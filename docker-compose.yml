@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  front:
+    build:
+      context: ./apps/front
+      args:
+        USER_ID: '${LOCAL_USER}'
+    user: ${LOCAL_USER}
+    volumes:
+      - './apps/front:/usr/src/app'
+    ports:
+      - '8080:5000'
+    restart: on-failure
