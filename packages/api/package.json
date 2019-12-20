@@ -1,0 +1,20 @@
+{
+    "name": "cc-jobboard-api",
+    "version": "1.0.0",
+    "description": "Backend part of the caencamp jobboard",
+    "author": "Alexis Janvier <contact@alexisjanvier.net>",
+    "homepage": "https://github.com/CaenCamp/jobs-caen-camp#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CaenCamp/jobs-caen-camp.git"
+    },
+    "scripts": {
+        "test": "echo \"Error: run tests from root\" && exit 1"
+    },
+    "bugs": {
+        "url": "https://github.com/CaenCamp/jobs-caen-camp/issues"
+    },
+    "dependencies": {
+        "koa": "2.11.0"
+    }
+}
