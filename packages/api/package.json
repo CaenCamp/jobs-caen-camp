@@ -9,12 +9,15 @@
         "url": "git+https://github.com/CaenCamp/jobs-caen-camp.git"
     },
     "scripts": {
-        "test": "echo \"Error: run tests from root\" && exit 1"
+        "dev": "nodemon --watch src src/index.js"
     },
     "bugs": {
         "url": "https://github.com/CaenCamp/jobs-caen-camp/issues"
     },
     "dependencies": {
         "koa": "2.11.0"
+    },
+    "devDependencies": {
+        "nodemon": "2.0.2"
     }
 }
