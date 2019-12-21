@@ -64,13 +64,86 @@ Quelle que soit votre type d'implication, ce peut-être une bonne chose que d'in
 Tout d'abord vous devez avoir un compte GitHub ainsi que [git installé](https://help.github.com/articles/set-up-git/) sur votre ordinateur.
 Ensuite vous devez ["*forker*"](https://guides.github.com/activities/forking/) le dépôt du projet et le cloner localement si vous ne faites pas partie de la team codingCaenCamp. Vous venez au CodingCaenCamp ? N'oubliez pas de demander un un mebre de vous ajouter à l'équipe, afin de pouvoir intervenir directement sur le repo, sans passer par la case fork.
 
-> CETTE PARTIE RESTE A COMPLETER DES QUE LE CODE SERA UN PEU PLUS AVANCE :)
+Enfin, vous devez faire un choix :
+
+* Soit vous décidez d'installer [Node.js](https://nodejs.org/en/download/) en version 12.14 (LTS) sur votre ordinateur. Node est un environnement d'exécution JavaScript .js (comme l'est un navigateur). C'est un bon choix, mais les recettes du fichier `Makefile` utilisent Docker ! Vous devrez donc lancer les différents serveurs "à la main" en utilisant les scripts des fichiers `package.json`. **Le projet utilise [workspaces Yarn](https://yarnpkg.com/lang/en/docs/workspaces/). Vous devez donc également installer [Yarn](https://yarnpkg.com/fr/) et l'utiliser comme gestionnaire de dépendances sur le projet à la place de `npm`.
+* Soit vous préférez ne pas installer Node.js, et dans ce cas, vous devrez installer [Docker](https://docs.docker.com/engine/installation/). Docker va vous permettre d'exécuter Node.js au sein d'un container (une sorte de machine virtuelle). C'est aussi un bon choix. En plus de Docker, vous devrez aussi installer [Docker Compose](https://docs.docker.com/compose/) afin de lancer les diffentes applications en même temps. 
+
+Si vous ne savez pas que choisir, Docker présente l'avantage de bien isoler les dépendances du projet de votre OS ainsi que de rendre un peu plus facile le lancement des différentes applications en parallèle ou l'exécution des tests.
+
+### Sans Docker
+
+Vous avez donc décidez d'installer Node.js et Yarn. La première chose à faire est d'installer les dépendances du projet :
+
+```bash
+$ yarn
+```
+
+Ensuite, vous devez lancer le serveur de developpement de l'application web :
+
+```bash
+$ cd apps/front
+$ yarn dev
+```
+
+Ainsi que le serveur d'API dans une seconde console :
+
+```bash
+$ cd apps/api
+$ yarn dev
+```
+
+Vous pouvez ainsi acceder à :
+
+* l'api sur http://localhost:3001
+* l'application web sur http://localhost:5000
+
+Dans les premières phases de développement du projet, nous utiliserons un *faux* serveur d'API afin de mettre en place rapidement et facilement le modèle du projet. Ce serveur *"mocked"* d'api doit être lancer en plus des autres applications :
+
+```bash
+$ cd apps/api-mocked
+$ yarn start
+```
+
+L'API simulée est alors disponible sur http://localhost:3000
+
+### Avec Docker
+Si vous avez choisi Docker, vous pouvez utiliser les recettes du fichier `makefile` pour lancer les commandes du projet.
+
+La première commande à lancer permettant d'installer les dépendances du projet est :
+
+```bash
+$ make install
+```
+
+Ensuite, voici les deux principales commandes à connaitre :
+
+```bash
+$ make start
+```
+
+Vous pouvez ainsi accéder à :
+
+* l'application web sur http://localhost:8000
+* l'api sur http://localhost:8001
+* l'api *mockée* sur http://localhost:8002
+
+Pour arrêter le projet, faites un:
+
+```bash
+$ make stop
+```
+
+**Tips** : Vous pouvez voir toutes les commandes disponibles en tappant juste `make`.
 
 ### L'organisation du code
 
 Voici l'organisation des principaux répertoires du projet :
 
-> CETTE PARTIE RESTE A COMPLETER DES QUE LE CODE SERA UN PEU PLUS AVANCE :)
+* **.github** : On trouve ici les fichiers d'aide sur le projet et les templates pour Github.
+* **apps/front** : On trouve ici le code de l'application web.
+* **apps/api** : On trouve ici le code de l'api.
+* **apps/api-mocked** : On trouve ici le code de l'api *simulée* du projet. Si au moment ou vous lisez ces lignes ce répertoire - qui ne sera présent que lors de la phase de lancement du projet - n'est plus présent, un PR destinée à supprimer cette ligne sera la bienvenue ;)
 
 ## Faire une Pull request
 

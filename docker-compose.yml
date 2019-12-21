@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+    front:
+      image: node:12.14-alpine
+      volumes:
+          - .:/jobboard
+      working_dir: '/jobboard/apps/front'
+      user: '${UID}:${GID}'
+      ports:
+          - 8000:5000
+      command: 'yarn dev'
+
+    api:
+      image: node:12.14-alpine
+      volumes:
+          - .:/jobboard
+      working_dir: '/jobboard/apps/api'
+      user: '${UID}:${GID}'
+      ports:
+          - 8001:3001
+      command: 'yarn dev'
+
+    api-moked:
+      image: node:12.14-alpine
+      volumes:
+          - .:/jobboard
+      working_dir: '/jobboard/apps/api-mocked'
+      user: '${UID}:${GID}'
+      ports:
+          - 8002:3000
+      command: 'yarn start'
+
