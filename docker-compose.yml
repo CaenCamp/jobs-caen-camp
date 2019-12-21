@@ -4,8 +4,8 @@ services:
     front:
       image: node:12.14-alpine
       volumes:
-          - .:/app
-      working_dir: '/app/packages/front'
+          - .:/jobboard
+      working_dir: '/jobboard/apps/front'
       user: '${UID}:${GID}'
       ports:
           - 8000:5000
@@ -14,8 +14,8 @@ services:
     api:
       image: node:12.14-alpine
       volumes:
-          - .:/app
-      working_dir: '/app/packages/api'
+          - .:/jobboard
+      working_dir: '/jobboard/apps/api'
       user: '${UID}:${GID}'
       ports:
           - 8001:3000
@@ -24,8 +24,8 @@ services:
     api-moked:
       image: node:12.14-alpine
       volumes:
-          - .:/app
-      working_dir: '/app/packages/api-mocked'
+          - .:/jobboard
+      working_dir: '/jobboard/apps/api-mocked'
       user: '${UID}:${GID}'
       ports:
           - 8002:3000
