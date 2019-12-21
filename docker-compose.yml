@@ -18,7 +18,7 @@ services:
       working_dir: '/jobboard/apps/api'
       user: '${UID}:${GID}'
       ports:
-          - 8001:3000
+          - 8001:3001
       command: 'yarn dev'
 
     api-moked:

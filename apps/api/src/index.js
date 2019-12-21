@@ -5,4 +5,4 @@ app.use(async ctx => {
     ctx.body = {message: 'Hello CaenCamp Jobboard'};
 });
 
-app.listen(3000, () => console.log('API started on port 3000'));
+app.listen(3001, () => console.log('API started on port 3001'));
