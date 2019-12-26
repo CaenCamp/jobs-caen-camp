@@ -5,5 +5,8 @@
     "workspaces": [
         "apps/*"
     ],
-    "homepage": "https://github.com/CaenCamp/jobs-caen-camp#readme"
+    "homepage": "https://github.com/CaenCamp/jobs-caen-camp#readme",
+    "devDependencies": {
+        "eslint": "6.8.0"
+    }
 }
