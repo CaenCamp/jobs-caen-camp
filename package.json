@@ -7,6 +7,7 @@
     ],
     "homepage": "https://github.com/CaenCamp/jobs-caen-camp#readme",
     "devDependencies": {
-        "eslint": "6.8.0"
+        "eslint": "6.8.0",
+        "prettier": "1.19.1"
     }
 }
