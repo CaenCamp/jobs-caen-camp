@@ -28,7 +28,7 @@
 
 En participant, vous devez respecter le [code de conduite du projet](CODE_OF_CONDUCT.md).
 
-## Qu'est ce que je peux faire ?
+## Qu'est ce que je peux faire
 
 Beaucoup de choses, l’écriture de code n’étant pas l'unique manière de contribuer au projet !
 
@@ -78,36 +78,36 @@ Si vous ne savez pas que choisir, Docker présente l'avantage de bien isoler les
 Vous avez donc décidez d'installer Node.js et Yarn. La première chose à faire est d'installer les dépendances du projet :
 
 ```bash
-$ yarn
+yarn
 ```
 
 Ensuite, vous devez lancer le serveur de developpement de l'application web :
 
 ```bash
-$ cd apps/front
-$ yarn dev
+cd apps/front
+yarn dev
 ```
 
 Ainsi que le serveur d'API dans une seconde console :
 
 ```bash
-$ cd apps/api
-$ yarn dev
+cd apps/api
+yarn dev
 ```
 
 Vous pouvez ainsi acceder à :
 
--   l'api sur http://localhost:3001
--   l'application web sur http://localhost:5000
+-   l'api sur <http://localhost:3001>
+-   l'application web sur <http://localhost:5000>
 
 Dans les premières phases de développement du projet, nous utiliserons un _faux_ serveur d'API afin de mettre en place rapidement et facilement le modèle du projet. Ce serveur _"mocked"_ d'api doit être lancer en plus des autres applications :
 
 ```bash
-$ cd apps/api-mocked
-$ yarn start
+cd apps/api-mocked
+yarn start
 ```
 
-L'API simulée est alors disponible sur http://localhost:3000
+L'API simulée est alors disponible sur <http://localhost:3000>
 
 ### Avec Docker
 
@@ -116,25 +116,25 @@ Si vous avez choisi Docker, vous pouvez utiliser les recettes du fichier `makefi
 La première commande à lancer permettant d'installer les dépendances du projet est :
 
 ```bash
-$ make install
+make install
 ```
 
 Ensuite, voici les deux principales commandes à connaitre :
 
 ```bash
-$ make start
+make start
 ```
 
 Vous pouvez ainsi accéder à :
 
--   l'application web sur http://localhost:8000
--   l'api sur http://localhost:8001
--   l'api _mockée_ sur http://localhost:8002
+-   l'application web sur <http://localhost:8000>
+-   l'api sur <http://localhost:8001>
+-   l'api _mockée_ sur <http://localhost:8002>
 
 Pour arrêter le projet, faites un:
 
 ```bash
-$ make stop
+make stop
 ```
 
 **Tips** : Vous pouvez voir toutes les commandes disponibles en tappant juste `make`.
@@ -166,11 +166,18 @@ Pour le projet, nous utilisons le workflow suivant :
 
 Si vous vous sentez un peu perdu.e, la lecture de [Using the Fork-and-Branch Git Workflow](https://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/) devrait vous rendre plus serein.ne.
 
+### La convention de codage (coding style)
+
+Le code suit le style de code basé sur [ESLint](https://eslint.org/docs/rules/) et [Prettier](https://prettier.io/).
+Nous vous conseillons d'utiliser [l'integration du linter avec votre ide](https://eslint.org/docs/user-guide/integrations), d'autant plus qu'un [pre-commit Hook git](https://github.com/okonet/lint-staged) validera le formatage de votre code avant de pouvoir ajouter vos modifications à l'index git.
+
 ### La convention de message de commit
 
 Nous utilisons la convention de commit dîte conventionnelle provenant de [conventionalcommits.org](Conventionnels) initiée par Angular.
 
 Ils doivent être écrits en français et respecter la convention.
+
+Tout comme la convention de codage, le formatage de commit est validé par un [hook git](https://commitlint.js.org/#/).
 
 ### Les tests
 
