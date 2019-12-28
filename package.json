@@ -5,12 +5,18 @@
     "workspaces": [
         "apps/*"
     ],
+    "scripts": {
+        "tests": "jest",
+        "tests:watch": "jest --watchAll"
+    },
     "homepage": "https://github.com/CaenCamp/jobs-caen-camp#readme",
     "devDependencies": {
         "@commitlint/cli": "8.2.0",
         "@commitlint/config-conventional": "8.2.0",
         "eslint": "6.8.0",
+        "eslint-plugin-jest": "23.1.1",
         "husky": "3.1.0",
+        "jest": "24.9.0",
         "lint-staged": "9.5.0",
         "prettier": "1.19.1"
     },

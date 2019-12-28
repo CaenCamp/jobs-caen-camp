@@ -22,3 +22,15 @@ stop: ## Stop all containers
 
 logs: ## Display all logs
 	docker-compose logs -f
+
+tests: ## launch all tests in docker
+	docker-compose run --rm --no-deps api ash -ci '\
+		cd ../../ && \
+		yarn tests \
+	'
+
+tests-watch: ## launch all tests in docker
+	docker-compose run --rm --no-deps api ash -ci '\
+		cd ../../ && \
+		yarn tests:watch \
+	'
