@@ -10,8 +10,8 @@
     },
     "scripts": {
         "dev": "nodemon --watch src src/index.js",
-        "test": "jest src",
-        "test:watch": "npm run test -- --watch"
+        "test": "jest",
+        "test:watch": "jest --watchAll"
     },
     "bugs": {
         "url": "https://github.com/CaenCamp/jobs-caen-camp/issues"

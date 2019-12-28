@@ -11,8 +11,8 @@
         "dev": "run-p start:dev autobuild",
         "start": "sirv public --single",
         "start:dev": "sirv public --single --dev --host 0.0.0.0",
-        "test": "jest src",
-        "test:watch": "npm run test -- --watch",
+        "test": "jest",
+        "test:watch": "jest --watchAll",
         "cypress:open": "cypress open"
     }
 }
