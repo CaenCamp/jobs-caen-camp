@@ -6,4 +6,7 @@ module.exports = {
     resetMocks: true,
     resetModules: true,
     verbose: true,
+    transform: {
+        '^.+\\.js$': 'babel-jest',
+    },
 };

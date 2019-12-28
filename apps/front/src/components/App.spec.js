@@ -4,7 +4,7 @@ import App from './App';
 
 describe('app component', () => {
     it('shows proper heading when rendered', () => {
-        expect.hasAssertions();
+        expect.assertions(1);
 
         const { getByText } = render(App, { props: { name: 'World' } });
 

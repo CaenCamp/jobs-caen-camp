@@ -9,7 +9,9 @@
         "url": "git+https://github.com/CaenCamp/jobs-caen-camp.git"
     },
     "scripts": {
-        "dev": "nodemon --watch src src/index.js"
+        "dev": "nodemon --watch src src/index.js",
+        "test": "jest src",
+        "test:watch": "npm run test -- --watch"
     },
     "bugs": {
         "url": "https://github.com/CaenCamp/jobs-caen-camp/issues"
@@ -18,8 +20,12 @@
         "koa": "2.11.0"
     },
     "devDependencies": {
+        "@babel/core": "7.7.7",
+        "@babel/preset-env": "7.7.7",
+        "babel-jest": "24.9.0",
         "eslint-config-prettier": "6.9.0",
         "eslint-plugin-prettier": "3.1.2",
+        "frisby": "2.1.2",
         "nodemon": "2.0.2"
     }
 }
