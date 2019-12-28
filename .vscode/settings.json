@@ -1,10 +1,11 @@
 {
     "json.schemas": [
         {
-          "fileMatch": [
-            "cypress.json"
-          ],
-          "url": "https://on.cypress.io/cypress.schema.json"
+            "fileMatch": ["cypress.json"],
+            "url": "https://on.cypress.io/cypress.schema.json"
         }
     ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    }
 }
