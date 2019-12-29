@@ -8,11 +8,19 @@ export NODE_ENV ?= development
 help: ## Display available commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+# =====================================================================
+# Initialization ======================================================
+# =====================================================================
+
 install: ## Install all js deps
 	@docker-compose run --rm --no-deps api ash -ci '\
 		cd ../../ && \
 		yarn \
 	'
+
+# =====================================================================
+# Operating recipies ==================================================
+# =====================================================================
 
 start: ## Start all service in containers
 	docker-compose up -d
@@ -22,6 +30,10 @@ stop: ## Stop all containers
 
 logs: ## Display all logs
 	docker-compose logs -f
+
+# =====================================================================
+# Testing =============================================================
+# =====================================================================
 
 test: ## launch all tests in docker
 	@docker-compose run --rm --no-deps api ash -ci '\
@@ -33,4 +45,14 @@ test-watch: ## launch all tests in docker
 	@docker-compose run --rm --no-deps api ash -ci '\
 		cd ../../ && \
 		yarn test:watch \
+	'
+
+# =====================================================================
+# Build ===============================================================
+# =====================================================================
+
+build-front: ## Build the front
+	@docker-compose run --rm --no-deps front ash -ci '\
+		rm -f public/bundle.* && \
+		yarn build \
 	'
