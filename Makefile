@@ -9,7 +9,7 @@ help: ## Display available commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 install: ## Install all js deps
-	docker-compose run --rm --no-deps api ash -ci '\
+	@docker-compose run --rm --no-deps api ash -ci '\
 		cd ../../ && \
 		yarn \
 	'
@@ -22,3 +22,15 @@ stop: ## Stop all containers
 
 logs: ## Display all logs
 	docker-compose logs -f
+
+test: ## launch all tests in docker
+	@docker-compose run --rm --no-deps api ash -ci '\
+		cd ../../ && \
+		yarn test \
+	'
+
+test-watch: ## launch all tests in docker
+	@docker-compose run --rm --no-deps api ash -ci '\
+		cd ../../ && \
+		yarn test:watch \
+	'
