@@ -8,7 +8,7 @@ Les rencontres ont lieu une fois par mois, et c’est très chouette. Mais pour 
 
 Ce projet de site d'offres d'emploi web est l'un de nos projets communs mis en place lors de ces rencontres.
 
-## Démarage rapide
+## Démarrage rapide
 
 Le [guide du contributeur](https://github.com/CaenCamp/jobs-caen-camp/blob/master/.github/CONTRIBUTING.md#installer-le-projet) détaille les pré-requis et les différents mode d'installation du projet. Mais en partant du postulat que *Docker* et *Docker Compose* sont installés sur votre environnement, vous pouvez lancer l'installation du projet avec la commande 
 
