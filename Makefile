@@ -48,13 +48,21 @@ test-watch: ## launch all tests in docker
 		cd ../../ && \
 		yarn test:watch \
 	'
+test-e2e: ## Run whole e2e tests suite
+	@${MAKE} --quiet test-env-start
+	@($(MAKE) --quiet test-env-run && $(MAKE) --quiet test-env-stop) || ($(MAKE) --quiet test-env-stop && exit 1)
 
-test-application-start: build-front 
+test-env-start: build-front 
 	@${DC_TEST} up -d
-test-application-stop:
+test-env-stop:
 	@${DC_TEST} down
-test-application-logs:
+test-env-logs:
 	@${DC_TEST} logs -f
+test-env-run:
+	@${DC_TEST} run --rm jobboard ash -ci '\
+		cd ../../tests-e2e && \
+		yarn test \
+	'
 
 # =====================================================================
 # Build ===============================================================
