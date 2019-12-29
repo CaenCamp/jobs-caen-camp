@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  jobboard:
+    image: node:12.14-alpine
+    volumes:
+      - .:/jobboard
+    working_dir: '/jobboard/apps/api'
+    user: '${UID}:${GID}'
+    ports:
+      - 8000:3001
+    environment:
+      - NODE_ENV='test'
+    command: 'yarn start'

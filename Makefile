@@ -35,6 +35,8 @@ logs: ## Display all logs
 # Testing =============================================================
 # =====================================================================
 
+DC_TEST = docker-compose -p cc-jobboard-test -f docker-compose-test.yml
+
 test: ## launch all tests in docker
 	@docker-compose run --rm --no-deps api ash -ci '\
 		cd ../../ && \
@@ -46,6 +48,13 @@ test-watch: ## launch all tests in docker
 		cd ../../ && \
 		yarn test:watch \
 	'
+
+test-application-start: build-front 
+	@${DC_TEST} up -d
+test-application-stop:
+	@${DC_TEST} down
+test-application-logs:
+	@${DC_TEST} logs -f
 
 # =====================================================================
 # Build ===============================================================

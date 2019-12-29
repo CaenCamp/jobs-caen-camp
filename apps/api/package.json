@@ -10,6 +10,7 @@
     },
     "scripts": {
         "dev": "nodemon --watch src src/index.js",
+        "start": "nodemon --watch src src/index.js",
         "test": "jest",
         "test:watch": "jest --watchAll"
     },
@@ -17,6 +18,8 @@
         "url": "https://github.com/CaenCamp/jobs-caen-camp/issues"
     },
     "dependencies": {
-        "koa": "2.11.0"
+        "koa": "2.11.0",
+        "koa-router": "7.4.0",
+        "koa-static": "5.0.0"
     }
 }

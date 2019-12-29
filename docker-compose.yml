@@ -19,6 +19,8 @@ services:
     user: '${UID}:${GID}'
     ports:
       - 8001:3001
+    environment:
+      - NODE_ENV='development'
     command: 'yarn dev'
 
   api-moked:
