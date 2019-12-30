@@ -10,6 +10,6 @@ module.exports = {
         '^.+\\.js$': 'babel-jest',
     },
     moduleFileExtensions: ['js'],
-    testPathIgnorePatterns: ['node_modules'],
-    transformIgnorePatterns: ['node_modules'],
+    testPathIgnorePatterns: ['node_modules', 'cypress'],
+    transformIgnorePatterns: ['node_modules', 'cypress'],
 };

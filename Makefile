@@ -40,13 +40,15 @@ logs: ## Display all logs
 
 DC_TEST = docker-compose -p cc-jobboard-test -f docker-compose-test.yml
 
-test: ## launch all tests in docker
+test: test-unit test-e2e ## launch all tests in docker
+
+test-unit: ## launch only tests unit (front and api)
 	@docker-compose run --rm --no-deps api ash -ci '\
 		cd ../../ && \
 		yarn test \
 	'
 
-test-watch: ## launch all tests in docker
+test-unit-watch: ## launch only tests unit in watch mode
 	@docker-compose run --rm --no-deps api ash -ci '\
 		cd ../../ && \
 		yarn test:watch \
@@ -55,6 +57,7 @@ test-e2e: ## Run whole e2e tests suite
 	@${MAKE} --quiet test-env-start
 	@($(MAKE) --quiet test-env-run && $(MAKE) --quiet test-env-stop) || ($(MAKE) --quiet test-env-stop && exit 1)
 
+# Manual recipes for e2e test (api with frisby and front with cypress)
 test-env-start: build-front 
 	@${DC_TEST} up -d
 test-env-stop:
@@ -66,6 +69,13 @@ test-env-run:
 		cd ../../tests-e2e && \
 		yarn test \
 	'
+test-env-watch:
+	@${DC_TEST} run --rm jobboard ash -ci '\
+		cd ../../tests-e2e && \
+		yarn test:watch \
+	'
+cypress:
+	@cd tests-e2e && yarn cypress:open
 
 # =====================================================================
 # Build ===============================================================
