@@ -18,6 +18,9 @@ install: ## Install all js deps
 		yarn \
 	'
 
+install-cypress: ## Install cypress.io bin on local environment, not in Docker !
+	@node_modules/.bin/cypress install
+
 # =====================================================================
 # Operating recipies ==================================================
 # =====================================================================

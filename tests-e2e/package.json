@@ -4,6 +4,7 @@
     "description": "Tests e2e mage on jobBoard app (api and front)",
     "scripts": {
         "test": "jest",
-        "test:watch": "jest --watchAll"
+        "test:watch": "jest --watchAll",
+        "cypress:open": "cypress open"
     }
 }
