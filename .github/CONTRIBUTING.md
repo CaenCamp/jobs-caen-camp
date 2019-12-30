@@ -1,6 +1,6 @@
 # Contribuer au site d'offres d'emploi des CaenCamp.s
 
-### Sommaire
+## Sommaire
 
 -   [Code de conduite](#code-de-conduite)
 -   [Qu'est ce que je peux faire ?](#quest-ce-que-je-peux-faire)
@@ -13,6 +13,7 @@
     -   [L'organisation du code](#lorganisation-du-code)
 -   [Faire une Pull Request](#faire-une-pull-request)
     -   [Le git flow](#le-git-flow)
+    -   [La convention de codage (coding style)](#la-convention-de-codage-coding-style)
     -   [Les tests](#les-tests)
     -   [Les bonnes pratiques](#les-bonnes-pratiques)
 -   [Trouver de l'aide](#trouver-de-laide)
@@ -171,7 +172,7 @@ Si vous vous sentez un peu perdu.e, la lecture de [Using the Fork-and-Branch Git
 Le code suit le style de code basé sur [ESLint](https://eslint.org/docs/rules/) et [Prettier](https://prettier.io/).
 Nous vous conseillons d'utiliser [l'integration du linter avec votre ide](https://eslint.org/docs/user-guide/integrations), d'autant plus qu'un [pre-commit Hook git](https://github.com/okonet/lint-staged) validera le formatage de votre code avant de pouvoir ajouter vos modifications à l'index git.
 
-### La convention de message de commit
+#### La convention de message de commit
 
 Nous utilisons la convention de commit dîte conventionnelle provenant de [conventionalcommits.org](Conventionnels) initiée par Angular.
 
@@ -181,14 +182,53 @@ Tout comme la convention de codage, le formatage de commit est validé par un [h
 
 ### Les tests
 
-Afin de facililiter l'intégration (le merge) de vos PR, surtout si elles contiennent du code, celle-ci devront contenir les tests couvrant vos propositions.
+Afin de facililiter l'intégration (le merge) de vos PR, surtout si elles contiennent du code, celles-ci devront contenir les tests couvrant vos propositions.
 
 Il y a deux grands types de tests sur le projet:
 
--   des tests unitaires lancés par [Jest](https://facebook.github.io/jest/) ,
--   des tests [e2e](https://blog.kentcdodds.com/write-tests-not-too-many-mostly-integration-5e8c7fff591c) dont l'outil reste encore à définir (cypress ?).
+-   des tests unitaires lancés par [Jest](https://facebook.github.io/jest/),
+-   des tests [e2e](https://blog.kentcdodds.com/write-tests-not-too-many-mostly-integration-5e8c7fff591c).
 
-Le dépôt du projet est/sera branché sur la plateforme d'intégration continue de Github via les [Github actions](https://github.com/features/actions).
+Les tests sont lancés sur la plateforme d'intégration continue de Github via les [Github actions](https://github.com/features/actions).
+
+#### Les tests unitaires
+
+Par convention, les tests unitaires se trouvent à côté du fichier testé, en utilisant l'extension `.spec.js`. Par exemple `tools.spec.js` pour les tests des fonctions écrites dans le fichier `tools.js`.
+
+Les tests sont lancés avec [Jest](https://facebook.github.io/jest/) et profitent du workspace yarn, c'est à dire que les tests des l'api et du front peuvent être lancés depuis la racine du site, tout en ayant leur configuration propre (voir [la documentation](https://jestjs.io/docs/en/configuration#projects-arraystring--projectconfig)).
+
+Les tests du front utilisent la librairie [Testing Libray](https://testing-library.com/) pour les tests des composants [Svelte](https://testing-library.com/docs/svelte-testing-library/intro). C'est la même librairie qui est utilisée pour les tests e2e du front réalisés avec [Cypress.io](https://www.cypress.io/).
+
+##### Les tests unitaires avec Docker
+
+Les tests unitaires peuvent être lancés au sein de Docker. Pour cela, il y a deux commandes à connaitre :
+
+-   `make test-unit` pour lancer la suite de tests,
+-   `make test-unit-watch` pour lancer les tests [en mode watch](https://jestjs.io/docs/en/cli#--watchall).
+
+##### Les tests unitaires sans Docker
+
+La suite de tests peut également être lancée sans Docker :
+
+-   soit depuis la racine du projet pour lancer tous les tests (`yarn test` et `yarn test:watch`),
+-   soit depuis le répertoire d'un projet pour ne lancer que les tests du projet (par exemple `cd apps/api && yarn test:watch`).
+
+#### Les tests e2e
+
+Contrairement aux tests unitaires, les tests e2e sont regroupés dans le répertoire `tests-e2e`. Ils sont lancés sur une build de production du code. Ce build s'execute dans un container Docker, avec la commande `make test-env-start`.
+
+Il existe des tests e2e pour l'api (dans le répertoire `/tests-e2e/api`) utilisant les framework de test [Frisby.js](https://www.frisbyjs.com/). Ces tests peuvent être lancés, **une fois l'environnement de test démarré**, avec les commandes :
+
+-   `make test-env-run`,
+-   `make test-env-watch` pour avoir le mode _watch_.
+
+Les tests e2e du front sont eux basé sur [Cypress.io](https://www.cypress.io/). Pour démarrer Cypress, il faut donc avoir au préalable lancé l'environnement de test, puis utilisez la commande `make cypress`.
+
+> **Si vous voulez utiliser Cypress, il faut que vous l'installiez sur votre environnement en utilisant la commande `make install-cypress` !**
+
+Lorsque vous avez terminer les tests e2e, pensez à stopper l'environnement de test avec la commande `make test-env-stop`.
+
+> Remarque: l'intégralité des tests (unitaires et e2e) peuvent être lancés en une seule commande : `make test`.
 
 ### Les bonnes pratiques
 
@@ -203,7 +243,7 @@ Mais voici quelques conseils qui peuvent les rendre encore meilleures :
 -   Ajouter une description et une _todo list_ en ouvrant la PR.
 -   N'attendez pas que la PR soit terminée pour l'ouvrir : la communauté viendra plus facilement en aide en découvrant tôt la PR.
 -   Utilisez les labels `WIP` (Work In Progress) et `RFR` (Ready For Review) pour indiquer l'avancement de la PR.
--   dernier point : normalement, toute les _textes_ (titre, description, commentaires, ...) sont fait en anglais. Si vous n'êtes pas à l'aise, écrivez en français. Mais le norme en opensource, c'est l'anglais.
+-   dernier point : tous les _textes_ (titre, description, commentaires, ...) sont fait en **français**. En effet, même si la norme en opensource c'est l'anglais, nous avons collectivement décidé d'utiliser le français pour le projet.
 
 ## Trouver de l'aide
 

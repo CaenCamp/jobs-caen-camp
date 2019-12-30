@@ -3,7 +3,8 @@
     "private": true,
     "version": "1.0.0",
     "workspaces": [
-        "apps/*"
+        "apps/*",
+        "tests-e2e"
     ],
     "scripts": {
         "test": "jest",
@@ -15,13 +16,15 @@
         "@babel/preset-env": "7.7.7",
         "@commitlint/cli": "8.2.0",
         "@commitlint/config-conventional": "8.2.0",
+        "@testing-library/cypress": "5.0.2",
         "@testing-library/jest-dom": "4.2.4",
         "@testing-library/svelte": "1.11.0",
         "babel-jest": "24.9.0",
         "cypress": "3.8.1",
         "eslint": "6.8.0",
         "eslint-config-prettier": "6.9.0",
-        "eslint-plugin-jest": "23.1.1",
+        "eslint-plugin-cypress": "2.8.1",
+        "eslint-plugin-jest": "23.2.0",
         "eslint-plugin-prettier": "3.1.2",
         "eslint-plugin-svelte3": "2.7.3",
         "frisby": "2.1.2",
