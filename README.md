@@ -1,6 +1,6 @@
 # Le site des offres d'emploi des CaenCamp.s
 
-[![Actions Status](https://github.com/CaenCamp/jobs-caen-camp/workflows/CI/badge.svg)](https://github.com/CaenCamp/jobs-caen-camp/actions) ![GitHub top language](https://img.shields.io/github/languages/top/CaenCamp/jobs-caen-camp.svg) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) ![github contributors](https://img.shields.io/github/contributors/CaenCamp/jobs-caen-camp.svg) ![web-myna.svg](https://img.shields.io/github/license/CaenCamp/jobs-caen-camp.svg) ![prs welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg)
+![](https://github.com/CaenCamp/jobs-caen-camp/workflows/test/badge.svg?branch=master) ![GitHub top language](https://img.shields.io/github/languages/top/CaenCamp/jobs-caen-camp.svg) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) ![github contributors](https://img.shields.io/github/contributors/CaenCamp/jobs-caen-camp.svg) ![web-myna.svg](https://img.shields.io/github/license/CaenCamp/jobs-caen-camp.svg) ![prs welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg)
 
 Les [CaenCamp.s](https://www.caen.camp) sont une série de rencontres caennaises organisées par, animées par et à destination des développeurs. Cette initiative existe depuis 2012.
 
