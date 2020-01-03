@@ -4,9 +4,12 @@
     "description": "Mocked backend part of the caencamp jobboard",
     "author": "Alexis Janvier <contact@alexisjanvier.net>",
     "scripts": {
-        "start": "json-server --host 0.0.0.0 --watch db.json"
+        "start": "json-server --host 0.0.0.0 --watch index.js"
     },
     "dependencies": {
         "json-server": "0.15.1"
+    },
+    "devDependencies": {
+        "faker": "4.1.0"
     }
 }
