@@ -174,7 +174,7 @@ Nous vous conseillons d'utiliser [l'integration du linter avec votre ide](https:
 
 #### La convention de message de commit
 
-Nous utilisons la convention de commit dîte conventionnelle provenant de [conventionalcommits.org](Conventionnels) initiée par Angular.
+Nous utilisons la convention de commit dîte conventionnelle provenant de [conventional commits](https://conventionalcommits.org) initiée par Angular.
 
 Ils doivent être écrits en français et respecter la convention.
 
