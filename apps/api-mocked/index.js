@@ -1,5 +1,5 @@
 const organization = require('./db/organization');
-const offer = require('./db/offer');
+const job = require('./db/job');
 
 module.exports = () => {
     const data = { organizations: [], offers: [] };
@@ -8,10 +8,10 @@ module.exports = () => {
         const fakeOrganization = organization.fake(i);
 
         for (let j = 0; j < 3; j++) {
-            const fakeOffer = offer.fake(j, fakeOrganization);
-            data.offers.push(fakeOffer);
+            const fakeJob = job.fake(j, fakeOrganization);
+            data.jobs.push(fakeJob);
 
-            organization.addOffer(fakeOrganization, fakeOffer);
+            organization.addJob(fakeOrganization, fakeJob);
         }
 
         data.organizations.push(fakeOrganization);

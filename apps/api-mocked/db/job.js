@@ -6,7 +6,7 @@ module.exports = {
     fake: (id, organization) => ({
         '@context': 'http://schema.org',
         '@type': 'JobPosting',
-        '@id': '/offers/' + id,
+        '@id': '/jobs/' + id,
         id: id,
         title: faker.lorem.words(3),
         hiringOrganization: {

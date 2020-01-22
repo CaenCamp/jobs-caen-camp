@@ -26,13 +26,13 @@ module.exports = {
             addressLocality:
                 faker.address.city() + ', ' + faker.address.country()
         },
-        offers: []
+        jobs: []
     }),
-    addOffer: (organization, offer) => {
-        organization.offers.push({
+    addJobs: (organization, job) => {
+        organization.jobs.push({
             '@type': 'JobPosting',
-            '@id': '/offers/' + offer.id,
-            title: offer.title
+            '@id': '/jobs/' + job.id,
+            title: job.title
         });
     }
 };
