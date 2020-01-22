@@ -16,7 +16,7 @@ Le [guide du contributeur](https://github.com/CaenCamp/jobs-caen-camp/blob/maste
 $ make install
 ```
 
-et lancer les différentes applications avec
+et lancer les différentes applications avec :
 
 ```bash
 $ make start
