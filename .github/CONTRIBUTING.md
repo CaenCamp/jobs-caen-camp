@@ -1,24 +1,24 @@
-# Contribuer au site d'offres d'emploi des CaenCamp.s
+# Contribuer au site d’offres d’emploi des CaenCamp.s
 
 ## Sommaire
 
 -   [Code de conduite](#code-de-conduite)
--   [Qu'est ce que je peux faire ?](#quest-ce-que-je-peux-faire)
+-   [Qu’est ce que je peux faire ?](#quest-ce-que-je-peux-faire)
     -   [Contribuer au design](#contribuer-au-design)
     -   [Contribuer au code](#contribuer-au-code)
     -   [Rapporter des bugs](#rapporter-des-bugs)
     -   [Suggérer des améliorations ou de nouvelles fonctionnalités](#suggestions)
 -   [Installer le projet](#installer-le-projet)
     -   [Les prérequis](#installer-le-projet)
-    -   [L'organisation du code](#lorganisation-du-code)
+    -   [L’organisation du code](#lorganisation-du-code)
 -   [Faire une Pull Request](#faire-une-pull-request)
     -   [Le git flow](#le-git-flow)
     -   [La convention de codage (coding style)](#la-convention-de-codage-coding-style)
     -   [Les tests](#les-tests)
     -   [Les bonnes pratiques](#les-bonnes-pratiques)
--   [Trouver de l'aide](#trouver-de-laide)
+-   [Trouver de l’aide](#trouver-de-laide)
     -   [Dans une issue](#dans-une-issue)
-    -   [Au cours d'une pull request](#au-cours-dun-pull-request)
+    -   [Au cours d’une pull request](#au-cours-dun-pull-request)
     -   [Sur Slack](#sur-slack)
     -   [Le wiki](#le-wiki)
     -   [Aux Coding CaenCamp.s](#aux-coding-caencamps)
@@ -29,15 +29,15 @@
 
 En participant, vous devez respecter le [code de conduite du projet](CODE_OF_CONDUCT.md).
 
-## Qu'est ce que je peux faire
+## Qu’est ce que je peux faire
 
-Beaucoup de choses, l’écriture de code n’étant pas l'unique manière de contribuer au projet !
+Beaucoup de choses, l’écriture de code n’étant pas l’unique manière de contribuer au projet !
 
 ### Contribuer au design
 
-Concernant le design, tout est à faire. Nous pouvons certainement partir sur un look _à la bootstrap_, mais si certains d'entre vous se sentent inspirés, ce sera un gros plus.
+Concernant le design, tout est à faire. Nous pouvons certainement partir sur un look _à la bootstrap_, mais si certains d’entre vous se sentent inspirés, ce sera un gros plus.
 
-Pour l'instant, nous n'avons qu'un logo qui d'ailleurs ne demande qu'à évoluer.
+Pour l’instant, nous n’avons qu’un logo qui d’ailleurs ne demande qu’à évoluer.
 
 ![CaenCamp Logo](logo.png)
 
@@ -47,12 +47,12 @@ Les issues concernant le design sont associées au tag [`design`](https://github
 
 ### Contribuer au code
 
-Lors de l'édition #7 des Coding CaenCamp, nous avons choisi en commun les technos sur lesquelles nous allons démarrer le projet. Et pour une question de simplicité, nous avons choisi le Javascript. La partie back/API devrait donc être réalisée en s'appuyant sur [Koa](https://koajs.com/) et la partie front sur [Svelte](https://svelte.dev/).
+Lors de l’édition #7 des Coding CaenCamp, nous avons choisi en commun les technos sur lesquelles nous allons démarrer le projet. Et pour une question de simplicité, nous avons choisi le Javascript. La partie back/API devrait donc être réalisée en s’appuyant sur [Koa](https://koajs.com/) et la partie front sur [Svelte](https://svelte.dev/).
 
 ### Rapporter des bugs
 
 Il parait que chaque bug relevé sauve un chaton. En tout cas, la technique du [ZBSD (Zero-Bug Software Development)](https://medium.com/quality-functions/the-zero-bug-policy-b0bd987be684) semble porter ses fruits, comme le rapporte [Andrew Fulton](https://medium.com/@andrew.fulton/how-we-got-to-zero-bugs-and-implemented-a-zero-bug-policy-c77ee3f2e50b).
-Donc, si à chaque bug rencontré quelqu'un [ouvre une issue](#ouvrir-une-issue) avec le label `bug`, ce seront des familles entières de chats qui seront sauvées.
+Donc, si à chaque bug rencontré quelqu’un [ouvre une issue](#ouvrir-une-issue) avec le label `bug`, ce seront des familles entières de chats qui seront sauvées.
 
 <h3 id="suggestions">Suggérer des améliorations ou de nouvelles fonctionnalités</h3>
 
@@ -60,106 +60,106 @@ Dans ce cas, ouvrez une nouvelle issue de type `feature` ou `improvement` en dé
 
 ## Installer le projet
 
-Quelle que soit votre type d'implication, ce peut-être une bonne chose que d'installer le projet sur votre machine pour pouvoir visualiser votre contribution avant de la proposer sur Github.
+Quelle que soit votre type d’implication, ce peut-être une bonne chose que d’installer le projet sur votre machine pour pouvoir visualiser votre contribution avant de la proposer sur Github.
 
 ### Prérequis
 
-Tout d'abord vous devez avoir un compte GitHub ainsi que [git installé](https://help.github.com/articles/set-up-git/) sur votre ordinateur.
-Ensuite vous devez ["_forker_"](https://guides.github.com/activities/forking/) le dépôt du projet et le cloner localement si vous ne faites pas partie de la team codingCaenCamp. Vous venez au CodingCaenCamp ? N'oubliez pas de demander un un mebre de vous ajouter à l'équipe, afin de pouvoir intervenir directement sur le repo, sans passer par la case fork.
+Tout d’abord vous devez avoir un compte GitHub ainsi que [git installé](https://help.github.com/articles/set-up-git/) sur votre ordinateur.
+Ensuite vous devez ["_forker_"](https://guides.github.com/activities/forking/) le dépôt du projet et le cloner localement si vous ne faites pas partie de la team codingCaenCamp. Vous venez au CodingCaenCamp ? N’oubliez pas de demander un un mebre de vous ajouter à l’équipe, afin de pouvoir intervenir directement sur le repo, sans passer par la case fork.
 
-Enfin, vous devez faire un choix :
+Enfin, vous devez faire un choix :
 
--   Soit vous décidez d'installer [Node.js](https://nodejs.org/en/download/) en version 12.14 (LTS) sur votre ordinateur. Node est un environnement d'exécution JavaScript .js (comme l'est un navigateur). C'est un bon choix, mais les recettes du fichier `Makefile` utilisent Docker ! Vous devrez donc lancer les différents serveurs "à la main" en utilisant les scripts des fichiers `package.json`. \*\*Le projet utilise [workspaces Yarn](https://yarnpkg.com/lang/en/docs/workspaces/). Vous devez donc également installer [Yarn](https://yarnpkg.com/fr/) et l'utiliser comme gestionnaire de dépendances sur le projet à la place de `npm`.
--   Soit vous préférez ne pas installer Node.js, et dans ce cas, vous devrez installer [Docker](https://docs.docker.com/engine/installation/). Docker va vous permettre d'exécuter Node.js au sein d'un container (une sorte de machine virtuelle). C'est aussi un bon choix. En plus de Docker, vous devrez aussi installer [Docker Compose](https://docs.docker.com/compose/) afin de lancer les diffentes applications en même temps.
+- Soit vous décidez d’installer [Node.js](https://nodejs.org/en/download/) en version 12.14 (LTS) sur votre ordinateur. Node est un environnement d’exécution JavaScript .js (comme l’est un navigateur). C’est un bon choix, mais les recettes du fichier `Makefile` utilisent Docker ! Vous devrez donc lancer les différents serveurs « à la main » en utilisant les scripts des fichiers `package.json`. \*\*Le projet utilise [workspaces Yarn](https://yarnpkg.com/lang/en/docs/workspaces/). Vous devez donc également installer [Yarn](https://yarnpkg.com/fr/) et l’utiliser comme gestionnaire de dépendances sur le projet à la place de `npm`.
+- Soit vous préférez ne pas installer Node.js, et dans ce cas, vous devrez installer [Docker](https://docs.docker.com/engine/installation/). Docker va vous permettre d’exécuter Node.js au sein d’un container (une sorte de machine virtuelle). C’est aussi un bon choix. En plus de Docker, vous devrez aussi installer [Docker Compose](https://docs.docker.com/compose/) afin de lancer les diffentes applications en même temps.
 
-Si vous ne savez pas que choisir, Docker présente l'avantage de bien isoler les dépendances du projet de votre OS ainsi que de rendre un peu plus facile le lancement des différentes applications en parallèle ou l'exécution des tests.
+Si vous ne savez pas que choisir, Docker présente l’avantage de bien isoler les dépendances du projet de votre OS ainsi que de rendre un peu plus facile le lancement des différentes applications en parallèle ou l’exécution des tests.
 
 ### Sans Docker
 
-Vous avez donc décidez d'installer Node.js et Yarn. La première chose à faire est d'installer les dépendances du projet :
+Vous avez donc décidez d’installer Node.js et Yarn. La première chose à faire est d’installer les dépendances du projet :
 
 ```bash
 yarn
 ```
 
-Ensuite, vous devez lancer le serveur de developpement de l'application web :
+Ensuite, vous devez lancer le serveur de developpement de l’application web :
 
 ```bash
 cd apps/front
 yarn dev
 ```
 
-Ainsi que le serveur d'API dans une seconde console :
+Ainsi que le serveur d’API dans une seconde console :
 
 ```bash
 cd apps/api
 yarn dev
 ```
 
-Vous pouvez ainsi acceder à :
+Vous pouvez ainsi acceder à :
 
--   l'api sur <http://localhost:3001>
--   l'application web sur <http://localhost:5000>
+- l’API sur <http://localhost:3001>
+- l’application web sur <http://localhost:5000>
 
-Dans les premières phases de développement du projet, nous utiliserons un _faux_ serveur d'API afin de mettre en place rapidement et facilement le modèle du projet. Ce serveur _"mocked"_ d'api doit être lancer en plus des autres applications :
+Dans les premières phases de développement du projet, nous utiliserons un _faux_ serveur d’API afin de mettre en place rapidement et facilement le modèle du projet. Ce serveur _"mocked"_ d’api doit être lancer en plus des autres applications :
 
 ```bash
 cd apps/api-mocked
 yarn start
 ```
 
-L'API simulée est alors disponible sur <http://localhost:3000>
+L’API simulée est alors disponible sur <http://localhost:3000>
 
 ### Avec Docker
 
 Si vous avez choisi Docker, vous pouvez utiliser les recettes du fichier `makefile` pour lancer les commandes du projet.
 
-La première commande à lancer permettant d'installer les dépendances du projet est :
+La première commande à lancer permettant d’installer les dépendances du projet est :
 
 ```bash
 make install
 ```
 
-Ensuite, voici les deux principales commandes à connaitre :
+Ensuite, voici les deux principales commandes à connaitre :
 
 ```bash
 make start
 ```
 
-Vous pouvez ainsi accéder à :
+Vous pouvez ainsi accéder à :
 
--   l'application web sur <http://localhost:8000>
--   l'api sur <http://localhost:8001>
--   l'api _mockée_ sur <http://localhost:8002>
+- l’application web sur <http://localhost:8000>
+- l’api sur <http://localhost:8001>
+- l’api _mockée_ sur <http://localhost:8002>
 
-Pour arrêter le projet, faites un:
+Pour arrêter le projet, faites un :
 
 ```bash
 make stop
 ```
 
-**Tips** : Vous pouvez voir toutes les commandes disponibles en tappant juste `make`.
+**Tips** : Vous pouvez voir toutes les commandes disponibles en tappant juste `make`.
 
-### L'organisation du code
+### L’organisation du code
 
-Voici l'organisation des principaux répertoires du projet :
+Voici l’organisation des principaux répertoires du projet :
 
--   **.github** : On trouve ici les fichiers d'aide sur le projet et les templates pour Github.
--   **apps/front** : On trouve ici le code de l'application web.
--   **apps/api** : On trouve ici le code de l'api.
--   **apps/api-mocked** : On trouve ici le code de l'api _simulée_ du projet. Si au moment ou vous lisez ces lignes ce répertoire - qui ne sera présent que lors de la phase de lancement du projet - n'est plus présent, un PR destinée à supprimer cette ligne sera la bienvenue ;)
+-   **.github** : On trouve ici les fichiers d’aide sur le projet et les templates pour Github.
+-   **apps/front** : On trouve ici le code de l’application web.
+-   **apps/api** : On trouve ici le code de l’api.
+-   **apps/api-mocked** : On trouve ici le code de l’api _simulée_ du projet. Si au moment ou vous lisez ces lignes ce répertoire - qui ne sera présent que lors de la phase de lancement du projet - n’est plus présent, un PR destinée à supprimer cette ligne sera la bienvenue ;)
 
 ## Faire une Pull request
 
-Si vous n'avez encore jamais fait de Pull Request (PR), la lecture du tutorial Github [Understanding the GitHub Flow](https://guides.github.com/introduction/flow/) est sûrement un bon point de départ.
+Si vous n’avez encore jamais fait de Pull Request (PR), la lecture du tutorial Github [Understanding the GitHub Flow](https://guides.github.com/introduction/flow/) est sûrement un bon point de départ.
 
-Si vous n'aviez pas encore de compte Github, en voici une [bonne introduction](https://flaviocopes.com/github-guide/).
+Si vous n’aviez pas encore de compte Github, en voici une [bonne introduction](https://flaviocopes.com/github-guide/).
 
 ### le git flow
 
-Pour le projet, nous utilisons le workflow suivant :
+Pour le projet, nous utilisons le workflow suivant :
 
--   Le projet principal ne possède qu'une branche `master`.
+-   Le projet principal ne possède qu’une branche `master`.
 -   Chaque participant réalise un [fork](https://guides.github.com/activities/forking/) du dépôt principal puis ouvre une [branche](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/) depuis son fork pour chaque nouvelle feature.
 -   Une [PR](https://help.github.com/articles/about-pull-requests/) est créée depuis la branche du fork vers la branche `master` du dépôt principal.
 
@@ -170,7 +170,7 @@ Si vous vous sentez un peu perdu.e, la lecture de [Using the Fork-and-Branch Git
 ### La convention de codage (coding style)
 
 Le code suit le style de code basé sur [ESLint](https://eslint.org/docs/rules/) et [Prettier](https://prettier.io/).
-Nous vous conseillons d'utiliser [l'integration du linter avec votre ide](https://eslint.org/docs/user-guide/integrations), d'autant plus qu'un [pre-commit Hook git](https://github.com/okonet/lint-staged) validera le formatage de votre code avant de pouvoir ajouter vos modifications à l'index git.
+Nous vous conseillons d’utiliser [l’integration du linter avec votre ide](https://eslint.org/docs/user-guide/integrations), d’autant plus qu’un [pre-commit Hook git](https://github.com/okonet/lint-staged) validera le formatage de votre code avant de pouvoir ajouter vos modifications à l’index git.
 
 #### La convention de message de commit
 
@@ -182,96 +182,96 @@ Tout comme la convention de codage, le formatage de commit est validé par un [h
 
 ### Les tests
 
-Afin de facililiter l'intégration (le merge) de vos PR, surtout si elles contiennent du code, celles-ci devront contenir les tests couvrant vos propositions.
+Afin de facililiter l’intégration (le merge) de vos PR, surtout si elles contiennent du code, celles-ci devront contenir les tests couvrant vos propositions.
 
 Il y a deux grands types de tests sur le projet:
 
 -   des tests unitaires lancés par [Jest](https://facebook.github.io/jest/),
 -   des tests [e2e](https://blog.kentcdodds.com/write-tests-not-too-many-mostly-integration-5e8c7fff591c).
 
-Les tests sont lancés sur la plateforme d'intégration continue de Github via les [Github actions](https://github.com/features/actions).
+Les tests sont lancés sur la plateforme d’intégration continue de Github via les [Github actions](https://github.com/features/actions).
 
 #### Les tests unitaires
 
-Par convention, les tests unitaires se trouvent à côté du fichier testé, en utilisant l'extension `.spec.js`. Par exemple `tools.spec.js` pour les tests des fonctions écrites dans le fichier `tools.js`.
+Par convention, les tests unitaires se trouvent à côté du fichier testé, en utilisant l’extension `.spec.js`. Par exemple `tools.spec.js` pour les tests des fonctions écrites dans le fichier `tools.js`.
 
-Les tests sont lancés avec [Jest](https://facebook.github.io/jest/) et profitent du workspace yarn, c'est à dire que les tests des l'api et du front peuvent être lancés depuis la racine du site, tout en ayant leur configuration propre (voir [la documentation](https://jestjs.io/docs/en/configuration#projects-arraystring--projectconfig)).
+Les tests sont lancés avec [Jest](https://facebook.github.io/jest/) et profitent du workspace yarn, c’est à dire que les tests des l’api et du front peuvent être lancés depuis la racine du site, tout en ayant leur configuration propre (voir [la documentation](https://jestjs.io/docs/en/configuration#projects-arraystring--projectconfig)).
 
-Les tests du front utilisent la librairie [Testing Libray](https://testing-library.com/) pour les tests des composants [Svelte](https://testing-library.com/docs/svelte-testing-library/intro). C'est la même librairie qui est utilisée pour les tests e2e du front réalisés avec [Cypress.io](https://www.cypress.io/).
+Les tests du front utilisent la librairie [Testing Libray](https://testing-library.com/) pour les tests des composants [Svelte](https://testing-library.com/docs/svelte-testing-library/intro). C’est la même librairie qui est utilisée pour les tests e2e du front réalisés avec [Cypress.io](https://www.cypress.io/).
 
 ##### Les tests unitaires avec Docker
 
-Les tests unitaires peuvent être lancés au sein de Docker. Pour cela, il y a deux commandes à connaitre :
+Les tests unitaires peuvent être lancés au sein de Docker. Pour cela, il y a deux commandes à connaitre :
 
 -   `make test-unit` pour lancer la suite de tests,
 -   `make test-unit-watch` pour lancer les tests [en mode watch](https://jestjs.io/docs/en/cli#--watchall).
 
 ##### Les tests unitaires sans Docker
 
-La suite de tests peut également être lancée sans Docker :
+La suite de tests peut également être lancée sans Docker :
 
 -   soit depuis la racine du projet pour lancer tous les tests (`yarn test` et `yarn test:watch`),
--   soit depuis le répertoire d'un projet pour ne lancer que les tests du projet (par exemple `cd apps/api && yarn test:watch`).
+-   soit depuis le répertoire d’un projet pour ne lancer que les tests du projet (par exemple `cd apps/api && yarn test:watch`).
 
 #### Les tests e2e
 
-Contrairement aux tests unitaires, les tests e2e sont regroupés dans le répertoire `tests-e2e`. Ils sont lancés sur une build de production du code. Ce build s'execute dans un container Docker, avec la commande `make test-env-start`.
+Contrairement aux tests unitaires, les tests e2e sont regroupés dans le répertoire `tests-e2e`. Ils sont lancés sur une build de production du code. Ce build s’execute dans un container Docker, avec la commande `make test-env-start`.
 
-Il existe des tests e2e pour l'api (dans le répertoire `/tests-e2e/api`) utilisant les framework de test [Frisby.js](https://www.frisbyjs.com/). Ces tests peuvent être lancés, **une fois l'environnement de test démarré**, avec les commandes :
+Il existe des tests e2e pour l’api (dans le répertoire `/tests-e2e/api`) utilisant les framework de test [Frisby.js](https://www.frisbyjs.com/). Ces tests peuvent être lancés, **une fois l’environnement de test démarré**, avec les commandes :
 
 -   `make test-env-run`,
 -   `make test-env-watch` pour avoir le mode _watch_.
 
-Les tests e2e du front sont eux basé sur [Cypress.io](https://www.cypress.io/). Pour démarrer Cypress, il faut donc avoir au préalable lancé l'environnement de test, puis utilisez la commande `make cypress`.
+Les tests e2e du front sont eux basé sur [Cypress.io](https://www.cypress.io/). Pour démarrer Cypress, il faut donc avoir au préalable lancé l’environnement de test, puis utilisez la commande `make cypress`.
 
-> **Si vous voulez utiliser Cypress, il faut que vous l'installiez sur votre environnement en utilisant la commande `make install-cypress` !**
+> **Si vous voulez utiliser Cypress, il faut que vous l’installiez sur votre environnement en utilisant la commande `make install-cypress` !**
 
-Lorsque vous avez terminer les tests e2e, pensez à stopper l'environnement de test avec la commande `make test-env-stop`.
+Lorsque vous avez terminer les tests e2e, pensez à stopper l’environnement de test avec la commande `make test-env-stop`.
 
-> Remarque: l'intégralité des tests (unitaires et e2e) peuvent être lancés en une seule commande : `make test`.
+> Remarque: l’intégralité des tests (unitaires et e2e) peuvent être lancés en une seule commande : `make test`.
 
 ### Les bonnes pratiques
 
-La bonne pratique, c'est de **faire des PR**, et puis c'est tout.
+La bonne pratique, c’est de **faire des PR**, et puis c’est tout.
 
-Mais voici quelques conseils qui peuvent les rendre encore meilleures :
+Mais voici quelques conseils qui peuvent les rendre encore meilleures :
 
 -   Faites des commits [courts et bien commentés](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
--   Faites des [PR courtes](https://dev.to/bosepchuk/optimal-pull-request-size-600), toute une tache (une issue) n'a pas forcement besoin d'être adressée dans une seule PR.
--   Faites référence à l'issue que la PR adresse.
--   N'hésitez pas à joindre des captures d'écran, fixes ou animées.
+-   Faites des [PR courtes](https://dev.to/bosepchuk/optimal-pull-request-size-600), toute une tache (une issue) n’a pas forcement besoin d’être adressée dans une seule PR.
+-   Faites référence à l’issue que la PR adresse.
+-   N’hésitez pas à joindre des captures d’écran, fixes ou animées.
 -   Ajouter une description et une _todo list_ en ouvrant la PR.
--   N'attendez pas que la PR soit terminée pour l'ouvrir : la communauté viendra plus facilement en aide en découvrant tôt la PR.
--   Utilisez les labels `WIP` (Work In Progress) et `RFR` (Ready For Review) pour indiquer l'avancement de la PR.
--   dernier point : tous les _textes_ (titre, description, commentaires, ...) sont fait en **français**. En effet, même si la norme en opensource c'est l'anglais, nous avons collectivement décidé d'utiliser le français pour le projet.
+-   N’attendez pas que la PR soit terminée pour l’ouvrir : la communauté viendra plus facilement en aide en découvrant tôt la PR.
+-   Utilisez les labels `WIP` (Work In Progress) et `RFR` (Ready For Review) pour indiquer l’avancement de la PR.
+-   dernier point : tous les _textes_ (titre, description, commentaires, etc.) sont fait en **français**. En effet, même si la norme en opensource c’est l’anglais, nous avons collectivement décidé d’utiliser le français pour le projet.
 
-## Trouver de l'aide
+## Trouver de l’aide
 
 ### Dans une issue
 
-Le [système d'issues du Github](https://guides.github.com/features/issues/) est très bien pensé et permet de facilement réagir, commenter, noter... Donc si une issue vous intéresse mais qu'elle ne vous semble pas claire, c'est directement dans l'issue que vous pouvez poser des questions.
+Le [système d’issues du Github](https://guides.github.com/features/issues/) est très bien pensé et permet de facilement réagir, commenter, noter... Donc si une issue vous intéresse mais qu’elle ne vous semble pas claire, c’est directement dans l’issue que vous pouvez poser des questions.
 
-### Au cours d'une pull request
+### Au cours d’une pull request
 
 Si vous avez commencé une PR, mais que vous êtes bloqué, vous pouvez écrire un commentaire dessus décrivant votre problème et ajouter le label `help wanted`.
 
 ### Sur Slack
 
-Il existe un channel **coding-caen-camps** sur le slack [Web@Caen](http://webcaen.slack.com). N'hésitez pas à [demander une invitation](mailto:contact@alexisjanvier.net) puis à y poser vos questions.
-L'une des tâches de cette refonte concerne d'ailleur la mise en place d'un sytème d'invitation simplifié pour rejoindre le Slack des CaenCamp.s .
+Il existe un channel **coding-caen-camps** sur le slack [Web@Caen](http://webcaen.slack.com). N’hésitez pas à [demander une invitation](mailto:contact@alexisjanvier.net) puis à y poser vos questions.
+L’une des tâches de cette refonte concerne d’ailleur la mise en place d’un sytème d’invitation simplifié pour rejoindre le Slack des CaenCamp.s .
 
 ### Le wiki
 
-Le wiki d'un projet est souvent difficile à maintenir. C'est portant une manière simple et efficace de noter des "astuces" et autres commentaires documentant la vie du projet. Vous pouvez aller y jeter un coup d'oeil, quelquefois qu'une bonne âme se serait donné la peine d'y noter quelque chose.
+Le wiki d’un projet est souvent difficile à maintenir. C’est portant une manière simple et efficace de noter des « astuces » et autres commentaires documentant la vie du projet. Vous pouvez aller y jeter un coup d’œil, quelquefois qu’une bonne âme se serait donné la peine d’y noter quelque chose.
 
 ### Aux Coding CaenCamp.s
 
-Nous nous réunissons une fois par mois pour passer quelques heures ensemble. Pour être tenu au courant des prochaines sessions, le plus simple est de s'inscrire sur la [newsletter des CaenCamp](http://eepurl.com/gEWFkv) et de nous suivre sur [Tweeter](https://twitter.com/caencamp)
+Nous nous réunissons une fois par mois pour passer quelques heures ensemble. Pour être tenu au courant des prochaines sessions, le plus simple est de s’inscrire sur la [newsletter des CaenCamp](http://eepurl.com/gEWFkv) et de nous suivre sur [Tweeter](https://twitter.com/caencamp)
 
 ## Notes additionnelles
 
 ### La Roadmap
 
-Ce projet est un projet uniquement lié aux bonnes volontés. Tous nous travaillons et il n'est donc pas question de mettre en place un Roadmap.
+Ce projet est un projet uniquement lié aux bonnes volontés. Tous nous travaillons et il n’est donc pas question de mettre en place un Roadmap.
 
 **Mais**, ce serait chouette de voir une première version en ligne pour 2020 ;)
