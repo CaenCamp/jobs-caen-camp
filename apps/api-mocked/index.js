@@ -2,7 +2,7 @@ const organization = require('./db/organization');
 const job = require('./db/job');
 
 module.exports = () => {
-    const data = { organizations: [], offers: [] };
+    const data = { organizations: [], jobs: [] };
 
     for (let i = 0; i < 10; i++) {
         const fakeOrganization = organization.fake(i);

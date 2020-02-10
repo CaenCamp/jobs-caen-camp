@@ -28,7 +28,7 @@ module.exports = {
         },
         jobs: []
     }),
-    addJobs: (organization, job) => {
+    addJob: (organization, job) => {
         organization.jobs.push({
             '@type': 'JobPosting',
             '@id': '/jobs/' + job.id,
