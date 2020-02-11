@@ -11,7 +11,7 @@
     "scripts": {
         "dev": "nodemon --watch src src/index.js",
         "start": "nodemon --watch src src/index.js",
-        "openapi:bundle": "swagger-cli bundle ./openapi/index.json -o ./openapi/openapi.json -r",
+        "openapi:bundle": "swagger-cli bundle ./openapi/index.yaml -o ./openapi/openapi.json -r",
         "openapi:check": "swagger-cli validate ./openapi/openapi.json",
         "test": "jest",
         "test:watch": "jest --watchAll"
