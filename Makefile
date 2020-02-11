@@ -5,6 +5,8 @@ export GID = $(shell id -g)
 
 export NODE_ENV ?= development
 
+DOCKER_API := docker run --rm -v ${PWD}:/jobboard -u=${UID} -w /jobboard/apps/api node:12.14-alpine
+
 help: ## Display available commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -35,6 +37,18 @@ logs: ## Display all logs
 	docker-compose logs -f
 
 # =====================================================================
+# OpenAPI =============================================================
+# =====================================================================
+
+openapi: openapi-bundle openapi-validate ## Bundle then validate the OpenAPI schema
+
+openapi-bundle: ## Bundle the OpenAPI schema
+	@$(DOCKER_API) yarn openapi:bundle
+
+openapi-validate: ## Validate the OpenAPI schema
+	@$(DOCKER_API) yarn openapi:check
+
+# =====================================================================
 # Testing =============================================================
 # =====================================================================
 
@@ -58,7 +72,7 @@ test-e2e: ## Run whole e2e tests suite
 	@($(MAKE) --quiet test-env-run && $(MAKE) --quiet test-env-stop) || ($(MAKE) --quiet test-env-stop && exit 1)
 
 # Manual recipes for e2e test (api with frisby and front with cypress)
-test-env-start: build-front 
+test-env-start: build-front
 	@${DC_TEST} up -d
 test-env-stop:
 	@${DC_TEST} down

@@ -44,6 +44,7 @@
         "svelte": "3.18.2",
         "svelte-jester": "1.0.3",
         "svelte-loader": "2.13.6",
+        "swagger-cli": "3.0.1",
         "webpack": "4.41.5",
         "webpack-cli": "3.3.10",
         "webpack-dev-server": "3.10.3"
@@ -56,12 +57,11 @@
     },
     "lint-staged": {
         "*.{js,css,json,md}": [
-            "prettier --write",
-            "git add"
+            "prettier --write"
         ],
         "*.js": [
-            "eslint --fix",
-            "git add"
-        ]
+            "eslint --fix"
+        ],
+        "openapi.json": "swagger-cli validate ./apps/api/openapi/openapi.json"
     }
 }
