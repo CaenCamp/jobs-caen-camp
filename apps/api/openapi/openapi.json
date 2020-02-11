@@ -35,7 +35,28 @@
     "paths": {},
     "components": {
         "securitySchemes": {},
-        "schemas": {},
+        "schemas": {
+            "JobPosting": {
+                "description": "Une offre d'emploi",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    }
+                },
+                "required": ["id"]
+            },
+            "Organization": {
+                "description": "Une entreprise liée au développement informatique succeptible de proposer des offres d'emploi",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    }
+                },
+                "required": ["id"]
+            }
+        },
         "parameters": {}
     }
 }

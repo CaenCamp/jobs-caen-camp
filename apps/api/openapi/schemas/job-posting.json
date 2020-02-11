@@ -1,0 +1,10 @@
+{
+    "JobPosting": {
+        "description": "Une offre d'emploi",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" }
+        },
+        "required": ["id"]
+    }
+}

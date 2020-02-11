@@ -1,0 +1,8 @@
+{
+    "JobPosting": {
+        "$ref": "job-posting.json#/JobPosting"
+    },
+    "Organization": {
+        "$ref": "organization.json#/Organization"
+    }
+}
