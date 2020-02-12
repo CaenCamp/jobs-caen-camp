@@ -1,19 +1,21 @@
-<script>
-    export let name;
-    import Company from './Company.svelte';
-    let companyName = 'CaenCamp';
-    const changeCompanyName = () => {
-        const newName = companyName === 'CaenCamp' ? 'Coding CaenCamp' : 'CaenCamp';
-        companyName = newName;
-    };
-</script>
-
 <style>
     h1 {
         color: purple;
     }
 </style>
 
-<h1>Hello {name}!</h1>
-<Company name={companyName} />
-<button on:click={changeCompanyName}>Changer le nom de la boite</button>
+<script>
+    import Company from './Company.svelte';
+    import Jobs from './Jobs.svelte';
+    import {name as nameStore} from '../stores';
+
+    const changeCompanyName = () =>
+        nameStore.update(name =>
+            name === 'CaenCamp' ? 'Coding CaenCamp' : 'CaenCamp'
+        );
+</script>
+
+<h1>Hello {$nameStore}!</h1>
+<Jobs/>
+<Company name="{$nameStore}" />
+<button on:click="{changeCompanyName}">Changer le nom de la boite</button>
