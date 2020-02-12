@@ -12,7 +12,7 @@ info:
     name: GNU GPLv3
     url: https://github.com/CaenCamp/jobs-caen-camp/blob/master/LICENSE
 servers:
-- url: http://localhost::8001
+- url: http://localhost:8001
   description: Local server
 security: []
 tags:

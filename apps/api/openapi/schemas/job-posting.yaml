@@ -4,5 +4,9 @@ JobPosting:
   properties:
     id:
       type: string
+    title:
+        type: string
+    hiringOrganization:
+        type: object
   required:
   - id
