@@ -8,5 +8,8 @@ JobPosting:
         type: string
     hiringOrganization:
         type: object
+        properties:
+            name:
+                type: string
   required:
   - id

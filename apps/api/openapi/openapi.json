@@ -32,7 +32,72 @@
       "description": "Les routes d'API liées aux entreprises à l'origine des offres d'emploi"
     }
   ],
-  "paths": {},
+  "paths": {
+    "/job/{jobId}": {
+      "get": {
+        "tags": [
+          "Offres d'emploi"
+        ],
+        "summary": "Trouver une offre par son ID",
+        "description": "Renvoi une offre d'emploi",
+        "operationId": "getJobById",
+        "parameters": [
+          {
+            "name": "jobId",
+            "schema": {
+              "type": "integer"
+            },
+            "in": "path",
+            "description": "ID of job to return",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "requete réussie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Une offre d'emploi",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "hiringOrganization": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID fourni invalide"
+          },
+          "404": {
+            "description": "Offre d'emploi non trouvée"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
   "components": {
     "securitySchemes": {},
     "schemas": {
@@ -47,7 +112,12 @@
             "type": "string"
           },
           "hiringOrganization": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
           }
         },
         "required": [

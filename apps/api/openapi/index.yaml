@@ -1,28 +1,55 @@
 openapi: 3.0.2
 info:
-  version: 1.0.0
-  title: CaenCamp.s JobBoard API
-  description: Description de l'API Rest des offres d'emplois des CaenCamp.s
-  termsOfService: https://jobboard.caen.camp/terms/
-  contact:
-    name: JobBoard Support
-    url: https://jobboard.caen.camp/support
-    email: jobboard@caen.camp
-  license:
-    name: GNU GPLv3
-    url: https://github.com/CaenCamp/jobs-caen-camp/blob/master/LICENSE
+    version: 1.0.0
+    title: CaenCamp.s JobBoard API
+    description: Description de l'API Rest des offres d'emplois des CaenCamp.s
+    termsOfService: https://jobboard.caen.camp/terms/
+    contact:
+        name: JobBoard Support
+        url: https://jobboard.caen.camp/support
+        email: jobboard@caen.camp
+    license:
+        name: GNU GPLv3
+        url: https://github.com/CaenCamp/jobs-caen-camp/blob/master/LICENSE
 servers:
-- url: http://localhost:8001
-  description: Local server
+    - url: http://localhost:8001
+      description: Local server
 security: []
 tags:
-- name: Offres d'emploi
-  description: Les routes d'API liées aux offre d'emploi.
-- name: Entreprises
-  description: Les routes d'API liées aux entreprises à l'origine des offres d'emploi
-paths: {}
+    - name: Offres d'emploi
+      description: Les routes d'API liées aux offre d'emploi.
+    - name: Entreprises
+      description: Les routes d'API liées aux entreprises à l'origine des offres d'emploi
+paths:
+    '/job/{jobId}':
+        get:
+            tags:
+                - Offres d'emploi
+            summary: Trouver une offre par son ID
+            description: Renvoi une offre d'emploi
+            operationId: getJobById
+            parameters:
+                - name: jobId
+                  schema:
+                      type: integer
+                  in: path
+                  description: ID of job to return
+                  required: true
+            responses:
+                '200':
+                    description: requete réussie
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/JobPosting'
+                '400':
+                    description: ID fourni invalide
+                '404':
+                    description: Offre d'emploi non trouvée
+            security:
+                - api_key: []
 components:
-  securitySchemes: {}
-  schemas:
-    "$ref": schemas/index.yaml
-  parameters: {}
+    securitySchemes: {}
+    schemas:
+        '$ref': schemas/index.yaml
+    parameters: {}
