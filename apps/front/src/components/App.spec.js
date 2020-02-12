@@ -6,8 +6,8 @@ describe('app component', () => {
     it('shows proper heading when rendered', () => {
         expect.assertions(1);
 
-        const { getByText } = render(App, { props: { name: 'World' } });
+        const { getByText } = render(App);
 
-        expect(getByText('Hello World!')).toBeInTheDocument();
+        expect(getByText('Hello Test!')).toBeInTheDocument();
     });
 });
