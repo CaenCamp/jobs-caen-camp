@@ -1,10 +1,13 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const serve = require('koa-static');
-
 const app = new Koa();
 const router = new Router();
 const env = process.env.NODE_ENV;
+
+// const mongoose = require('mongoose');
+
+// importer le modele de models.js
 
 if (env === 'development') {
     router.get('/', ctx => {
