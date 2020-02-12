@@ -1,7 +1,7 @@
 .PHONY: install start stop log
 
-export UID = $(shell id -u)
-export GID = $(shell id -g)
+export UID = $(id -u)
+export GID = $(id -g)
 
 export NODE_ENV ?= development
 
@@ -58,7 +58,7 @@ test-e2e: ## Run whole e2e tests suite
 	@($(MAKE) --quiet test-env-run && $(MAKE) --quiet test-env-stop) || ($(MAKE) --quiet test-env-stop && exit 1)
 
 # Manual recipes for e2e test (api with frisby and front with cypress)
-test-env-start: build-front 
+test-env-start: build-front
 	@${DC_TEST} up -d
 test-env-stop:
 	@${DC_TEST} down
