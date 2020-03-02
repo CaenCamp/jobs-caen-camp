@@ -1,0 +1,366 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: CaenCamp.s JobBoard API
+  description: "Description de l'API Rest des offres d'emplois des CaenCamp.s"
+  termsOfService: 'https://jobboard.caen.camp/terms/'
+  contact:
+    name: JobBoard Support
+    url: 'https://jobboard.caen.camp/support'
+    email: jobboard@caen.camp
+  license:
+    name: GNU GPLv3
+    url: 'https://github.com/CaenCamp/jobs-caen-camp/blob/master/LICENSE'
+servers:
+  - url: 'http://localhost:8001'
+    description: Local server
+security: []
+tags:
+  - name: "Offres d'emploi"
+    description: "Les routes d'API liées aux offre d'emploi."
+  - name: Entreprises
+    description: "Les routes d'API liées aux entreprises à l'origine des offres d'emploi"
+paths:
+  '/job-posting/{jobId}':
+    get:
+      tags:
+        - "Offres d'emploi"
+      summary: Trouver une offre par son ID
+      description: "Renvoi une offre d'emploi"
+      operationId: getJobById
+      parameters:
+        - name: jobId
+          schema:
+            type: integer
+          in: path
+          description: ID of job to return
+          required: true
+      responses:
+        '200':
+          description: requete réussie
+          content:
+            application/json:
+              schema:
+                description: "Une offre d'emploi"
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  hiringOrganization:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                required:
+                  - id
+        '400':
+          description: ID fourni invalide
+        '404':
+          description: "Offre d'emploi non trouvée"
+    parameters:
+      - schema:
+          type: string
+        name: jobId
+        in: path
+        required: true
+        description: "L'identifiant de l'offre d'emploi"
+    put:
+      tags:
+        - "Offres d'emploi"
+      summary: ''
+      operationId: updateJobPosting
+      responses:
+        '200':
+          description: "Offre d'emploi mise à jour"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobPosting'
+      description: "Editer une offre d'emploi"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobPosting'
+    delete:
+      tags:
+        - "Offres d'emploi"
+      summary: ''
+      operationId: deleteJobPosting
+      responses:
+        '200':
+          description: OK
+      description: "Supprimer une offre d'emploi"
+      parameters:
+        - schema:
+            type: string
+          in: path
+          name: jobId
+          description: "Identifiant de l'offre d'emploi"
+          required: true
+  /job-posting:
+    get:
+      tags:
+        - "Offres d'emploi"
+      summary: "Collection d'offres d'emploi"
+      responses:
+        '200':
+          description: "Liste paginée d'offres d'emploi"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobPosting'
+      operationId: getJobPostings
+      description: "Obtenir une liste d'offres d'emploi"
+    post:
+      tags:
+        - "Offres d'emploi"
+      summary: ''
+      operationId: createJobPosting
+      responses:
+        '200':
+          description: "Offre d'emploi créée"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobPosting'
+      description: "Ajouter une offre d'emploi au JobBoard"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobPosting'
+        description: "Données permettant de créer nue offre d'emploi"
+components:
+  securitySchemes: {}
+  schemas:
+    JobPosting:
+      description: "Une offre d'emploi"
+      type: object
+      x-examples:
+        example-devReact:
+          identifier: 89b4753a-f765-47f9-8229-c7b85ee9b6e6
+          title: Developpeur Javascript
+          hiringOrganization:
+            identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+            name: Incaya
+            description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+            image: 'https://www.incaya.fr/static/logo-incaya.svg'
+            email: contact@organization.org
+            url: 'https://www.incaya.fr/'
+            address:
+              addressCountry: France
+              addressLocality: Caen
+              postalCode: '14000'
+              streetAddress: '5, place de la Répulique'
+            contactPoints:
+              - email: job@organization.org
+                telephone: '0606060606'
+                name: 'John Do, CTO'
+                contactType: "Offres d'emploi"
+          url: 'https://jobs.caen.camp'
+          datePosted: '2010-03-02'
+          employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
+          employmentType: CDD
+          experienceRequirements: "3 ans d'experience sur un projet Javascript"
+          jobStartDate: '2020-05-02'
+          skills: 'JavaScript, Devops, Php, ...'
+          validThrough: '2010-05-05'
+      properties:
+        identifier:
+          type: string
+          format: uuid
+          example: 89b4753a-f765-47f9-8229-c7b85ee9b6e6
+        title:
+          type: string
+          example: Developpeur Cobol
+        hiringOrganization:
+          $ref: '#/components/schemas/hiringOrganization'
+        url:
+          type: string
+          format: uri
+          minLength: 10
+        datePosted:
+          type: string
+          format: date
+          example: '2010-03-02'
+        employerOverview:
+          type: string
+          example: "Au sein d'une équipe DSI composée de juniors et de séniors"
+        employmentType:
+          type: string
+          enum:
+            - CDI
+            - CDD
+            - Alternance
+          example: CDD
+        experienceRequirements:
+          type: string
+          example: "3 ans d'experience sur un projet Javascript"
+          minLength: 20
+        jobStartDate:
+          type: string
+          format: date
+          example: '2020-05-02'
+        skills:
+          type: string
+          example: 'JavaScript, Devops, Php, ...'
+        validThrough:
+          type: string
+          format: date
+          example: '2010-05-05'
+      required:
+        - identifier
+        - hiringOrganization
+        - datePosted
+        - employerOverview
+        - employmentType
+        - experienceRequirements
+        - jobStartDate
+        - skills
+    Organization:
+      description: Une entreprise liée au développement informatique.
+      type: object
+      x-examples:
+        example-hiringOrganization:
+          identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+          name: Incaya
+          description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+          image: 'https://www.incaya.fr/static/logo-incaya.svg'
+          email: contact@organization.org
+          url: 'https://www.incaya.fr/'
+          address:
+            addressCountry: France
+            addressLocality: Caen
+            postalCode: '14000'
+            streetAddress: '5, place de la Répulique'
+          contactPoints:
+            - email: job@organization.org
+              telephone: '0606060606'
+              name: 'John Do, CTO'
+              contactType: "Offres d'emploi"
+      properties:
+        identifier:
+          type: string
+          format: uuid
+          example: a122edec-5580-4a93-aff7-fc18b41e4c57
+        name:
+          type: string
+          example: Incaya
+          minLength: 2
+          maxLength: 150
+        description:
+          type: string
+          example: Coopérative de services du numérique
+        url:
+          type: string
+          format: uri
+          example: 'https://www.incaya.fr/'
+          minLength: 10
+          pattern: "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+        email:
+          type: string
+          format: email
+          example: email@organization.org
+        image:
+          type: string
+          format: uri
+          example: 'https://www.incaya.fr/static/logo-incaya.svg'
+          minLength: 10
+          pattern: "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+        address:
+          anyOf:
+            - type: string
+            - $ref: '#/components/schemas/PostalAddress'
+        contactPoints:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ContactPoint'
+      required:
+        - identifier
+        - name
+        - url
+    PostalAddress:
+      title: PostalAddress
+      type: object
+      properties:
+        addressCountry:
+          type: string
+          example: France
+          minLength: 2
+        addressLocality:
+          type: string
+          example: Caen
+          minLength: 2
+        postalCode:
+          type: string
+          example: '14000'
+          minLength: 5
+          maxLength: 5
+        streetAddress:
+          type: string
+          example: '5, place de la Répulique'
+      required:
+        - addressLocality
+        - postalCode
+      description: Une adresse postale.
+      x-examples:
+        example-Caen:
+          addressCountry: France
+          addressLocality: Caen
+          postalCode: '14000'
+          streetAddress: '5, place de la Répulique'
+    ContactPoint:
+      title: ContactPoint
+      type: object
+      x-examples:
+        example-job:
+          email: job@organization.org
+          telephone: '0606060606'
+          name: 'John Do, CTO'
+          contactType: "Offres d'emploi"
+      description: "Une personne à contacter au sein de l'organisation"
+      properties:
+        email:
+          type: string
+          format: email
+          example: job@organization.org
+          minLength: 7
+        telephone:
+          type: string
+          minLength: 10
+        name:
+          type: string
+        contactType:
+          type: string
+          example: "Offres d'emploi"
+      required:
+        - email
+        - name
+    hiringOrganization:
+      allOf:
+        - $ref: '#/components/schemas/Organization'
+      x-examples:
+        example-Incaya:
+          identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+          name: Incaya
+          description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+          image: 'https://www.incaya.fr/static/logo-incaya.svg'
+          email: contact@organization.org
+          url: 'https://www.incaya.fr/'
+          address:
+            addressCountry: France
+            addressLocality: Caen
+            postalCode: '14000'
+            streetAddress: '5, place de la Répulique'
+          contactPoints:
+            - email: job@organization.org
+              telephone: '0606060606'
+              name: 'John Do, CTO'
+              contactType: "Offres d'emploi"
+  parameters: {}
