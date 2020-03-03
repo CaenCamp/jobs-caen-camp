@@ -1,4 +1,4 @@
-openapi: 3.0.2
+openapi: 3.0.3
 info:
   version: 1.0.0
   title: CaenCamp.s JobBoard API
@@ -104,7 +104,7 @@ paths:
     get:
       tags:
         - "Offres d'emploi"
-      summary: "Collection d'offres d'emploi"
+      summary: "Obtenir une collection d'offres d'emploi"
       responses:
         '200':
           description: "Liste paginée d'offres d'emploi"
@@ -114,20 +114,68 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/JobPosting'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getJobPostings
       description: "Obtenir une liste d'offres d'emploi"
     post:
       tags:
         - "Offres d'emploi"
-      summary: ''
+      summary: "Création d'une offre d'emploi"
       operationId: createJobPosting
       responses:
         '200':
-          description: "Offre d'emploi créée"
+          description: "Retourne L'offre d'emploi créée"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/JobPosting'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
       description: "Ajouter une offre d'emploi au JobBoard"
       requestBody:
         content:
@@ -363,4 +411,35 @@ components:
               telephone: '0606060606'
               name: 'John Do, CTO'
               contactType: "Offres d'emploi"
+    ExtendedErrorModel:
+      allOf:
+        - $ref: '#/components/schemas/ErrorModel'
+        - type: object
+          properties:
+            rootCause:
+              type: string
+              example: Connexion to db failed
+          required:
+            - rootCause
+      description: "Une message d'erreur avec la stack d'erreur"
+    ErrorModel:
+      type: object
+      description: "Un message d'erreur"
+      x-examples:
+        example-404:
+          code: 404
+          message: "Cette offre d'emploi n'existe pas."
+      properties:
+        message:
+          type: string
+          example: "Cette offre d'emploi n'existe pas"
+          minLength: 10
+        code:
+          type: integer
+          format: int32
+          minimum: 200
+          maximum: 500
+      required:
+        - message
+        - code
   parameters: {}
