@@ -2,6 +2,7 @@
     "name": "cc-jobboard-front",
     "version": "1.0.0",
     "description": "Front (web app) part of the caencamp jobboard",
+    "license": "GPL-3.0",
     "scripts": {
         "build": "cross-env NODE_ENV=production webpack",
         "dev": "webpack-dev-server --content-base public",

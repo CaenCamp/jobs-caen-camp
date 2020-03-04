@@ -40,7 +40,7 @@ logs: ## Display all logs
 # OpenAPI =============================================================
 # =====================================================================
 
-openapi: openapi-bundle openapi-validate ## Bundle then validate the OpenAPI schema
+openapi: openapi-validate openapi-bundle ## Bundle then validate the OpenAPI schema
 
 openapi-bundle: ## Bundle the OpenAPI schema
 	@$(DOCKER_API) yarn openapi:bundle
