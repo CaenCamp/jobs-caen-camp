@@ -46,3 +46,4 @@ Option choisie : "Utiliser des ADR", parce que la solution est simple et rapide,
 - [Architecture et documentation : les ADRs](https://blog.xebia.fr/2019/03/05/architecture-et-documentation-les-adrs/)
 - [Architectural Decision Records](https://adr.github.io/)
 - [Markdown Architectural Decision Records](https://adr.github.io/madr/)
+

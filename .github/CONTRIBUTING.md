@@ -16,6 +16,7 @@
     - [L’organisation du code](#lorganisation-du-code)
   - [La documentation](#la-documentation)
     - [Les ADR.s](#les-adrs)
+  - [OpenAPI](#openapi)
   - [Faire une Pull request](#faire-une-pull-request)
     - [le git flow](#le-git-flow)
     - [La convention de codage (coding style)](#la-convention-de-codage-coding-style)
@@ -200,7 +201,6 @@ Et enfin, si vous effectuer des modifications au contrat, il faut re-générer l
 ```bash
 make openapi
 ```
-
 ## Faire une Pull request
 
 Si vous n’avez encore jamais fait de Pull Request (PR), la lecture du tutorial Github [Understanding the GitHub Flow](https://guides.github.com/introduction/flow/) est sûrement un bon point de départ.
