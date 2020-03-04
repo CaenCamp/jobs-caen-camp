@@ -21,7 +21,7 @@ tags:
   - name: Entreprises
     description: "Les routes d'API liées aux entreprises à l'origine des offres d'emploi"
 paths:
-  '/job-posting/{jobId}':
+  '/job-postings/{jobId}':
     get:
       tags:
         - "Offres d'emploi"
@@ -37,28 +37,71 @@ paths:
           required: true
       responses:
         '200':
-          description: requete réussie
+          description: "L'offre d'emploi demandée"
           content:
             application/json:
               schema:
-                description: "Une offre d'emploi"
-                type: object
-                properties:
-                  id:
-                    type: string
-                  title:
-                    type: string
-                  hiringOrganization:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                required:
-                  - id
+                $ref: '#/components/schemas/FullJobPosting'
+              examples:
+                example-1:
+                  value:
+                    identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    title: Developpeur Javascript
+                    hiringOrganization:
+                      identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                      name: Incaya
+                      description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+                      image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                      email: contact@organization.org
+                      url: 'https://www.incaya.fr/'
+                      address:
+                        addressCountry: France
+                        addressLocality: Caen
+                        postalCode: '14000'
+                        streetAddress: '5, place de la Répulique'
+                      contactPoints:
+                        - email: job@organization.org
+                          telephone: '0606060606'
+                          name: 'John Do, CTO'
+                          contactType: "Offres d'emploi"
+                    url: 'https://jobs.caen.camp'
+                    datePosted: '2010-03-02'
+                    employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
+                    employmentType: CDD
+                    experienceRequirements: "3 ans d'experience sur un projet Javascript"
+                    jobStartDate: '2020-05-02'
+                    skills: 'JavaScript, Devops, Php, ...'
+                    validThrough: '2010-05-05'
         '400':
           description: ID fourni invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
         '404':
           description: "Offre d'emploi non trouvée"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
     parameters:
       - schema:
           type: string
@@ -69,7 +112,7 @@ paths:
     put:
       tags:
         - "Offres d'emploi"
-      summary: ''
+      summary: "Mettre à jour une offre d'emploi"
       operationId: updateJobPosting
       responses:
         '200':
@@ -78,20 +121,108 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JobPosting'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
       description: "Editer une offre d'emploi"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JobPosting'
+              allOf:
+                - $ref: '#/components/schemas/Organization'
+                - type: object
+                  properties:
+                    hiringOrganizationId:
+                      type: string
+                      format: uuid
+                      example: 9b24d771-1069-40b1-b6be-3f3e53fdadd0
+            examples:
+              example-1:
+                value:
+                  title: Developpeur Javascript
+                  url: 'https://jobs.caen.camp'
+                  datePosted: '2010-03-02'
+                  employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
+                  employmentType: CDD
+                  experienceRequirements: "3 ans d'experience sur un projet Javascript"
+                  jobStartDate: '2020-05-02'
+                  skills: 'JavaScript, Devops, Php, ...'
+                  validThrough: '2010-05-05'
+                  hiringOrganizationId: a122edec-5580-4a93-aff7-fc18b41e4c57
+        description: "Données permettant de mettre à jour une offre d'emploi"
     delete:
       tags:
         - "Offres d'emploi"
-      summary: ''
+      summary: "Supprimer une offre d'emploi"
       operationId: deleteJobPosting
       responses:
         '200':
-          description: OK
+          description: "Offre d'emploi supprimée"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
       description: "Supprimer une offre d'emploi"
       parameters:
         - schema:
@@ -100,11 +231,11 @@ paths:
           name: jobId
           description: "Identifiant de l'offre d'emploi"
           required: true
-  /job-posting:
+  /job-postings:
     get:
       tags:
         - "Offres d'emploi"
-      summary: "Obtenir une collection d'offres d'emploi"
+      summary: "Liste des offres d'emploi"
       responses:
         '200':
           description: "Liste paginée d'offres d'emploi"
@@ -113,7 +244,43 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/JobPosting'
+                  $ref: '#/components/schemas/FullJobPosting'
+              examples:
+                example-1:
+                  value:
+                    - identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                      title: Developpeur Javascript
+                      hiringOrganization:
+                        identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                        name: Incaya
+                        description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+                        image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                        email: contact@organization.org
+                        url: 'https://www.incaya.fr/'
+                        address:
+                          addressCountry: France
+                          addressLocality: Caen
+                          postalCode: '14000'
+                          streetAddress: '5, place de la Répulique'
+                        contactPoints:
+                          - email: job@organization.org
+                            telephone: '0606060606'
+                            name: 'John Do, CTO'
+                            contactType: "Offres d'emploi"
+                      url: 'https://jobs.caen.camp'
+                      datePosted: '2010-03-02'
+                      employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
+                      employmentType: CDD
+                      experienceRequirements: "3 ans d'experience sur un projet Javascript"
+                      jobStartDate: '2020-05-02'
+                      skills: 'JavaScript, Devops, Php, ...'
+                      validThrough: '2010-05-05'
+          headers:
+            content-range:
+              schema:
+                type: string
+              description: "Return information about pagination, with form 'objectType from-to/total'"
+              required: true
         '400':
           description: Bad Request
           content:
@@ -140,18 +307,64 @@ paths:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getJobPostings
       description: "Obtenir une liste d'offres d'emploi"
+      parameters:
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Filter'
+        - $ref: '#/components/parameters/Pagination'
     post:
       tags:
         - "Offres d'emploi"
       summary: "Création d'une offre d'emploi"
       operationId: createJobPosting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/JobPosting'
+                - type: object
+                  properties:
+                    hiringOrganizationId:
+                      type: string
+                      format: uuid
+                      example: 9b24d771-1069-40b1-b6be-3f3e53fdadd0
+                  required:
+                    - hiringOrganizationId
+            examples:
+              example-1:
+                value:
+                  title: Developpeur Javascript
+                  url: 'https://jobs.caen.camp'
+                  datePosted: '2010-03-02'
+                  employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
+                  employmentType: CDD
+                  experienceRequirements: "3 ans d'experience sur un projet Javascript"
+                  jobStartDate: '2020-05-02'
+                  skills: 'JavaScript, Devops, Php, ...'
+                  validThrough: '2010-05-05'
+                  hiringOrganizationId: a122edec-5580-4a93-aff7-fc18b41e4c57
+        description: "Données permettant de créer une offre d'emploi"
+      description: "Ajouter une offre d'emploi au JobBoard"
       responses:
         '200':
           description: "Retourne L'offre d'emploi créée"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobPosting'
+                $ref: '#/components/schemas/FullOrganization'
+              examples:
+                example-1:
+                  value:
+                    title: Developpeur Javascript
+                    url: 'https://jobs.caen.camp'
+                    datePosted: '2010-03-02'
+                    employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
+                    employmentType: CDD
+                    experienceRequirements: "3 ans d'experience sur un projet Javascript"
+                    jobStartDate: '2020-05-02'
+                    skills: 'JavaScript, Devops, Php, ...'
+                    validThrough: '2010-05-05'
+                    hiringOrganizationId: a122edec-5580-4a93-aff7-fc18b41e4c57
         '400':
           description: Bad Request
           content:
@@ -176,13 +389,271 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
-      description: "Ajouter une offre d'emploi au JobBoard"
+      parameters: []
+  /organizations:
+    get:
+      summary: Liste des entreprises
+      tags:
+        - Entreprises
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FullOrganization'
+              examples:
+                example-1:
+                  value:
+                    - identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                      name: Incaya
+                      description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+                      image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                      email: contact@organization.org
+                      url: 'https://www.incaya.fr/'
+                      address:
+                        addressCountry: France
+                        addressLocality: Caen
+                        postalCode: '14000'
+                        streetAddress: '5, place de la Répulique'
+                      contactPoints:
+                        - email: job@organization.org
+                          telephone: '0606060606'
+                          name: 'John Do, CTO'
+                          contactType: "Offres d'emploi"
+          headers:
+            content-range:
+              schema:
+                type: string
+              required: true
+              description: "Return information about pagination, with form 'objectType from-to/total'"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      operationId: getOrganizations
+      description: Obtenir la liste des entreprises
+      parameters:
+        - $ref: '#/components/parameters/Filter'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Pagination'
+    post:
+      summary: "Création d'une entreprise"
+      operationId: createOrganization
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullOrganization'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      description: Créer une entreprise
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JobPosting'
-        description: "Données permettant de créer nue offre d'emploi"
+              $ref: '#/components/schemas/Organization'
+      tags:
+        - Entreprises
+  '/organizations/{organizationId}':
+    parameters:
+      - schema:
+          type: string
+        name: organizationId
+        in: path
+        required: true
+        description: "L'identifiant de l'entreprise"
+    get:
+      summary: "Donnée d'une entreprise"
+      tags:
+        - Entreprises
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullOrganization'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      operationId: getOrganization
+      description: "Obtenir les données d'une entreprise"
+    put:
+      summary: Mettre à jour une entreprise
+      operationId: updateOrganization
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullOrganization'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      description: "Mettre à jour les données d'une entreprise"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+        description: "Les données de l'entreprise mises à jour"
+      tags:
+        - Entreprises
+    delete:
+      summary: "Suppression d'une entreprise"
+      operationId: deleteOrganization
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ok
+                required:
+                  - message
+              examples:
+                example-1:
+                  value:
+                    message: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      description: Supprimer une entreprise existante
+      tags:
+        - Entreprises
 components:
   securitySchemes: {}
   schemas:
@@ -191,25 +662,7 @@ components:
       type: object
       x-examples:
         example-devReact:
-          identifier: 89b4753a-f765-47f9-8229-c7b85ee9b6e6
           title: Developpeur Javascript
-          hiringOrganization:
-            identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
-            name: Incaya
-            description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
-            image: 'https://www.incaya.fr/static/logo-incaya.svg'
-            email: contact@organization.org
-            url: 'https://www.incaya.fr/'
-            address:
-              addressCountry: France
-              addressLocality: Caen
-              postalCode: '14000'
-              streetAddress: '5, place de la Répulique'
-            contactPoints:
-              - email: job@organization.org
-                telephone: '0606060606'
-                name: 'John Do, CTO'
-                contactType: "Offres d'emploi"
           url: 'https://jobs.caen.camp'
           datePosted: '2010-03-02'
           employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
@@ -219,15 +672,9 @@ components:
           skills: 'JavaScript, Devops, Php, ...'
           validThrough: '2010-05-05'
       properties:
-        identifier:
-          type: string
-          format: uuid
-          example: 89b4753a-f765-47f9-8229-c7b85ee9b6e6
         title:
           type: string
           example: Developpeur Cobol
-        hiringOrganization:
-          $ref: '#/components/schemas/hiringOrganization'
         url:
           type: string
           format: uri
@@ -262,8 +709,6 @@ components:
           format: date
           example: '2010-05-05'
       required:
-        - identifier
-        - hiringOrganization
         - datePosted
         - employerOverview
         - employmentType
@@ -275,7 +720,6 @@ components:
       type: object
       x-examples:
         example-hiringOrganization:
-          identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
           name: Incaya
           description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
           image: 'https://www.incaya.fr/static/logo-incaya.svg'
@@ -292,10 +736,6 @@ components:
               name: 'John Do, CTO'
               contactType: "Offres d'emploi"
       properties:
-        identifier:
-          type: string
-          format: uuid
-          example: a122edec-5580-4a93-aff7-fc18b41e4c57
         name:
           type: string
           example: Incaya
@@ -330,7 +770,6 @@ components:
           items:
             $ref: '#/components/schemas/ContactPoint'
       required:
-        - identifier
         - name
         - url
     PostalAddress:
@@ -390,27 +829,6 @@ components:
       required:
         - email
         - name
-    hiringOrganization:
-      allOf:
-        - $ref: '#/components/schemas/Organization'
-      x-examples:
-        example-Incaya:
-          identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
-          name: Incaya
-          description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
-          image: 'https://www.incaya.fr/static/logo-incaya.svg'
-          email: contact@organization.org
-          url: 'https://www.incaya.fr/'
-          address:
-            addressCountry: France
-            addressLocality: Caen
-            postalCode: '14000'
-            streetAddress: '5, place de la Répulique'
-          contactPoints:
-            - email: job@organization.org
-              telephone: '0606060606'
-              name: 'John Do, CTO'
-              contactType: "Offres d'emploi"
     ExtendedErrorModel:
       allOf:
         - $ref: '#/components/schemas/ErrorModel'
@@ -422,6 +840,8 @@ components:
           required:
             - rootCause
       description: "Une message d'erreur avec la stack d'erreur"
+      x-examples:
+        example-1: {}
     ErrorModel:
       type: object
       description: "Un message d'erreur"
@@ -442,4 +862,102 @@ components:
       required:
         - message
         - code
-  parameters: {}
+    Identifier:
+      title: Identifier
+      type: object
+      properties:
+        identifier:
+          type: string
+          format: uuid
+          example: a122edec-5580-4a93-aff7-fc18b41e4c57
+      description: "L'identifiant unique des objets persistés dans le JobBoard"
+    FullJobPosting:
+      title: FullJobPosting
+      description: "Une offre d'emploi complète (avec identifiant unique et entreprise liée)"
+      allOf:
+        - $ref: '#/components/schemas/Identifier'
+        - $ref: '#/components/schemas/JobPosting'
+        - type: object
+          properties:
+            hiringOrganization:
+              $ref: '#/components/schemas/FullOrganization'
+      x-examples:
+        example-1:
+          title: Developpeur Javascript
+          hiringOrganization:
+            identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+            name: Incaya
+            description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+            image: 'https://www.incaya.fr/static/logo-incaya.svg'
+            email: contact@organization.org
+            url: 'https://www.incaya.fr/'
+            address:
+              addressCountry: France
+              addressLocality: Caen
+              postalCode: '14000'
+              streetAddress: '5, place de la Répulique'
+            contactPoints:
+              - email: job@organization.org
+                telephone: '0606060606'
+                name: 'John Do, CTO'
+                contactType: "Offres d'emploi"
+          url: 'https://jobs.caen.camp'
+          datePosted: '2010-03-02'
+          employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
+          employmentType: CDD
+          experienceRequirements: "3 ans d'experience sur un projet Javascript"
+          jobStartDate: '2020-05-02'
+          skills: 'JavaScript, Devops, Php, ...'
+          validThrough: '2010-05-05'
+    FullOrganization:
+      title: FullOrganization
+      description: Une entreprise complete avec identifiant unique
+      allOf:
+        - $ref: '#/components/schemas/Identifier'
+        - $ref: '#/components/schemas/Organization'
+      x-examples:
+        example-1:
+          identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+          name: Incaya
+          description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+          image: 'https://www.incaya.fr/static/logo-incaya.svg'
+          email: contact@organization.org
+          url: 'https://www.incaya.fr/'
+          address:
+            addressCountry: France
+            addressLocality: Caen
+            postalCode: '14000'
+            streetAddress: '5, place de la Répulique'
+          contactPoints:
+            - email: job@organization.org
+              telephone: '0606060606'
+              name: 'John Do, CTO'
+              contactType: "Offres d'emploi"
+  parameters:
+    Filter:
+      name: filter
+      in: query
+      description: "Filtres appliquables à la requête. C'est un objet json stringifié, avec les filtres en clé/valeur séparé par des virgules."
+      required: false
+      explode: true
+      schema:
+        type: string
+      example: '{"locale":"fr","editor_name":"dd"}'
+    Sort:
+      name: sort
+      in: query
+      description: "Le tri applicable à la liste. C'est un tableau stringifié de la forme [sortProp, sortDirection]"
+      required: false
+      explode: true
+      schema:
+        type: string
+      example: '["id","ASC"]'
+    Pagination:
+      name: pagination
+      in: query
+      description: "Les paramètres pour la pagination. C'est un tableau stringifié de la forme [perPage, currentPage]"
+      required: false
+      explode: true
+      schema:
+        type: string
+      example: '[10,3]'
