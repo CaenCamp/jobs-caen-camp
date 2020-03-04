@@ -149,6 +149,24 @@ Voici l’organisation des principaux répertoires du projet :
 -   **apps/api** : On trouve ici le code de l’api.
 -   **apps/api-mocked** : On trouve ici le code de l’api _simulée_ du projet. Si au moment ou vous lisez ces lignes ce répertoire - qui ne sera présent que lors de la phase de lancement du projet - n’est plus présent, un PR destinée à supprimer cette ligne sera la bienvenue ;)
 
+## OpenAPI
+
+La modélisation et la documentation de l'API se fait via un contrat d'API en [OpenAPI](https://spec.openapis.org/oas/v3.0.2#tag-object).
+
+Vous trouverez le contrat dans `apps/api/openapi/openapi.yaml`.
+
+La documentation est générée dans un container Docker avec [Swagger UI](https://swagger.io/tools/swagger-ui/), disponible sur http://localhost:8003
+
+Si vous ne connaissez pas bien OpenAPI, vous pouvez jeter un coup d'oeil à la vidéo de l'édition #48 des CaenCamp qui en parle : [OpenAPI: un contrat pour vos API.s](https://www.caen.camp/talks/openapi-un-contrat-pour-vos-apis).
+
+Le contrat est dans un unique fichier, on ne peut donc que conseiller l'utilisation d'un outil tel que [StopLight Studio](https://stoplight.io/studio/) pour facilliter l'édition de ce fichier.
+
+Et enfin, si vous effectuer des modifications au contrat, il faut re-générer le contrat au format `json` grace à la recette
+
+```bash
+make openapi
+```
+
 ## Faire une Pull request
 
 Si vous n’avez encore jamais fait de Pull Request (PR), la lecture du tutorial Github [Understanding the GitHub Flow](https://guides.github.com/introduction/flow/) est sûrement un bon point de départ.
