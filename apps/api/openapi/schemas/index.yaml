@@ -1,4 +1,0 @@
-JobPosting:
-  "$ref": job-posting.yaml#/JobPosting
-Organization:
-  "$ref": organization.yaml#/Organization

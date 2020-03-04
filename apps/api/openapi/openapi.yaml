@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.0.2
 info:
   version: 1.0.0
   title: CaenCamp.s JobBoard API
