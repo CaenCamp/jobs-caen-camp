@@ -9,7 +9,9 @@
     ],
     "scripts": {
         "test": "jest",
-        "test:watch": "jest --watchAll"
+        "test:watch": "jest --watchAll",
+        "adr:new": "adr-tools new",
+        "adr:list": "adr-tools list"
     },
     "homepage": "https://github.com/CaenCamp/jobs-caen-camp#readme",
     "devDependencies": {
@@ -20,6 +22,7 @@
         "@testing-library/cypress": "5.3.0",
         "@testing-library/jest-dom": "5.1.1",
         "@testing-library/svelte": "1.11.0",
+        "adr-tools": "2.0.4",
         "babel-jest": "25.1.0",
         "cross-env": "7.0.0",
         "css-loader": "3.4.2",
