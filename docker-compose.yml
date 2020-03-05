@@ -23,6 +23,15 @@ services:
       - NODE_ENV='development'
     command: "yarn dev"
 
+  postgres:
+    image: postgres:12.2
+    volumes:
+      - jobboard-pgData:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    env_file:
+      - ./config/${NODE_ENV}.env
+
   api-moked:
     image: node:12.14-alpine
     volumes:
@@ -49,3 +58,6 @@ services:
     ports:
       - 8004:4010
     command: mock -d -h 0.0.0.0 "/openapi/openapi.json"
+
+volumes:
+  jobboard-pgData:

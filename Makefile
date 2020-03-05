@@ -15,10 +15,12 @@ help: ## Display available commands
 # =====================================================================
 
 install: ## Install all js deps
+	cp -n ./config/development.dist ./config/development.env
 	@docker-compose run --rm --no-deps api ash -ci '\
 		cd ../../ && \
 		yarn \
 	'
+
 install-cypress: ## Install cypress.io bin on local environment, not in Docker !
 	@node_modules/.bin/cypress install
 
