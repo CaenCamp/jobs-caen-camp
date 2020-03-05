@@ -1,77 +1,48 @@
-# 1. Utiliser les ADRs pour documenter le projet
+# 1. Utiliser les ADR.s pour documenter le projet
 
 Date: 2020-03-04
 
-Décideurs: [liste des personnes impliquée dans la décision] <!-- optional -->
-Ticket.s concerné.s: [description | URL ticket/issue Github] <!-- optional -->
-Pull Request: [PR URL] <!-- optional -->
+- Décideurs: [Alexis Janvier](https://github.com/orgs/CaenCamp/people/alexisjanvier), [Gaël Reyrol](https://github.com/gaelreyrol)
+- Ticket.s concerné.s: -
+- Pull.s Request.s: [#32](https://github.com/CaenCamp/jobs-caen-camp/pull/32)
 
 ## Statut
 
-<!-- les statuts sont en anglais : proposed/accepted/done/deprecated/superseded -->
 2020-03-04 proposed
 
 ## Contexte et énoncé du problème
 
-[Décrivez le contexte et l'énoncé du problème, par exemple, sous forme libre en deux ou trois phrases. Vous pouvez vouloir articuler le problème sous forme de question].
+Ce n'est jamais facile de maintenir la documentation d'un projet. Dans le cas du jobBoard, une documentation semble pourtant particulièrement importante, puisque les participants au projet ne se retrouvent qu'une fois par mois _IRL_ et viennent d'horizons techniques très différents.
 
-## Moteurs de décision <!-- facultatif -->
+Nous avons déjà mis en place une stratégie de documentation via [OpenAPI](https://www.openapis.org/) afin de documenter le coeur de l'application, c'est à dire l'API Rest du projet.
 
-* [conducteur 1, par exemple, une force, face à l'inquiétude, ...]
-* [conducteur 2, par exemple, une force, face à l'inquiétude, ...]
-* ... <!-- le nombre de conducteurs peut varier -->
+Mais il y a beaucoup de décisions qui sont difficilement "documentables" : ce sont celles qui concernent les décisions d'architecture (une API Rest ou graphQL, utilisation d'une base de données relationnelle ou de type noSQL, ...).
+
+Et pourtant, la prise de décision sur ces sujets représente l'un des grands intérêts des Coding CaenCamp.s !
 
 ## Options envisagées
 
-* [option 1]
-* [option 2]
-* [option 3]
-* ... <!-- le nombre d'options peut varier -->
+- Utilisation du wiki de Github.
+- Mettre en place un outil de documentation complet, comme [docusaurus](https://docusaurus.io/).
+- Utiliser des [ADRs](https://adr.github.io/).
 
 ## Résultat de la décision
 
-Option choisie : "[option 1]", parce que [justification. par exemple, seule l'option qui répond au critère de k.o. déterminant la décision | qui résout la force | ... | est la meilleure (voir ci-dessous)].
+Option choisie : "Utiliser des ADR", parce que la solution est simple et rapide, et permet de maintenir une documentation au plus proche du code. Un ADR peut être poussé dans le code du projet en même temps qu'une Pull Request.
 
-### Conséquences positives <!-- facultatif -->
+### Conséquences positives
 
-* [par exemple, amélioration de la satisfaction des attributs de qualité, décisions de suivi requises, ...]
-* …
+- Un suivi des décisions architecturales prises sur le projet
+- Le format ADR est léger (fichier markdown) et correspond à nos méthodes de développement.
+- La structure des ADR est compréhensible et facilite l'utilisation et la maintenance.
+- Le projet ADR est bien entretenu.
 
-### Conséquences négatives <!-- facultatif -->
+### Conséquences négatives
 
-* [par exemple, attribut de qualité compromettant, décisions de suivi requises, ...]
-* …
+- Un peu de travail supplémentaire pour les développeurs qui devront prendre un certain temps pour rédiger les ADR.
 
-## Avantages et inconvénients des options <!-- facultatif -->
+## Liens
 
-### [option 1]
-
-[exemple | description | pointeur vers plus d'informations | ...] <!-- facultatif -->
-
-* Bien, parce que [argument a]
-* Bien, parce que [argument b]
-* Mauvais, parce que [argument c]
-* ... <!-- le nombre de pour et de contre peut varier -->
-
-### [option 2]
-
-[exemple | description | pointeur vers plus d'informations | ...] <!-- facultatif -->
-
-* Bien, parce que [argument a]
-* Bien, parce que [argument b]
-* Mauvais, parce que [argument c]
-* ... <!-- le nombre de pour et de contre peut varier -->
-
-### [option 3]
-
-[exemple | description | pointeur vers plus d'informations | ...] <!-- facultatif -->
-
-* Bien, parce que [argument a]
-* Bien, parce que [argument b]
-* Mauvais, parce que [argument c]
-* ... <!-- le nombre de pour et de contre peut varier -->
-
-## Liens <!-- facultatif -->
-
-* [Type de lien] [Lien vers l'ADR] <!-- exemple : Raffiné par [ADR-0005](0005-exemple.md) -->
-* ... <!-- le nombre de liens peut varier -->
+- [Architecture et documentation : les ADRs](https://blog.xebia.fr/2019/03/05/architecture-et-documentation-les-adrs/)
+- [Architectural Decision Records](https://adr.github.io/)
+- [Markdown Architectural Decision Records](https://adr.github.io/madr/)
