@@ -11,7 +11,7 @@
     },
     "dependencies": {
         "axios": "0.19.2",
-        "svelte": "3.18.2",
-        "svelte-routing": "1.4.0"
+        "svelte": "3.19.2",
+        "svelte-routing": "1.4.1"
     }
 }
