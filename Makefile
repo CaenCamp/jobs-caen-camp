@@ -68,7 +68,7 @@ adr-list: ## List all ADR
 
 DC_TEST = docker-compose -p cc-jobboard-test -f docker-compose-test.yml
 
-test: test-unit test-e2e ## launch all tests in docker
+test: test-unit ## launch all tests in docker
 
 test-unit: ## launch only tests unit (front and api)
 	@docker-compose run --rm --no-deps api ash -ci '\
