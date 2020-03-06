@@ -19,8 +19,10 @@ services:
     user: "${UID}:${GID}"
     ports:
       - 8001:3001
-    environment:
-      - NODE_ENV='development'
+    env_file:
+      - ./config/${NODE_ENV}.env
+    depends_on:
+      - postgres
     command: "yarn dev"
 
   postgres:

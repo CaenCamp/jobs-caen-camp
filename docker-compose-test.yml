@@ -9,6 +9,6 @@ services:
     user: "${UID}:${GID}"
     ports:
       - 8000:3001
-    environment:
-      - NODE_ENV='test'
+    env_file:
+      - ./config/test.env
     command: "yarn start"

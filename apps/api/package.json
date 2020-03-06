@@ -15,7 +15,13 @@
         "openapi:bundle": "swagger-cli bundle ./openapi/openapi.yaml -o ./openapi/openapi.json -r",
         "openapi:check": "spectral lint ./openapi/openapi.yaml",
         "test": "jest",
-        "test:watch": "jest --watchAll"
+        "test:watch": "jest --watchAll",
+        "migrate:latest": "knex migrate:latest",
+        "migrate:rollback": "knex migrate:rollback",
+        "migrate:up": "knex migrate:up",
+        "migrate:down": "knex migrate:down",
+        "migrate:list": "knex migrate:list",
+        "migrate:create": "knex migrate:make"
     },
     "bugs": {
         "url": "https://github.com/CaenCamp/jobs-caen-camp/issues"
