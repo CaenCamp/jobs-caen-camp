@@ -37,6 +37,9 @@ stop: ## Stop all containers
 logs: ## Display all logs
 	docker-compose logs -f
 
+connect-api: ## Display all logs
+	docker-compose exec api ash
+
 # =====================================================================
 # OpenAPI =============================================================
 # =====================================================================
