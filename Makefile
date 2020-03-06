@@ -6,6 +6,8 @@ export GID = $(id -g)
 export NODE_ENV ?= development
 
 DOCKER_API := docker run --rm -v ${PWD}:/jobboard -u=${UID} -w /jobboard/apps/api node:12.14-alpine
+DC_DEV = docker-compose -p cc-jobboard-dev
+DC_TEST = docker-compose -p cc-jobboard-test -f docker-compose-test.yml
 
 help: ## Display available commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -15,12 +17,11 @@ help: ## Display available commands
 # =====================================================================
 
 install: ## Install all js deps
-	cp -n ./config/development.dist ./config/development.env
-	@docker-compose run --rm --no-deps api ash -ci '\
+	@cp -n ./config/development.dist ./config/development.env
+	@${DC_DEV} run --rm --no-deps api ash -ci '\
 		cd ../../ && \
 		yarn \
 	'
-
 install-cypress: ## Install cypress.io bin on local environment, not in Docker !
 	@node_modules/.bin/cypress install
 
@@ -29,16 +30,16 @@ install-cypress: ## Install cypress.io bin on local environment, not in Docker !
 # =====================================================================
 
 start: ## Start all service in containers
-	docker-compose up -d
+	${DC_DEV} up -d
 
 stop: ## Stop all containers
-	docker-compose down
+	${DC_DEV} down
 
 logs: ## Display all logs
-	docker-compose logs -f
+	${DC_DEV} logs -f
 
-connect-api: ## Display all logs
-	docker-compose exec api ash
+connect-api: ## Start cli in api container
+	${DC_DEV} exec api ash
 
 # =====================================================================
 # OpenAPI =============================================================
@@ -68,21 +69,41 @@ adr-list: ## List all ADR
 	@${DOCKER_API} yarn adr:list
 
 # =====================================================================
-# Testing =============================================================
+# DATABASE ============================================================
 # =====================================================================
 
-DC_TEST = docker-compose -p cc-jobboard-test -f docker-compose-test.yml
+migrate-create: ## Create a new migration file, ie make migrate-create name=whatever-title
+	$(DC_DEV) exec api ash -ci 'yarn migrate:create -- ${name}'
+
+migrate-latest: ## Apply Migrations up to the last one
+	$(DC_DEV) exec api ash -ci 'yarn migrate:latest'
+
+migrate-rollback: ## Apply Migrations down to last state
+	$(DC_DEV) exec api ash -ci 'yarn migrate:rollback'
+
+migrate-down: ## Apply Migrations down one step
+	$(DC_DEV) exec api ash -ci 'yarn migrate:down'
+
+migrate-up: ## Apply Migrations up one step
+	$(DC_DEV) exec api ash -ci 'yarn migrate:up'
+
+migrate-list: ## Apply Migrations list
+	$(DC_DEV) exec api ash -ci 'yarn migrate:list'
+
+# =====================================================================
+# Testing =============================================================
+# =====================================================================
 
 test: test-unit ## launch all tests in docker
 
 test-unit: ## launch only tests unit (front and api)
-	@docker-compose run --rm --no-deps api ash -ci '\
+	@${DC_TEST} run --rm --no-deps api ash -ci '\
 		cd ../../ && \
 		yarn test \
 	'
 
 test-unit-watch: ## launch only tests unit in watch mode
-	@docker-compose run --rm --no-deps api ash -ci '\
+	@${DC_TEST} run --rm --no-deps api ash -ci '\
 		cd ../../ && \
 		yarn test:watch \
 	'
@@ -115,7 +136,8 @@ cypress:
 # =====================================================================
 
 build-front: ## Build the front
-	@docker-compose run --rm --no-deps front ash -ci '\
+	@${DC_DEV} run --rm --no-deps front ash -ci '\
 		rm -f public/bundle.* && \
 		yarn build \
 	'
+

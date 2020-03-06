@@ -21,6 +21,7 @@
         "url": "https://github.com/CaenCamp/jobs-caen-camp/issues"
     },
     "dependencies": {
+        "convict": "5.2.0",
         "koa": "2.11.0",
         "koa-router": "8.0.8",
         "koa-static": "5.0.0"
