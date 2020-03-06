@@ -41,3 +41,11 @@ services:
       - SWAGGER_JSON=/openapi/openapi.json
     ports:
       - 8003:8080
+
+  prism:
+    image: stoplight/prism:3
+    volumes:
+      - ./apps/api/openapi:/openapi
+    ports:
+      - 8004:4010
+    command: mock -d -h 0.0.0.0 "/openapi/openapi.json"

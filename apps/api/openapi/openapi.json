@@ -17,6 +17,10 @@
   },
   "servers": [
     {
+      "url": "http://localhost:8004",
+      "description": "Mock server with Prism"
+    },
+    {
       "url": "http://localhost:8001",
       "description": "Local server"
     }
