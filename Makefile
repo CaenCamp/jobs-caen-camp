@@ -5,6 +5,8 @@ export GID = $(id -g)
 
 export NODE_ENV ?= development
 
+DOCKER_API := docker run --rm -v ${PWD}:/jobboard -u=${UID} -w /jobboard/apps/api node:12.14-alpine
+
 help: ## Display available commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -33,6 +35,18 @@ stop: ## Stop all containers
 
 logs: ## Display all logs
 	docker-compose logs -f
+
+# =====================================================================
+# OpenAPI =============================================================
+# =====================================================================
+
+openapi: openapi-validate openapi-bundle ## Bundle then validate the OpenAPI schema
+
+openapi-bundle: ## Bundle the OpenAPI schema
+	@$(DOCKER_API) yarn openapi:bundle
+
+openapi-validate: ## Validate the OpenAPI schema
+	@$(DOCKER_API) yarn openapi:check
 
 # =====================================================================
 # Testing =============================================================

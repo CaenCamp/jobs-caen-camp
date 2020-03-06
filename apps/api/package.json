@@ -2,6 +2,7 @@
     "name": "cc-jobboard-api",
     "version": "1.0.0",
     "description": "Backend part of the caencamp jobboard",
+    "license": "GPL-3.0",
     "author": "Alexis Janvier <contact@alexisjanvier.net>",
     "homepage": "https://github.com/CaenCamp/jobs-caen-camp#readme",
     "repository": {
@@ -11,6 +12,8 @@
     "scripts": {
         "dev": "nodemon --watch src src/index.js",
         "start": "nodemon --watch src src/index.js",
+        "openapi:bundle": "swagger-cli bundle ./openapi/openapi.yaml -o ./openapi/openapi.json -r",
+        "openapi:check": "spectral lint ./openapi/openapi.yaml",
         "test": "jest",
         "test:watch": "jest --watchAll"
     },
@@ -21,5 +24,8 @@
         "koa": "2.11.0",
         "koa-router": "8.0.7",
         "koa-static": "5.0.0"
+    },
+    "devDependencies": {
+        "@stoplight/spectral": "5.1.0"
     }
 }

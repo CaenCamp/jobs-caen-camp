@@ -1,35 +1,43 @@
-version: '3.5'
+version: "3.5"
 
 services:
   front:
     image: node:12.14-alpine
     volumes:
       - .:/jobboard
-    working_dir: '/jobboard/apps/front'
-    user: '${UID}:${GID}'
+    working_dir: "/jobboard/apps/front"
+    user: "${UID}:${GID}"
     ports:
       - 8000:8000
-    command: 'yarn dev'
+    command: "yarn dev"
 
   api:
     image: node:12.14-alpine
     volumes:
       - .:/jobboard
-    working_dir: '/jobboard/apps/api'
-    user: '${UID}:${GID}'
+    working_dir: "/jobboard/apps/api"
+    user: "${UID}:${GID}"
     ports:
       - 8001:3001
     environment:
       - NODE_ENV='development'
-    command: 'yarn dev'
+    command: "yarn dev"
 
   api-moked:
     image: node:12.14-alpine
     volumes:
       - .:/jobboard
-    working_dir: '/jobboard/apps/api-mocked'
-    user: '${UID}:${GID}'
+    working_dir: "/jobboard/apps/api-mocked"
+    user: "${UID}:${GID}"
     ports:
       - 8002:3000
-    command: 'yarn start'
+    command: "yarn start"
 
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    volumes:
+      - ./apps/api/openapi:/openapi
+    environment:
+      - SWAGGER_JSON=/openapi/openapi.json
+    ports:
+      - 8003:8080

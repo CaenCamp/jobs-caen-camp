@@ -27,6 +27,7 @@ Vous pouvez ainsi accéder à :
 - l’application web sur http://localhost:8000
 - l’api sur http://localhost:8001
 - l’api _mockée_ sur http://localhost:8002
+- la documentation de l'API sur http://localhost:8003
 
 ## Vous souhaitez participer ?
 
