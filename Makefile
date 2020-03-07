@@ -1,13 +1,12 @@
 .PHONY: install start stop log
 
-export UID = $(shell id -u)
-export GID = $(shell id -g)
-
+CURRENT_UID=$(id -u):$(id -g)
+export CURRENT_UID ?= $(shell id -u):$(shell id -g)
 export NODE_ENV ?= development
 
-DOCKER_API := docker run --rm -v ${PWD}:/jobboard -u=${UID} -w /jobboard/apps/api node:12.14-alpine
-DC_DEV = docker-compose -p cc-jobboard-dev
-DC_TEST = docker-compose -p cc-jobboard-test -f docker-compose-test.yml
+DOCKER_API := docker run --rm -v ${PWD}:/jobboard -u=${CURRENT_UID} -w /jobboard/apps/api node:12.14-alpine
+DC_DEV := docker-compose -p cc-jobboard-dev
+DC_TEST := docker-compose -p cc-jobboard-test -f docker-compose-test.yml
 
 help: ## Display available commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

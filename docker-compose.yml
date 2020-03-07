@@ -6,7 +6,7 @@ services:
     volumes:
       - .:/jobboard
     working_dir: "/jobboard/apps/front"
-    user: "${UID}:${GID}"
+    user: ${CURRENT_UID}
     ports:
       - 8000:8000
     command: "yarn dev"
@@ -16,7 +16,7 @@ services:
     volumes:
       - .:/jobboard
     working_dir: "/jobboard/apps/api"
-    user: "${UID}:${GID}"
+    user: ${CURRENT_UID}
     ports:
       - 8001:3001
     env_file:
@@ -39,7 +39,7 @@ services:
     volumes:
       - .:/jobboard
     working_dir: "/jobboard/apps/api-mocked"
-    user: "${UID}:${GID}"
+    user: ${CURRENT_UID}
     ports:
       - 8002:3000
     command: "yarn start"
