@@ -1,7 +1,7 @@
 .PHONY: install start stop log
 
-export UID = $(id -u)
-export GID = $(id -g)
+export UID = $(shell id -u)
+export GID = $(shell id -g)
 
 export NODE_ENV ?= development
 
