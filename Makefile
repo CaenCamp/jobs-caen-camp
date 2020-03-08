@@ -38,6 +38,9 @@ stop: ## Stop all containers
 logs: ## Display all logs
 	${DC_DEV} logs -f
 
+logs-api: ## Display api logs
+	${DC_DEV} logs -f api
+
 connect-api: ## Start cli in api container
 	${DC_DEV} exec api ash
 

@@ -2,6 +2,8 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const serve = require('koa-static');
 
+const dbMiddleware = require('./toolbox/middleware/db');
+
 const app = new Koa();
 const router = new Router();
 const env = process.env.NODE_ENV;
@@ -20,7 +22,7 @@ if (env === 'development') {
 router.get('/api', ctx => {
     ctx.body = { message: 'CaenCamp Jobboard API' };
 });
-
 app.use(router.routes()).use(router.allowedMethods());
+app.use(dbMiddleware);
 
 app.listen(3001, () => global.console.log('API started on port 3001'));
