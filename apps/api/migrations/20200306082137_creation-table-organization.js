@@ -6,7 +6,7 @@ exports.up = function(knex) {
                 .primary()
                 .defaultTo(knex.raw('uuid_generate_v4()'));
             table.string('name', 150).notNullable();
-            table.string('description').nullable();
+            table.text('description').nullable();
             table.string('url', 400).nullable();
             table.string('email', 150).nullable();
             table.text('image', 400).nullable();

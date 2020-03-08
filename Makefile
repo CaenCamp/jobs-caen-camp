@@ -71,6 +71,9 @@ adr-list: ## List all ADR
 # DATABASE ============================================================
 # =====================================================================
 
+import-fixed-fixtures: ## Import fixtures from a json file create by hand
+	$(DC_DEV) exec api ash -ci 'node cli/load-fixed-fixtures'
+
 migrate-create: ## Create a new migration file, ie make migrate-create name=whatever-title
 	$(DC_DEV) exec api ash -ci 'yarn migrate:create -- ${name}'
 

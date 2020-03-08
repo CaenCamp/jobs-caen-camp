@@ -7,11 +7,11 @@ exports.up = function(knex) {
         table.string('title', 300).notNullable();
         table.string('url', 400).nullable();
         table.date('datePosted').notNullable();
-        table.string('employerOverview').notNullable();
+        table.text('employerOverview').notNullable();
         table
             .enu('employmentType', ['CDI', 'CDD', 'Alternance', 'Autre'])
             .notNullable();
-        table.string('experienceRequirements').notNullable();
+        table.text('experienceRequirements').notNullable();
         table.date('jobStartDate').nullable();
         table.string('skills').notNullable();
         table.date('validThrough').nullable();

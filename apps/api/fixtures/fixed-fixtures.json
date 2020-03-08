@@ -8,7 +8,7 @@
             "email": "hello@qwarry.com",
             "url": "https://qwarry.com",
             "address": {
-                "addressCountry": "France",
+                "addressCountry": "FR",
                 "addressLocality": "Colombelles",
                 "postalCode": "14460",
                 "streetAddress": "Normandie – Village By CA, 8 rue Léopold Sedar-Senghor"
@@ -40,7 +40,7 @@
             "email": "hello@qwarry.com",
             "url": "https://www.linkedin.com/in/mathieu-mosquet-b5937452/",
             "address": {
-                "addressCountry": "France",
+                "addressCountry": "FR",
                 "addressLocality": "Colombelles",
                 "postalCode": "14460",
                 "streetAddress": "Normandie – Village By CA, 8 rue Léopold Sedar-Senghor"
@@ -72,7 +72,7 @@
             "email": "contact@flexcity.energy",
             "url": "https://www.flexcity.energy/fr",
             "address": {
-                "addressCountry": "France",
+                "addressCountry": "FR",
                 "addressLocality": "Aubervilliers",
                 "postalCode": "93300",
                 "streetAddress": "30, rue Madeleine Vionnet"
