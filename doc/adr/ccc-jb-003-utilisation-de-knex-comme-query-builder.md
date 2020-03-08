@@ -22,4 +22,4 @@ Suite à la décision d'utiliser PostgreSQL comme base de données (voir l'ARD [
 
 ## Résultat de la décision
 
-Option choisie : "Utilisation d'un query builder", en l'occurance [Knex](https://knexjs.org), car cela fiabilise et accèlere l'écriture des requêtes SQL tout en n'imposant pas la lourdeur et la magie d'un ORM. De plus, Knex permet de très facilement écrire des _vraies_ requêtes SQL dans les cas les plus compliqués, permettant d'obtenir la meilleure optimisation possible et exploiter au mieux les fonctionnalitées propres à PostrgreSQL.
+Option choisie : "Utilisation d'un query builder", en l'occurrence [Knex](https://knexjs.org), car cela fiabilise et accélère l'écriture des requêtes SQL tout en n'imposant pas la lourdeur et la magie d'un ORM. De plus, Knex permet de très facilement écrire des _vraies_ requêtes SQL dans les cas les plus compliqués, permettant d'obtenir la meilleure optimisation possible et exploiter au mieux les fonctionnalités propres à PostrgreSQL. Knex permet enfin de gérer les migrations.

@@ -8,5 +8,5 @@
     "editor.codeActionsOnSave": {
         "source.fixAll": true
     },
-    "cSpell.enabled": false
+    "cSpell.enabled": true
 }
