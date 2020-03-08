@@ -19,7 +19,6 @@ install: ## Install all js deps
 		cd ../../ && \
 		yarn \
 	'
-
 install-cypress: ## Install cypress.io bin on local environment, not in Docker !
 	@node_modules/.bin/cypress install
 
@@ -49,12 +48,27 @@ openapi-validate: ## Validate the OpenAPI schema
 	@$(DOCKER_API) yarn openapi:check
 
 # =====================================================================
+# ADR - Architecture Decision Records =================================
+# =====================================================================
+
+adr-new: ## Create new ADR
+	@if [ "$(title)" = "" ]; then \
+		echo 'Vous devez déclarer un titre'; \
+		echo 'Exemple: make adr-new title="New Team Decision"'; \
+		exit 1; \
+	fi
+	@${DOCKER_API} yarn adr:new "${title}"
+
+adr-list: ## List all ADR
+	@${DOCKER_API} yarn adr:list
+
+# =====================================================================
 # Testing =============================================================
 # =====================================================================
 
 DC_TEST = docker-compose -p cc-jobboard-test -f docker-compose-test.yml
 
-test: test-unit test-e2e ## launch all tests in docker
+test: test-unit ## launch all tests in docker
 
 test-unit: ## launch only tests unit (front and api)
 	@docker-compose run --rm --no-deps api ash -ci '\
