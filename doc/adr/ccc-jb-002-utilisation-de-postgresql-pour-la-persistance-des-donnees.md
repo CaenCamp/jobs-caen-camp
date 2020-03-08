@@ -2,9 +2,9 @@
 
 Date: 2020-03-05
 
-- Décideurs: [Alexis Janvier](https://github.com/alexisjanvier)
-- Ticket.s concerné.s: -
-- Pull Request:
+-   Décideurs: [Alexis Janvier](https://github.com/alexisjanvier)
+-   Ticket.s concerné.s: -
+-   Pull Request: [#33](https://github.com/CaenCamp/jobs-caen-camp/pull/33)
 
 ## Statut
 
@@ -16,9 +16,9 @@ Après avoir défini le modèle de données via la contrat d'API en OpenAPI, il 
 
 ## Options envisagées
 
-- Base de données relationnelle
-- Base de données de type noSQL
-- Base de données en mode SAAS
+-   Base de données relationnelle
+-   Base de données de type noSQL
+-   Base de données en mode SAAS
 
 ## Résultat de la décision
 
@@ -26,11 +26,11 @@ Option choisie : "Base de données relationnelle", parce que c'est une solution 
 
 ### Conséquences positives
 
-- On pourra persister de la donnée :)
-- On ne se coupe pas de la possibilité d'une approche documents.
-- Le SQL est une techno globalement bien partagée et dans tous les cas très bien documentée. On peut donc espérer que cela facilitera la prise en main du projet par le plus grand nombre.
+-   On pourra persister de la donnée :)
+-   On ne se coupe pas de la possibilité d'une approche documents.
+-   Le SQL est une techno globalement bien partagée et dans tous les cas très bien documentée. On peut donc espérer que cela facilitera la prise en main du projet par le plus grand nombre.
 
 ### Conséquences négatives
 
-- Il nous faudra un serveur pour la mise en production du projet.
-- On alourdi un peu le projet, les volumes de données traitées ne nécessitant probablement pas un outils aussi puissant que PostgreSQL.
+-   Il nous faudra un serveur pour la mise en production du projet.
+-   On alourdi un peu le projet, les volumes de données traitées ne nécessitant probablement pas un outils aussi puissant que PostgreSQL.

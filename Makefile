@@ -4,6 +4,7 @@ CURRENT_UID=$(id -u):$(id -g)
 export CURRENT_UID ?= $(shell id -u):$(shell id -g)
 export NODE_ENV ?= development
 
+DOCKER := docker run --rm -v ${PWD}:/jobboard -u=${CURRENT_UID} -w /jobboard node:12.14-alpine
 DOCKER_API := docker run --rm -v ${PWD}:/jobboard -u=${CURRENT_UID} -w /jobboard/apps/api node:12.14-alpine
 DC_DEV := docker-compose -p cc-jobboard-dev
 DC_TEST := docker-compose -p cc-jobboard-test -f docker-compose-test.yml
@@ -62,10 +63,10 @@ adr-new: ## Create new ADR
 		echo 'Exemple: make adr-new title="New Team Decision"'; \
 		exit 1; \
 	fi
-	@${DOCKER_API} yarn adr:new "${title}"
+	@${DOCKER} yarn adr:new "${title}"
 
 adr-list: ## List all ADR
-	@${DOCKER_API} yarn adr:list
+	@${DOCKER} yarn adr:list
 
 # =====================================================================
 # DATABASE ============================================================
