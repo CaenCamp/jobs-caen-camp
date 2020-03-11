@@ -17,10 +17,6 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8004",
-            "description": "Mock server with Prism"
-        },
-        {
             "url": "http://localhost:8001",
             "description": "Local server"
         }
@@ -37,7 +33,7 @@
         }
     ],
     "paths": {
-        "/job-postings": {
+        "/api/job-postings": {
             "get": {
                 "tags": ["Offres d'emploi"],
                 "summary": "Liste des offres d'emploi",
@@ -580,7 +576,7 @@
                         "example": "[\"id\",\"ASC\"]"
                     },
                     {
-                        "name": "filter",
+                        "name": "filters",
                         "in": "query",
                         "description": "Filtres appliquables à la requête. C'est un objet json stringifié, avec les filtres en clé/valeur séparé par des virgules.",
                         "required": false,
@@ -1074,9 +1070,10 @@
                     }
                 },
                 "parameters": []
-            }
+            },
+            "parameters": []
         },
-        "/job-postings/{jobId}": {
+        "/api/job-postings/{jobId}": {
             "get": {
                 "tags": ["Offres d'emploi"],
                 "summary": "Trouver une offre par son ID",
@@ -2297,7 +2294,7 @@
                 ]
             }
         },
-        "/organizations": {
+        "/api/organizations": {
             "get": {
                 "summary": "Liste des entreprises",
                 "tags": ["Entreprises"],
@@ -2683,7 +2680,7 @@
                 "description": "Obtenir la liste des entreprises",
                 "parameters": [
                     {
-                        "name": "filter",
+                        "name": "filters",
                         "in": "query",
                         "description": "Filtres appliquables à la requête. C'est un objet json stringifié, avec les filtres en clé/valeur séparé par des virgules.",
                         "required": false,
@@ -3208,9 +3205,10 @@
                     }
                 },
                 "tags": ["Entreprises"]
-            }
+            },
+            "parameters": []
         },
-        "/organizations/{organizationId}": {
+        "/api/organizations/{organizationId}": {
             "parameters": [
                 {
                     "schema": {
@@ -5185,7 +5183,7 @@
         },
         "parameters": {
             "Filter": {
-                "name": "filter",
+                "name": "filters",
                 "in": "query",
                 "description": "Filtres appliquables à la requête. C'est un objet json stringifié, avec les filtres en clé/valeur séparé par des virgules.",
                 "required": false,

@@ -12,8 +12,6 @@ info:
     name: GNU GPLv3
     url: 'https://github.com/CaenCamp/jobs-caen-camp/blob/master/LICENSE'
 servers:
-  - url: 'http://localhost:8004'
-    description: Mock server with Prism
   - url: 'http://localhost:8001'
     description: Local server
 security: []
@@ -23,7 +21,7 @@ tags:
   - name: Entreprises
     description: "Les routes d'API liées aux entreprises à l'origine des offres d'emploi"
 paths:
-  /job-postings:
+  /api/job-postings:
     get:
       tags:
         - "Offres d'emploi"
@@ -182,7 +180,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       parameters: []
-  '/job-postings/{jobId}':
+    parameters: []
+  '/api/job-postings/{jobId}':
     get:
       tags:
         - "Offres d'emploi"
@@ -392,7 +391,7 @@ paths:
           name: jobId
           description: "Identifiant de l'offre d'emploi"
           required: true
-  /organizations:
+  /api/organizations:
     get:
       summary: Liste des entreprises
       tags:
@@ -503,7 +502,8 @@ paths:
               $ref: '#/components/schemas/Organization'
       tags:
         - Entreprises
-  '/organizations/{organizationId}':
+    parameters: []
+  '/api/organizations/{organizationId}':
     parameters:
       - schema:
           type: string
@@ -937,7 +937,7 @@ components:
               contactType: "Offres d'emploi"
   parameters:
     Filter:
-      name: filter
+      name: filters
       in: query
       description: "Filtres appliquables à la requête. C'est un objet json stringifié, avec les filtres en clé/valeur séparé par des virgules."
       required: false

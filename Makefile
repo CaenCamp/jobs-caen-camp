@@ -41,6 +41,9 @@ logs: ## Display all logs
 logs-api: ## Display api logs
 	${DC_DEV} logs -f api
 
+logs-db: ## Display postgres logs
+	${DC_DEV} logs -f postgres
+
 connect-api: ## Start cli in api container
 	${DC_DEV} exec api ash
 
@@ -100,7 +103,7 @@ migrate-list: ## Apply Migrations list
 # Testing =============================================================
 # =====================================================================
 
-test: test-unit ## launch all tests in docker
+test: test-unit test-e2e ## launch all tests in docker
 
 test-unit: ## launch only tests unit (front and api)
 	@${DC_TEST} run --rm --no-deps api ash -ci '\
@@ -120,17 +123,19 @@ test-e2e: ## Run whole e2e tests suite
 # Manual recipes for e2e test (api with frisby and front with cypress)
 test-env-start: build-front
 	@${DC_TEST} up -d
+	@$(DC_TEST) run --rm api ash -ci 'yarn migrate:latest'
+	@$(DC_TEST) run --rm api ash -ci 'node cli/load-fixed-fixtures'
 test-env-stop:
 	@${DC_TEST} down
 test-env-logs:
 	@${DC_TEST} logs -f
 test-env-run:
-	@${DC_TEST} run --rm jobboard ash -ci '\
+	@${DC_TEST} run --rm api ash -ci '\
 		cd ../../tests-e2e && \
 		yarn test \
 	'
 test-env-watch:
-	@${DC_TEST} run --rm jobboard ash -ci '\
+	@${DC_TEST} run --rm api ash -ci '\
 		cd ../../tests-e2e && \
 		yarn test:watch \
 	'

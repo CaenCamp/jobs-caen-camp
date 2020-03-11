@@ -11,3 +11,9 @@ services:
     env_file:
       - ./config/test.env
     command: "yarn start"
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:12.2
+    env_file:
+      - ./config/test.env

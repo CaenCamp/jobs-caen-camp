@@ -3,6 +3,7 @@ const Router = require('koa-router');
 const serve = require('koa-static');
 
 const dbMiddleware = require('./toolbox/middleware/db');
+const organizationRouter = require('./organization/router');
 
 const app = new Koa();
 const router = new Router();
@@ -24,5 +25,6 @@ router.get('/api', ctx => {
 });
 app.use(router.routes()).use(router.allowedMethods());
 app.use(dbMiddleware);
+app.use(organizationRouter.routes()).use(organizationRouter.allowedMethods());
 
 app.listen(3001, () => global.console.log('API started on port 3001'));

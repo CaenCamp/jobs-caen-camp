@@ -6,7 +6,7 @@ describe('jobBoard API endpoint', () => {
         it('devrait renvoyer un simple message de bienvenue', async () => {
             expect.hasAssertions();
             await frisby
-                .get('http://jobboard:3001/api')
+                .get('http://api:3001/api')
                 .expect('status', 200)
                 .expect(
                     'header',
