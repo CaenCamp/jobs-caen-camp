@@ -233,16 +233,16 @@ La modélisation et la documentation de l'API se fait via un contrat d'API en [O
 
 Vous trouverez le contrat dans `apps/api/openapi/openapi.yaml`.
 
-La documentation est générée dans un container Docker avec [Swagger UI](https://swagger.io/tools/swagger-ui/), disponible sur <http://localhost:8003>
+La documentation est servie par [koa-oas3](https://github.com/atlassian/koa-oas3) (en plus de la validation des entrées et sorties de l'API, validation s'appuyant sur le schema OpanAPI) à l'adresse <http://localhost:3001/documentation>
 
 Si vous ne connaissez pas bien OpenAPI, vous pouvez jeter un coup d'oeil à la vidéo de l'édition #48 des CaenCamp qui en parle : [OpenAPI: un contrat pour vos API.s](https://www.caen.camp/talks/openapi-un-contrat-pour-vos-apis).
 
 Le contrat est dans un unique fichier, on ne peut donc que conseiller l'utilisation d'un outil tel que [StopLight Studio](https://stoplight.io/studio/) pour facilliter l'édition de ce fichier.
 
-Et enfin, si vous effectuer des modifications au contrat, il faut re-générer le contrat au format `json` grace à la recette
+Et enfin, si vous effectuer des modifications au contrat, il faut penser à valider le contrat mis à jour grace à la recette
 
 ```bash
-make openapi
+make openapi-validate
 ```
 
 ## Faire une Pull request

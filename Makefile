@@ -51,11 +51,6 @@ connect-api: ## Start cli in api container
 # OpenAPI =============================================================
 # =====================================================================
 
-openapi: openapi-validate openapi-bundle ## Bundle then validate the OpenAPI schema
-
-openapi-bundle: ## Bundle the OpenAPI schema
-	@$(DOCKER_API) yarn openapi:bundle
-
 openapi-validate: ## Validate the OpenAPI schema
 	@$(DOCKER_API) yarn openapi:check
 

@@ -12,7 +12,7 @@ module.exports = {
         hiringOrganization: {
             '@type': 'Organization',
             '@id': '/organizations/' + organization.id,
-            name: organization.name
-        }
-    })
+            name: organization.name,
+        },
+    }),
 };

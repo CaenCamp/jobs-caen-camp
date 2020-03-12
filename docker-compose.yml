@@ -34,32 +34,5 @@ services:
     env_file:
       - ./config/${NODE_ENV}.env
 
-  api-moked:
-    image: node:12.14-alpine
-    volumes:
-      - .:/jobboard
-    working_dir: "/jobboard/apps/api-mocked"
-    user: ${CURRENT_UID}
-    ports:
-      - 8002:3000
-    command: "yarn start"
-
-  swagger-ui:
-    image: swaggerapi/swagger-ui
-    volumes:
-      - ./apps/api/openapi:/openapi
-    environment:
-      - SWAGGER_JSON=/openapi/openapi.json
-    ports:
-      - 8003:8080
-
-  prism:
-    image: stoplight/prism:3
-    volumes:
-      - ./apps/api/openapi:/openapi
-    ports:
-      - 8004:4010
-    command: mock -d -h 0.0.0.0 "/openapi/openapi.json"
-
 volumes:
   jobboard-pgData:
