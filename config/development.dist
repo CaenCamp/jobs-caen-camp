@@ -1,0 +1,6 @@
+NODE_ENV=development
+
+POSTGRES_USER=ccc
+POSTGRES_DB=jobboard
+POSTGRES_PASSWORD=heycoworking
+POSTGRES_HOST=postgres

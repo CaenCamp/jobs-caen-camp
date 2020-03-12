@@ -6,8 +6,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Install
-      run: make install
-    - name: Test
-      run: make test
+      - uses: actions/checkout@v1
+      - name: Install
+        run: make install
+      - name: Test
+        run: make test

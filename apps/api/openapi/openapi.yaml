@@ -23,7 +23,7 @@ tags:
   - name: Entreprises
     description: "Les routes d'API liées aux entreprises à l'origine des offres d'emploi"
 paths:
-  '/job-postings':
+  /job-postings:
     get:
       tags:
         - "Offres d'emploi"
@@ -694,6 +694,7 @@ components:
             - CDI
             - CDD
             - Alternance
+            - Autre
           example: CDD
         experienceRequirements:
           type: string
@@ -715,7 +716,6 @@ components:
         - employerOverview
         - employmentType
         - experienceRequirements
-        - jobStartDate
         - skills
     Organization:
       description: Une entreprise liée au développement informatique.

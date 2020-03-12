@@ -13,30 +13,39 @@ Ce projet de site d’offres d’emploi web est l’un de nos projets communs mi
 Le [guide du contributeur](./.github/CONTRIBUTING.md#installer-le-projet) détaille les pré-requis et les différents mode d’installation du projet. Mais en partant du postulat que _Docker_ et _Docker Compose_ sont installés sur votre environnement, vous pouvez lancer l’installation du projet avec la commande
 
 ```bash
-$ make install
+make install
 ```
 
 et lancer les différentes applications avec :
 
 ```bash
-$ make start
+make start
+make migrate-latest
+make import-fixed-fixtures
 ```
 
 Vous pouvez ainsi accéder à :
 
-- l’application web sur http://localhost:8000
-- l’api sur http://localhost:8001
-- l’api _mockée_ sur http://localhost:8002
-- la documentation de l'API sur http://localhost:8003
+-   l’application web sur <http://localhost:8000>
+-   l’api sur <http://localhost:8001>
+-   l’api _mockée_ sur <http://localhost:8002>
+-   la documentation de l'API sur <http://localhost:8003>
 
-## Vous souhaitez participer ?
+Lors du premier lancement du projet, vous devrez également initialiser la base de données :
+
+```bash
+make migrate-latest
+make import-fixed-fixtures
+```
+
+## Vous souhaitez participer
 
 Merci à vous :+1:
 
 Et c’est très simple :
 
-- Si vous ne savez pas trop par où commencer, vous pouvez jeter un coup d’œil aux [issues](https://github.com/CaenCamp/jobs-caen-camp/issues): elles décrivent les taches à réaliser classées par type (code, design, integration, etc.),
-- Une fois que vous savez quoi faire, vous pouvez consulter le [**guide du contributeur**](.github/CONTRIBUTING.md) pour vous lancer.
+-   Si vous ne savez pas trop par où commencer, vous pouvez jeter un coup d’œil aux [issues](https://github.com/CaenCamp/jobs-caen-camp/issues): elles décrivent les taches à réaliser classées par type (code, design, integration, etc.),
+-   Une fois que vous savez quoi faire, vous pouvez consulter le [**guide du contributeur**](.github/CONTRIBUTING.md) pour vous lancer.
 
 Et si vous ne trouvez toujours pas quoi faire dans les issues existantes et/ou que vous avez d’autres idées, n’hésitez pas à créer une nouvelle issue.
 

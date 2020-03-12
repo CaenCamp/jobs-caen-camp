@@ -3,3 +3,4 @@ node_modules
 apps/front/public/bundle.*
 .idea
 *.iml
+config/*.env

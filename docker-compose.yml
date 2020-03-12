@@ -6,7 +6,7 @@ services:
     volumes:
       - .:/jobboard
     working_dir: "/jobboard/apps/front"
-    user: "${UID}:${GID}"
+    user: ${CURRENT_UID}
     ports:
       - 8000:8000
     command: "yarn dev"
@@ -16,19 +16,30 @@ services:
     volumes:
       - .:/jobboard
     working_dir: "/jobboard/apps/api"
-    user: "${UID}:${GID}"
+    user: ${CURRENT_UID}
     ports:
       - 8001:3001
-    environment:
-      - NODE_ENV='development'
+    env_file:
+      - ./config/${NODE_ENV}.env
+    depends_on:
+      - postgres
     command: "yarn dev"
+
+  postgres:
+    image: postgres:12.2
+    volumes:
+      - jobboard-pgData:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    env_file:
+      - ./config/${NODE_ENV}.env
 
   api-moked:
     image: node:12.14-alpine
     volumes:
       - .:/jobboard
     working_dir: "/jobboard/apps/api-mocked"
-    user: "${UID}:${GID}"
+    user: ${CURRENT_UID}
     ports:
       - 8002:3000
     command: "yarn start"
@@ -49,3 +60,6 @@ services:
     ports:
       - 8004:4010
     command: mock -d -h 0.0.0.0 "/openapi/openapi.json"
+
+volumes:
+  jobboard-pgData:
