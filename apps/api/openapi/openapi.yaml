@@ -774,6 +774,7 @@ components:
       required:
         - name
         - url
+        - contactPoints
     PostalAddress:
       title: PostalAddress
       type: object
@@ -822,12 +823,13 @@ components:
           minLength: 7
         telephone:
           type: string
-          minLength: 10
+          nullable: true
         name:
           type: string
         contactType:
           type: string
           example: "Offres d'emploi"
+          nullable: true
       required:
         - email
         - name
@@ -950,16 +952,22 @@ components:
       in: query
       description: "Le tri applicable à la liste. C'est un tableau stringifié de la forme [sortProp, sortDirection]"
       required: false
-      explode: true
+      explode: false
       schema:
-        type: string
-      example: '["id","ASC"]'
+        type: array
+        maxItems: 2
+        minItems: 2
+        items:
+          type: string
     Pagination:
       name: pagination
       in: query
       description: "Les paramètres pour la pagination. C'est un tableau stringifié de la forme [perPage, currentPage]"
       required: false
-      explode: true
+      explode: false
       schema:
-        type: string
-      example: '[10,3]'
+        type: array
+        maxItems: 2
+        minItems: 2
+        items:
+          type: string

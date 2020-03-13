@@ -6615,6 +6615,13 @@ knex-paginate@1.1.1:
   resolved "https://registry.yarnpkg.com/knex-paginate/-/knex-paginate-1.1.1.tgz#b47c3aadb2a14f4ee92ce5b2814ed07415a49bbc"
   integrity sha512-f0NvQF/6kE3h4M3mqcgJBC+GCafAF4ukphPFNAcbSja+y+fhwb9uod6K8cG91EBseHM+tLIDykWzNUesLeqJxA==
 
+knex-stringcase@1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/knex-stringcase/-/knex-stringcase-1.4.1.tgz#350db680722cc4b913372dd1eb42debaebb3f46d"
+  integrity sha512-fOMSZP38NxbduKYeOSNeCHch/IjsLtvzRVNeXVfmzmCgW3mMNFdS+UFQJU0jNj1PunmO1M5/chSWJIljV/HD7Q==
+  dependencies:
+    stringcase "^4.3.1"
+
 knex@0.20.12:
   version "0.20.12"
   resolved "https://registry.yarnpkg.com/knex/-/knex-0.20.12.tgz#33e576fb53b624c6cf346f7a4c81f0a1e06191fc"
@@ -6663,6 +6670,14 @@ koa-convert@^1.2.0:
   dependencies:
     co "^4.6.0"
     koa-compose "^3.0.0"
+
+koa-json-error@3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/koa-json-error/-/koa-json-error-3.1.2.tgz#acad750c6739cb12cc4ea6c25f224d59b765abfe"
+  integrity sha1-rK11DGc5yxLMTqbCXyJNWbdlq/4=
+  dependencies:
+    lodash.compact "^3.0.1"
+    lodash.curry "^4.1.1"
 
 koa-oas3@0.18.0:
   version "0.18.0"
@@ -6940,6 +6955,16 @@ lodash.clonedeep@4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
   integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
+lodash.compact@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.compact/-/lodash.compact-3.0.1.tgz#540ce3837745975807471e16b4a2ba21e7256ca5"
+  integrity sha1-VAzjg3dFl1gHRx4WtKK6IeclbKU=
+
+lodash.curry@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.curry/-/lodash.curry-4.1.1.tgz#248e36072ede906501d75966200a86dab8b23170"
+  integrity sha1-JI42By7ekGUB11lmIAqG2riyMXA=
 
 lodash.get@^4.4.2:
   version "4.4.2"
@@ -10156,6 +10181,11 @@ string_decoder@~1.1.1:
   integrity sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==
   dependencies:
     safe-buffer "~5.1.0"
+
+stringcase@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/stringcase/-/stringcase-4.3.1.tgz#54279c9dd7379ff50f4e47d50d036b2ac888d34b"
+  integrity sha512-Ov7McNX1sFaEX9NWijD1hIOVDDhKdnFzN9tvoa1N8xgrclouhsO4kBPVrTPhjO/zP5mn1Ww03uZ2SThNMXS7zg==
 
 stringify-object@^3.3.0:
   version "3.3.0"

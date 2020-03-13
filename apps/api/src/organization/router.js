@@ -1,6 +1,9 @@
 const Router = require('koa-router');
 
-const { getOrganizationPaginatedList } = require('./repository');
+const {
+    createOrganization,
+    getOrganizationPaginatedList,
+} = require('./repository');
 
 const router = new Router({
     prefix: '/api/organizations',
@@ -13,9 +16,13 @@ const router = new Router({
  * @returns {(object|boolean)} the parsed parameter or false if incorrectly formatted
  */
 const parseJsonQueryParameter = parameter => {
+    if (parameter === undefined) {
+        return false;
+    }
     try {
         return JSON.parse(parameter);
     } catch (e) {
+        // signale.debug('Problem with query param json encoding', e);
         return false;
     }
 };
@@ -30,6 +37,20 @@ router.get('/', async ctx => {
 
     ctx.set('Content-Range', contentRange);
     ctx.body = organizations;
+});
+
+router.post('/', async ctx => {
+    const newOrganization = await createOrganization({
+        client: ctx.db,
+        apiData: ctx.request.body,
+    });
+    if (newOrganization.error) {
+        const explainedError = new Error(newOrganization.error.message);
+        explainedError.status = 400;
+        throw explainedError;
+    }
+
+    ctx.body = newOrganization;
 });
 
 module.exports = router;

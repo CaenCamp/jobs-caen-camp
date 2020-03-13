@@ -1,3 +1,6 @@
+const omit = require('lodash.omit');
+const pick = require('lodash.pick');
+
 const OrganizationFilterableFields = [
     'name',
     'address_locality',
@@ -102,8 +105,16 @@ const getFilteredOrganizationsQuery = (client, filters, sort) => {
         .select(
             'organization.*',
             client.raw(`(SELECT array_to_json(array_agg(jsonb_build_object(
-                'telephone', contact_point.telephone, 'name', contact_point.name, 'contactType', contact_point.contact_type
-            ) ORDER BY contact_point.contact_type)) FROM contact_point WHERE contact_point.organization_id = organization.id) as contactPoints`)
+                'email',
+                contact_point.email,
+                'telephone',
+                contact_point.telephone,
+                'name',
+                contact_point.name,
+                'contactType',
+                contact_point.contact_type
+            ) ORDER BY contact_point.contact_type))
+            FROM contact_point WHERE contact_point.organization_id = organization.id) as contact_points`)
         )
         .from('organization')
         .where(restFilters);
@@ -141,6 +152,29 @@ const formatPaginationContentRange = (objectType, pagination) =>
     }`;
 
 /**
+ * Transforms a db queried organization into an organization object for API.
+ *
+ * @param {object} dbOrganization - organization data from database
+ * @returns {object} an organization object as describe in OpenAPI contract
+ */
+const formatOrganizationForAPI = dbOrganization => ({
+    ...omit(dbOrganization, [
+        'addressCountry',
+        'addressLocality',
+        'postalCode',
+        'streetAddress',
+    ]),
+    address: {
+        ...pick(dbOrganization, [
+            'addressCountry',
+            'addressLocality',
+            'postalCode',
+            'streetAddress',
+        ]),
+    },
+});
+
+/**
  * Return paginated and filtered list of organization
  *
  * @param {object} client - The Database client
@@ -165,7 +199,7 @@ const getOrganizationPaginatedList = async ({
     return query
         .paginate({ perPage, currentPage, isLengthAware: true })
         .then(result => ({
-            organizations: result.data,
+            organizations: result.data.map(formatOrganizationForAPI),
             contentRange: formatPaginationContentRange(
                 'organizations',
                 result.pagination
@@ -173,10 +207,96 @@ const getOrganizationPaginatedList = async ({
         }));
 };
 
+/**
+ * Returns a organization and contact point object ready to be saved.
+ * The data sent to this function is supposed to be complete and therefore tested beforehand.
+ *
+ * @param {object} dataFromApi - The validated data sent from API to create a new organization
+ * @returns {object} - an object with valid data for an organization and for a contactPoint
+ */
+const prepareOrganizationDataForSave = dataFromApi => ({
+    organization: {
+        ...omit(dataFromApi, ['address', 'contactPoints']),
+        addressCountry: dataFromApi.address.addressCountry || null,
+        addressLocality: dataFromApi.address.addressLocality,
+        postalCode: dataFromApi.address.postalCode,
+        streetAddress: dataFromApi.address.streetAddress,
+    },
+    contactPoint: dataFromApi.contactPoints[0],
+});
+
+/**
+ * Knex query for signle organization
+ *
+ * @param {object} client - The Database client
+ * @param {string} organizationId - Organization Id
+ * @returns {Promise} - Knew query for single organization
+ */
+const getOrganizationByIdQuery = (client, organizationId) => {
+    return client
+        .table('organization')
+        .first(
+            'organization.*',
+            client.raw(`(SELECT array_to_json(array_agg(jsonb_build_object(
+                'email',
+                contact_point.email,
+                'telephone',
+                contact_point.telephone,
+                'name',
+                contact_point.name,
+                'contactType',
+                contact_point.contact_type
+            ) ORDER BY contact_point.contact_type))
+            FROM contact_point WHERE contact_point.organization_id = organization.id) as contact_points`)
+        )
+        .where({ id: organizationId });
+};
+
+/**
+ * Return paginated and filtered list of organization
+ *
+ * @param {object} client - The Database client
+ * @param {object} apiData - The validated data sent from API to create a new organization
+ * @returns {Promise} - the created organization
+ */
+const createOrganization = async ({ client, apiData }) => {
+    const { organization, contactPoint } = prepareOrganizationDataForSave(
+        apiData
+    );
+
+    return client
+        .transaction(trx => {
+            client('organization')
+                .transacting(trx)
+                .returning('id')
+                .insert(organization)
+                .then(([organizationId]) => {
+                    return client('contact_point')
+                        .transacting(trx)
+                        .insert({
+                            ...contactPoint,
+                            organizationId,
+                        })
+                        .then(() => organizationId);
+                })
+                .then(trx.commit)
+                .catch(trx.rollback);
+        })
+        .then(newOrganizationId => {
+            return getOrganizationByIdQuery(client, newOrganizationId).then(
+                formatOrganizationForAPI
+            );
+        })
+        .catch(error => ({ error }));
+};
+
 module.exports = {
+    createOrganization,
     filtersSanitizer,
+    formatOrganizationForAPI,
     formatPaginationContentRange,
     getOrganizationPaginatedList,
     paginationSanitizer,
+    prepareOrganizationDataForSave,
     sortSanitizer,
 };

@@ -1,7 +1,7 @@
 import frisby from 'frisby';
 
-describe('jobBoard API endpoint', () => {
-    describe('/api/organizations', () => {
+describe('JobBoard Organizations API Endpoints', () => {
+    describe('GET: /api/organizations', () => {
         it('devrait renvoyer une liste paginée ordonnée par nom d\'entreprise sans paramètres de requête', async () => {
             expect.hasAssertions();
             await frisby
@@ -56,6 +56,37 @@ describe('jobBoard API endpoint', () => {
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].name).toStrictEqual('Qwarry');
+                });
+        });
+
+        it('devrait accepter un parametre de requête "sort" pour le tri', async () => {
+            expect.hasAssertions();
+            await frisby
+                .get(
+                    `http://api:3001/api/organizations?sort=${JSON.stringify([
+                        'name',
+                        'ASC',
+                    ])}`
+                )
+                .expect('status', 200)
+                .then(resp => {
+                    expect(resp.json.length).toStrictEqual(3);
+                    expect(resp.json[0].name).toStrictEqual('Flexcity');
+                    expect(resp.json[1].name).toStrictEqual('Limengo');
+                    expect(resp.json[2].name).toStrictEqual('Qwarry');
+                });
+            await frisby
+                .get(
+                    `http://api:3001/api/organizations?sort=${JSON.stringify([
+                        'name',
+                        'DESC',
+                    ])}`
+                )
+                .then(resp => {
+                    expect(resp.json.length).toStrictEqual(3);
+                    expect(resp.json[0].name).toStrictEqual('Qwarry');
+                    expect(resp.json[1].name).toStrictEqual('Limengo');
+                    expect(resp.json[2].name).toStrictEqual('Flexcity');
                 });
         });
 
@@ -150,6 +181,104 @@ describe('jobBoard API endpoint', () => {
                 .expect('header', 'Content-Range', 'organizations 0-0/0')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(0);
+                });
+        });
+    });
+
+    describe('POST: /api/organizations', () => {
+        const incompleteDataForCreation = {
+            description: 'desc',
+            image: 'https://www.org.org/logo.svg',
+            email: 'contact@org.org',
+            url: 'https://www.org.org',
+            address: {
+                addressCountry: 'FR',
+                addressLocality: 'Caen',
+                postalCode: '14000',
+                streetAddress: '5, place de la Répulique',
+            },
+            contactPoints: [
+                {
+                    email: 'job@org.org',
+                    telephone: '0606060606',
+                    name: 'John Do, CTO',
+                    contactType: 'Offres d\'emploi',
+                },
+            ],
+        };
+
+        const completeDataForCreation = {
+            name: 'test org',
+            ...incompleteDataForCreation,
+        };
+
+        it('devrait retourner une erreur 400 en cas de données incompletes', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    incompleteDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 400)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'RequestValidationError: Schema validation error ( should have required property \'name\')'
+                    );
+                });
+        });
+
+        it('devrait retourner une erreur 400 en cas de données erronées', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    {
+                        ...completeDataForCreation,
+                        email: 'not-an-email',
+                    },
+                    { json: true }
+                )
+                .expect('status', 400)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'RequestValidationError: Schema validation error (/email: format should match format "email")'
+                    );
+                });
+        });
+
+        it('devrait retourner l\'entreprise crée avec un nouvel id en cas de succès', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    completeDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.id).not.toBeUndefined();
+                    expect(resp.json.address).toEqual({
+                        addressCountry: 'FR',
+                        addressLocality: 'Caen',
+                        postalCode: '14000',
+                        streetAddress: '5, place de la Répulique',
+                    });
                 });
         });
     });
