@@ -42,7 +42,6 @@ router.get('/', async ctx => {
 });
 
 router.post('/', async ctx => {
-    console.log('CREATION ORGA');
     const newOrganization = await createOrganization({
         client: ctx.db,
         apiData: ctx.request.body,
@@ -89,7 +88,7 @@ router.delete('/:organizationId', async ctx => {
         organizationId: ctx.params.organizationId,
     });
 
-    if (!deletedOrganization) {
+    if (!deletedOrganization.id) {
         const explainedError = new Error(
             `The organization of id ${ctx.params.organizationId} does not exist.`
         );

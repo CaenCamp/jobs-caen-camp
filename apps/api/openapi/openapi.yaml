@@ -609,15 +609,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
+                  id:
                     type: string
-                    example: ok
+                    format: uuid
+                    example: 9a6c8995-df54-446c-a5b8-71532c304751
                 required:
-                  - message
+                  - id
               examples:
                 example-1:
                   value:
-                    message: ok
+                    id: 9a6c8995-df54-446c-a5b8-71532c304751
         '400':
           description: Bad Request
           content:

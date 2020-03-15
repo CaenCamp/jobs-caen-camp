@@ -308,13 +308,15 @@ const getOrganization = async ({ client, organizationId }) => {
  *
  * @param {object} client - The Database client
  * @param {object} organizationId - The organization identifier
- * @returns {Promise} - the id if the deleted organization
+ * @returns {Promise} - the id if the deleted organization or an empty object if organization is not in db
  */
 const deleteOrganization = async ({ client, organizationId }) => {
     return client('organization')
         .where({ id: organizationId })
         .del()
-        .then(() => ({ id: organizationId }))
+        .then(nbDeletion => {
+            return nbDeletion ? { id: organizationId } : {};
+        })
         .catch(error => ({ error }));
 };
 

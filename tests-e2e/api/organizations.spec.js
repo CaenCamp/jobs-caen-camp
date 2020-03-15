@@ -1,18 +1,44 @@
 import frisby from 'frisby';
 
+const incompleteDataForCreation = {
+    description: 'desc',
+    image: 'https://www.org.org/logo.svg',
+    email: 'contact@org.org',
+    url: 'https://www.org.org',
+    address: {
+        addressCountry: 'FR',
+        addressLocality: 'Caen',
+        postalCode: '14000',
+        streetAddress: '5, place de la Répulique',
+    },
+    contactPoints: [
+        {
+            email: 'job@org.org',
+            telephone: '0606060606',
+            name: 'John Do, CTO',
+            contactType: 'Offres d\'emploi',
+        },
+    ],
+};
+
+const completeDataForCreation = {
+    name: 'test org',
+    ...incompleteDataForCreation,
+};
+
 describe('JobBoard Organizations API Endpoints', () => {
     describe('GET: /api/organizations', () => {
-        it("devrait renvoyer une liste paginée ordonnée par nom d'entreprise sans paramètres de requête", async () => {
+        it('devrait renvoyer une liste paginée ordonnée par nom d\'entreprise sans paramètres de requête', async () => {
             expect.hasAssertions();
             await frisby
                 .get('http://api:3001/api/organizations')
                 .expect('status', 200)
                 .expect(
                     'header',
-                    'Content-Type',
+                    'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'Content-Range', 'organizations 0-3/3')
+                .expect('header', 'content-range', 'organizations 0-3/3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
@@ -186,32 +212,6 @@ describe('JobBoard Organizations API Endpoints', () => {
     });
 
     describe('POST: /api/organizations', () => {
-        const incompleteDataForCreation = {
-            description: 'desc',
-            image: 'https://www.org.org/logo.svg',
-            email: 'contact@org.org',
-            url: 'https://www.org.org',
-            address: {
-                addressCountry: 'FR',
-                addressLocality: 'Caen',
-                postalCode: '14000',
-                streetAddress: '5, place de la Répulique',
-            },
-            contactPoints: [
-                {
-                    email: 'job@org.org',
-                    telephone: '0606060606',
-                    name: 'John Do, CTO',
-                    contactType: "Offres d'emploi",
-                },
-            ],
-        };
-
-        const completeDataForCreation = {
-            name: 'test org',
-            ...incompleteDataForCreation,
-        };
-
         it('devrait retourner une erreur 400 en cas de données incompletes', async () => {
             expect.hasAssertions();
             await frisby
@@ -228,7 +228,7 @@ describe('JobBoard Organizations API Endpoints', () => {
                 )
                 .then(resp => {
                     expect(resp.json.message).toEqual(
-                        "RequestValidationError: Schema validation error ( should have required property 'name')"
+                        'RequestValidationError: Schema validation error ( should have required property \'name\')'
                     );
                 });
         });
@@ -257,7 +257,7 @@ describe('JobBoard Organizations API Endpoints', () => {
                 });
         });
 
-        it("devrait retourner l'entreprise crée avec un nouvel id en cas de succès", async () => {
+        it('devrait retourner l\'entreprise crée avec un nouvel id en cas de succès', async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -279,15 +279,17 @@ describe('JobBoard Organizations API Endpoints', () => {
                         postalCode: '14000',
                         streetAddress: '5, place de la Répulique',
                     });
-                    return frisby.delete(
-                        `http://api:3001/api/organizations/${resp.json.id}`
-                    );
+                    return frisby
+                        .delete(
+                            `http://api:3001/api/organizations/${resp.json.id}`
+                        )
+                        .expect('status', 200);
                 });
         });
     });
 
     describe('GET: /api/organizations/:organizationId', () => {
-        it("devrait retourner une erreur 400 en cas d'id mal formaté", async () => {
+        it('devrait retourner une erreur 400 en cas d\'id mal formaté', async () => {
             expect.hasAssertions();
             await frisby
                 .get('http://api:3001/api/organizations/id-mal-formaté')
@@ -304,7 +306,7 @@ describe('JobBoard Organizations API Endpoints', () => {
                 });
         });
 
-        it("devrait retourner une erreur 404 en cas d'id n'existant pas en base de données", async () => {
+        it('devrait retourner une erreur 404 en cas d\'id n\'existant pas en base de données', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
@@ -340,6 +342,93 @@ describe('JobBoard Organizations API Endpoints', () => {
                         );
 
                     expect(qwarry).toEqual(qwarryFromGet.json);
+                });
+        });
+    });
+
+    describe('DELETE: /api/organizations/:organizationId', () => {
+        it('devrait retourner une erreur 400 en cas d\'id mal formaté', async () => {
+            expect.hasAssertions();
+            await frisby
+                .delete('http://api:3001/api/organizations/id-mal-formaté')
+                .expect('status', 400)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
+                    );
+                });
+        });
+
+        it('devrait retourner une erreur 404 en cas d\'id n\'existant pas en base de données', async () => {
+            expect.hasAssertions();
+            await frisby
+                .delete(
+                    'http://api:3001/api/organizations/9a6c8995-df54-446c-a5b8-71532c304751'
+                )
+                .expect('status', 404)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'The organization of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist.'
+                    );
+                });
+        });
+
+        it('devrait retourner l\'identifiant de l\'entreprise supprimée en cas de succes', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    completeDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(async ({ json: newOrganization }) => {
+                    const { json: organizationList } = await frisby
+                        .get('http://api:3001/api/organizations')
+                        .expect('status', 200)
+                        .expect(
+                            'header',
+                            'content-range',
+                            'organizations 0-4/4'
+                        );
+                    expect(
+                        organizationList.find(
+                            org => org.id === newOrganization.id
+                        )
+                    ).toBeTruthy();
+                    await frisby
+                        .delete(
+                            `http://api:3001/api/organizations/${newOrganization.id}`
+                        )
+                        .expect('status', 200);
+                    const { json: updatedOrganizationList } = await frisby
+                        .get('http://api:3001/api/organizations')
+                        .expect('status', 200)
+                        .expect(
+                            'header',
+                            'content-range',
+                            'organizations 0-3/3'
+                        );
+                    expect(
+                        updatedOrganizationList.find(
+                            org => org.id === newOrganization.id
+                        )
+                    ).toBeFalsy();
                 });
         });
     });
