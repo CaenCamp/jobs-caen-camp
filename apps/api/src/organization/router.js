@@ -5,6 +5,7 @@ const {
     createOrganization,
     getOrganization,
     getOrganizationPaginatedList,
+    updateOrganization,
 } = require('./repository');
 
 const router = new Router({
@@ -107,4 +108,29 @@ router.delete('/:organizationId', async ctx => {
     ctx.body = deletedOrganization;
 });
 
+router.put('/:organizationId', async ctx => {
+    const updatedOrganization = await updateOrganization({
+        client: ctx.db,
+        organizationId: ctx.params.organizationId,
+        apiData: ctx.request.body,
+    });
+
+    if (updatedOrganization.error) {
+        const explainedError = new Error(updatedOrganization.error.message);
+        explainedError.status = 400;
+
+        throw explainedError;
+    }
+
+    if (!updatedOrganization.id) {
+        const explainedError = new Error(
+            `The organization of id ${ctx.params.organizationId} does not exist, so it could not be updated`
+        );
+        explainedError.status = 404;
+
+        throw explainedError;
+    }
+
+    ctx.body = updatedOrganization;
+});
 module.exports = router;

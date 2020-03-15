@@ -2,6 +2,7 @@ const {
     filtersSanitizer,
     formatOrganizationForAPI,
     formatPaginationContentRange,
+    getIdsToDelete,
     paginationSanitizer,
     prepareOrganizationDataForSave,
     sortSanitizer,
@@ -94,6 +95,14 @@ describe('Organization Repository', () => {
                     name: 'John Do, CTO',
                     contactType: "Offres d'emploi",
                 },
+                contactPoints: [
+                    {
+                        email: 'job@org.org',
+                        telephone: '0606060606',
+                        name: 'John Do, CTO',
+                        contactType: "Offres d'emploi",
+                    },
+                ],
             });
         });
     });
@@ -253,6 +262,46 @@ describe('Organization Repository', () => {
 
         it('should remove the supernumerary parameters of the pagination array', () => {
             expect(paginationSanitizer([22, 3, 'foo', 'bar'])).toEqual([22, 3]);
+        });
+    });
+
+    describe('getIdsToDelete', () => {
+        it('should return ids presents in db but absent from API', () => {
+            expect(
+                getIdsToDelete(
+                    ['a', 'b', 'c'],
+                    [{ identifier: 'a' }, { identifier: 'c' }]
+                )
+            ).toEqual(['b']);
+        });
+
+        it('should return an empty array if nothing change', () => {
+            expect(
+                getIdsToDelete(
+                    ['a', 'b'],
+                    [{ identifier: 'a' }, { identifier: 'b' }]
+                )
+            ).toEqual([]);
+        });
+
+        it('should return all db ids if all is deleted from API', () => {
+            expect(getIdsToDelete(['a', 'b', 'c'], [])).toEqual([
+                'a',
+                'b',
+                'c',
+            ]);
+        });
+
+        it('should manage case where object from API has no identifier (creation case from API)', () => {
+            expect(
+                getIdsToDelete(
+                    ['a', 'c'],
+                    [
+                        { identifier: 'a' },
+                        { name: 'new object without identifier' },
+                    ]
+                )
+            ).toEqual(['c']);
         });
     });
 });

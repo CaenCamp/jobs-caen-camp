@@ -1,4 +1,5 @@
 import frisby from 'frisby';
+import omit from 'lodash.omit';
 
 const incompleteDataForCreation = {
     description: 'desc',
@@ -429,6 +430,404 @@ describe('JobBoard Organizations API Endpoints', () => {
                             org => org.id === newOrganization.id
                         )
                     ).toBeFalsy();
+                });
+        });
+    });
+
+    describe('PUT: /api/organizations/:organizationId', () => {
+        it('devrait retourner une erreur 404 en cas d\'id n\'existant pas en base de données', async () => {
+            const completeDataForEdition = {
+                ...completeDataForCreation,
+                contactPoints: completeDataForCreation.contactPoints.map(
+                    contact => ({
+                        identifier: '999904e7-37a3-4eaf-92bb-4f51f70dc595',
+                        ...contact,
+                    })
+                ),
+            };
+            expect.hasAssertions();
+            await frisby
+                .put(
+                    'http://api:3001/api/organizations/9a6c8995-df54-446c-a5b8-71532c304751',
+                    completeDataForEdition,
+                    { json: true }
+                )
+                .expect('status', 404)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'The organization of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist, so it could not be updated'
+                    );
+                });
+        });
+
+        it('devrait retourner une erreur 400 en cas d\'id mal formaté', async () => {
+            expect.hasAssertions();
+            await frisby
+                .put(
+                    'http://api:3001/api/organizations/this-is-not-an-uuid',
+                    completeDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 400)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
+                    );
+                });
+        });
+
+        it('devrait retourner une erreur 400 si il manque une donnée sur l\'entreprise', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    completeDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(async ({ json: organization }) => {
+                    const incompleteOrganization = omit(organization, ['name']);
+                    await frisby
+                        .put(
+                            `http://api:3001/api/organizations/${organization.id}`,
+                            incompleteOrganization,
+                            { json: true }
+                        )
+                        .expect('status', 400)
+                        .expect(
+                            'header',
+                            'Content-Type',
+                            'application/json; charset=utf-8'
+                        )
+                        .then(resp => {
+                            expect(resp.json.message).toEqual(
+                                'RequestValidationError: Schema validation error ( should have required property \'name\')'
+                            );
+                        });
+                    return frisby
+                        .delete(
+                            `http://api:3001/api/organizations/${organization.id}`
+                        )
+                        .expect('status', 200);
+                });
+        });
+
+        it('devrait retourner une erreur 400 si une donnée sur l\'entreprise est mal formatée', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    completeDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(async ({ json: organization }) => {
+                    const notWellFormatedOrganization = {
+                        ...organization,
+                        email: 'not-an-email',
+                    };
+                    await frisby
+                        .put(
+                            `http://api:3001/api/organizations/${organization.id}`,
+                            notWellFormatedOrganization,
+                            { json: true }
+                        )
+                        .expect('status', 400)
+                        .expect(
+                            'header',
+                            'Content-Type',
+                            'application/json; charset=utf-8'
+                        )
+                        .then(resp => {
+                            expect(resp.json.message).toEqual(
+                                'RequestValidationError: Schema validation error (/email: format should match format "email")'
+                            );
+                        });
+                    return frisby
+                        .delete(
+                            `http://api:3001/api/organizations/${organization.id}`
+                        )
+                        .expect('status', 200);
+                });
+        });
+
+        it('devrait retourner une erreur 400 si il manque une donnée sur le contact entreprise', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    completeDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(async ({ json: organization }) => {
+                    const incompleteOrganization = {
+                        ...organization,
+                        contactPoints: organization.contactPoints.map(
+                            contact => ({ ...omit(contact, ['email']) })
+                        ),
+                    };
+                    await frisby
+                        .put(
+                            `http://api:3001/api/organizations/${organization.id}`,
+                            incompleteOrganization,
+                            { json: true }
+                        )
+                        .expect('status', 400)
+                        .expect(
+                            'header',
+                            'Content-Type',
+                            'application/json; charset=utf-8'
+                        )
+                        .then(resp => {
+                            expect(resp.json.message).toEqual(
+                                'RequestValidationError: Schema validation error (/contactPoints/0 should have required property \'email\')'
+                            );
+                        });
+                    return frisby
+                        .delete(
+                            `http://api:3001/api/organizations/${organization.id}`
+                        )
+                        .expect('status', 200);
+                });
+        });
+
+        it('devrait retourner une erreur 400 si une donnée sur un contact entreprise est mal formatée', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    completeDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(async ({ json: organization }) => {
+                    const notWellFormatedOrganization = {
+                        ...organization,
+                        contactPoints: organization.contactPoints.map(
+                            contact => ({
+                                ...contact,
+                                email: 'not-an-email',
+                            })
+                        ),
+                    };
+                    await frisby
+                        .put(
+                            `http://api:3001/api/organizations/${organization.id}`,
+                            notWellFormatedOrganization,
+                            { json: true }
+                        )
+                        .expect('status', 400)
+                        .expect(
+                            'header',
+                            'Content-Type',
+                            'application/json; charset=utf-8'
+                        )
+                        .then(resp => {
+                            expect(resp.json.message).toEqual(
+                                'RequestValidationError: Schema validation error (/contactPoints/0/email: format should match format "email")'
+                            );
+                        });
+                    return frisby
+                        .delete(
+                            `http://api:3001/api/organizations/${organization.id}`
+                        )
+                        .expect('status', 200);
+                });
+        });
+
+        it('devrait permettre de mettre à jour une entreprise et son/ses contact.s', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    completeDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(async ({ json: organization }) => {
+                    const updatedData = {
+                        ...omit(organization, ['id']),
+                        name: 'Ma petite entreprise',
+                        contactPoints: organization.contactPoints.map(
+                            contact => ({
+                                ...contact,
+                                name: 'Alain B.',
+                            })
+                        ),
+                    };
+                    await frisby
+                        .put(
+                            `http://api:3001/api/organizations/${organization.id}`,
+                            updatedData,
+                            { json: true }
+                        )
+                        .expect('status', 200)
+                        .expect(
+                            'header',
+                            'Content-Type',
+                            'application/json; charset=utf-8'
+                        )
+                        .then(resp => {
+                            expect(resp.json.name).toEqual(
+                                'Ma petite entreprise'
+                            );
+                            return frisby
+                                .get(
+                                    `http://api:3001/api/organizations/${organization.id}`
+                                )
+                                .expect('status', 200)
+                                .then(resp => {
+                                    expect(resp.json.name).toEqual(
+                                        'Ma petite entreprise'
+                                    );
+                                    expect(
+                                        resp.json.contactPoints[0].name
+                                    ).toEqual('Alain B.');
+                                });
+                        });
+                    return frisby
+                        .delete(
+                            `http://api:3001/api/organizations/${organization.id}`
+                        )
+                        .expect('status', 200);
+                });
+        });
+
+        it('devrait permettre d\'ajouter et de supprimer des contacts', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    completeDataForCreation,
+                    { json: true }
+                )
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(async ({ json: organization }) => {
+                    const newContact = {
+                        name: 'John C.',
+                        email: 'john@impulse.com',
+                        contactType: 'Conseillé musical',
+                    };
+                    const updatedData = {
+                        ...omit(organization, ['id']),
+                        contactPoints: [
+                            ...organization.contactPoints,
+                            newContact,
+                        ],
+                    };
+                    // test adding contact
+                    const updatedContactPoints = await frisby
+                        .put(
+                            `http://api:3001/api/organizations/${organization.id}`,
+                            updatedData,
+                            { json: true }
+                        )
+                        .expect('status', 200)
+                        .expect(
+                            'header',
+                            'Content-Type',
+                            'application/json; charset=utf-8'
+                        )
+                        .then(() => {
+                            return frisby
+                                .get(
+                                    `http://api:3001/api/organizations/${organization.id}`
+                                )
+                                .expect('status', 200)
+                                .then(resp => {
+                                    expect(
+                                        resp.json.contactPoints.length
+                                    ).toEqual(2);
+                                    return resp.json.contactPoints;
+                                });
+                        });
+                    // test remove contact
+                    await frisby
+                        .put(
+                            `http://api:3001/api/organizations/${organization.id}`,
+                            {
+                                ...updatedData,
+                                contactPoints: updatedContactPoints
+                                    .filter(
+                                        contact => contact.name === 'John C.'
+                                    )
+                                    .map(contact => ({
+                                        ...contact,
+                                        email: 'john-updated@impulse.com',
+                                    })),
+                            },
+                            { json: true }
+                        )
+                        .expect('status', 200)
+                        .expect(
+                            'header',
+                            'Content-Type',
+                            'application/json; charset=utf-8'
+                        )
+                        .then(() => {
+                            return frisby
+                                .get(
+                                    `http://api:3001/api/organizations/${organization.id}`
+                                )
+                                .expect('status', 200)
+                                .then(resp => {
+                                    expect(
+                                        resp.json.contactPoints.length
+                                    ).toEqual(1);
+                                    expect(
+                                        resp.json.contactPoints[0].name
+                                    ).toEqual('John C.');
+                                    expect(
+                                        resp.json.contactPoints[0].email
+                                    ).toEqual('john-updated@impulse.com');
+                                });
+                        });
+                    return frisby
+                        .delete(
+                            `http://api:3001/api/organizations/${organization.id}`
+                        )
+                        .expect('status', 200);
                 });
         });
     });

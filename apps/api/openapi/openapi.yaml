@@ -872,8 +872,6 @@ components:
           type: string
           format: uuid
           example: a122edec-5580-4a93-aff7-fc18b41e4c57
-      required:
-        - identifier
     FullJobPosting:
       title: FullJobPosting
       description: "Une offre d'emploi complète (avec identifiant unique et entreprise liée)"

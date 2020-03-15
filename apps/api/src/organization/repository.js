@@ -225,6 +225,7 @@ const prepareOrganizationDataForSave = dataFromApi => ({
         streetAddress: dataFromApi.address.streetAddress,
     },
     contactPoint: dataFromApi.contactPoints[0],
+    contactPoints: dataFromApi.contactPoints,
 });
 
 /**
@@ -257,7 +258,7 @@ const getOrganizationByIdQuery = (client, organizationId) => {
 };
 
 /**
- * Return paginated and filtered list of organization
+ * Return the created organization
  *
  * @param {object} client - The Database client
  * @param {object} apiData - The validated data sent from API to create a new organization
@@ -324,15 +325,113 @@ const deleteOrganization = async ({ client, organizationId }) => {
         .catch(error => ({ error }));
 };
 
+/**
+ * Method returning in array of chlidren's ids linked (1-n) to an object during parent editing
+ *
+ * @param {object} objectsInDb - an array of object's id linked (1-n) to the object edited where identifier is id
+ * @param {object} objectsFromApi - an objects array linked (1-n) to the object edited where identifier is identifier
+ * @returns {array} an array of id that should be deleted from database
+ */
+const getIdsToDelete = (idsInDb, objectsFromApi) => {
+    const idsApi = objectsFromApi
+        .map(object => object.identifier)
+        .filter(id => id);
+    return idsInDb.filter(id => !idsApi.includes(id));
+};
+
+/**
+ * Update an organization
+ *
+ * @param {object} client - The Database client
+ * @param {object} apiData - The validated data sent from API to update an organization
+ * @returns {Promise} - the updated organization
+ */
+const updateOrganization = async ({ client, organizationId, apiData }) => {
+    const { organization, contactPoints } = prepareOrganizationDataForSave(
+        apiData
+    );
+
+    try {
+        await client.transaction(trx => {
+            client('organization')
+                .transacting(trx)
+                .where({ id: organizationId })
+                .update(organization)
+                .then(async () => {
+                    const existingContactIds = await client('contact_point')
+                        .select('id')
+                        .where({ organization_id: organizationId })
+                        .then(contacts => contacts.map(contact => contact.id));
+
+                    const contactUpdates = contactPoints.reduce(
+                        (acc, contact) => {
+                            // Contacts to update
+                            if (
+                                contact.identifier &&
+                                existingContactIds.includes(contact.identifier)
+                            ) {
+                                acc.push(
+                                    client('contact_point')
+                                        .transacting(trx)
+                                        .where({ id: contact.identifier })
+                                        .update(omit(contact, ['identifier']))
+                                );
+                            }
+                            // Contacts to create
+                            if (!contact.identifier) {
+                                acc.push(
+                                    client('contact_point')
+                                        .transacting(trx)
+                                        .insert({
+                                            ...contact,
+                                            organizationId,
+                                        })
+                                );
+                            }
+
+                            return acc;
+                        },
+                        []
+                    );
+
+                    // Contacts to delete
+                    const idsToDelete = getIdsToDelete(
+                        existingContactIds,
+                        contactPoints
+                    );
+                    idsToDelete.map(id =>
+                        contactUpdates.push(
+                            client('contact_point')
+                                .transacting(trx)
+                                .where({ id })
+                                .del()
+                        )
+                    );
+                    return Promise.all(contactUpdates);
+                })
+                .then(trx.commit)
+                .catch(trx.rollback);
+        });
+    } catch (error) {
+        return { error };
+    }
+
+    return getOrganizationByIdQuery(client, organizationId)
+        .then(formatOrganizationForAPI)
+        .catch(error => ({ error }));
+};
+
 module.exports = {
     createOrganization,
     deleteOrganization,
     filtersSanitizer,
     formatOrganizationForAPI,
     formatPaginationContentRange,
+    getIdsToDelete,
     getOrganization,
     getOrganizationPaginatedList,
     paginationSanitizer,
     prepareOrganizationDataForSave,
     sortSanitizer,
+    updateOrganization,
 };
