@@ -499,7 +499,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Organization'
+              $ref: '#/components/schemas/OrganizationForCreation'
       tags:
         - Entreprises
     parameters: []
@@ -729,7 +729,8 @@ components:
             postalCode: '14000'
             streetAddress: '5, place de la Répulique'
           contactPoints:
-            - email: job@organization.org
+            - identifier: abeb9875-2191-4097-8249-5b8defc42a3e
+              email: job@organization.org
               telephone: '0606060606'
               name: 'John Do, CTO'
               contactType: "Offres d'emploi"
@@ -766,7 +767,7 @@ components:
           type: array
           minItems: 1
           items:
-            $ref: '#/components/schemas/ContactPoint'
+            $ref: '#/components/schemas/FullContactPoint'
       required:
         - name
         - url
@@ -865,12 +866,14 @@ components:
     Identifier:
       title: Identifier
       type: object
+      description: "L'identifiant unique des objets persistés dans le JobBoard"
       properties:
         identifier:
           type: string
           format: uuid
           example: a122edec-5580-4a93-aff7-fc18b41e4c57
-      description: "L'identifiant unique des objets persistés dans le JobBoard"
+      required:
+        - identifier
     FullJobPosting:
       title: FullJobPosting
       description: "Une offre d'emploi complète (avec identifiant unique et entreprise liée)"
@@ -933,6 +936,60 @@ components:
               telephone: '0606060606'
               name: 'John Do, CTO'
               contactType: "Offres d'emploi"
+    FullContactPoint:
+      title: FullContactPoint
+      allOf:
+        - $ref: '#/components/schemas/Identifier'
+        - $ref: '#/components/schemas/ContactPoint'
+      x-examples:
+        example-1:
+          identifier: abeb9875-2191-4097-8249-5b8defc42a3e
+          email: job@organization.org
+          telephone: '0606060606'
+          name: 'John Do, CTO'
+          contactType: "Offres d'emploi"
+    OrganizationForCreation:
+      title: OrganizationForCreation
+      type: object
+      description: "Données nécessaires à la création d'une entreprise"
+      properties:
+        contactPoints:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ContactPoint'
+        address:
+          anyOf:
+            - type: string
+            - $ref: '#/components/schemas/PostalAddress'
+        image:
+          type: string
+          format: uri
+          example: 'https://www.incaya.fr/static/logo-incaya.svg'
+          minLength: 10
+          pattern: "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+        email:
+          type: string
+          format: email
+          example: email@organization.org
+        url:
+          type: string
+          format: uri
+          example: 'https://www.incaya.fr/'
+          minLength: 10
+          pattern: "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+        description:
+          type: string
+          example: Coopérative de services du numérique
+        name:
+          type: string
+          example: Incaya
+          minLength: 2
+          maxLength: 150
+      required:
+        - contactPoints
+        - url
+        - name
   parameters:
     Filter:
       name: filters

@@ -105,6 +105,8 @@ const getFilteredOrganizationsQuery = (client, filters, sort) => {
         .select(
             'organization.*',
             client.raw(`(SELECT array_to_json(array_agg(jsonb_build_object(
+                'identifier',
+                contact_point.id,
                 'email',
                 contact_point.email,
                 'telephone',
@@ -238,6 +240,8 @@ const getOrganizationByIdQuery = (client, organizationId) => {
         .first(
             'organization.*',
             client.raw(`(SELECT array_to_json(array_agg(jsonb_build_object(
+                'identifier',
+                contact_point.id,
                 'email',
                 contact_point.email,
                 'telephone',
