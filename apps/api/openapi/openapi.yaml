@@ -503,14 +503,9 @@ paths:
       tags:
         - Entreprises
     parameters: []
-  '/api/organizations/{organizationId}':
+  '/api/organizations/{identifier}':
     parameters:
-      - schema:
-          type: string
-        name: organizationId
-        in: path
-        required: true
-        description: "L'identifiant de l'entreprise"
+      - $ref: '#/components/parameters/UUID'
     get:
       summary: "Donnée d'une entreprise"
       tags:
@@ -971,3 +966,12 @@ components:
         minItems: 2
         items:
           type: string
+    UUID:
+      name: identifier
+      in: path
+      description: "Identifiant unique d'un objet de forme uuid"
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 9a6c8995-df54-446c-a5b8-71532c304751

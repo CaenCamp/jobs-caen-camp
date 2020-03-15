@@ -290,11 +290,41 @@ const createOrganization = async ({ client, apiData }) => {
         .catch(error => ({ error }));
 };
 
+/**
+ * Return an organization
+ *
+ * @param {object} client - The Database client
+ * @param {object} organizationId - The organization identifier
+ * @returns {Promise} - the organization
+ */
+const getOrganization = async ({ client, organizationId }) => {
+    return getOrganizationByIdQuery(client, organizationId)
+        .then(formatOrganizationForAPI)
+        .catch(error => ({ error }));
+};
+
+/**
+ * Delete an organization
+ *
+ * @param {object} client - The Database client
+ * @param {object} organizationId - The organization identifier
+ * @returns {Promise} - the id if the deleted organization
+ */
+const deleteOrganization = async ({ client, organizationId }) => {
+    return client('organization')
+        .where({ id: organizationId })
+        .del()
+        .then(() => ({ id: organizationId }))
+        .catch(error => ({ error }));
+};
+
 module.exports = {
     createOrganization,
+    deleteOrganization,
     filtersSanitizer,
     formatOrganizationForAPI,
     formatPaginationContentRange,
+    getOrganization,
     getOrganizationPaginatedList,
     paginationSanitizer,
     prepareOrganizationDataForSave,

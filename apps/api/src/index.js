@@ -53,7 +53,7 @@ app.use(
         file: `${__dirname}/../openapi/openapi.yaml`,
         endpoint: '/openapi.json',
         uiEndpoint: '/documentation',
-        validateResponse: false,
+        validateResponse: true,
         validatePaths: ['/api'],
         errorHandler,
     })

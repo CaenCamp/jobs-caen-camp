@@ -2,6 +2,7 @@
     "name": "cc-jobboard-tests-e2e",
     "version": "1.0.0",
     "description": "Tests e2e mage on jobBoard app (api and front)",
+    "license": "GPL-3.0",
     "scripts": {
         "test": "jest",
         "test:watch": "jest --watchAll",

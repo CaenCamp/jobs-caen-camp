@@ -2,7 +2,7 @@ import frisby from 'frisby';
 
 describe('JobBoard Organizations API Endpoints', () => {
     describe('GET: /api/organizations', () => {
-        it('devrait renvoyer une liste paginée ordonnée par nom d\'entreprise sans paramètres de requête', async () => {
+        it("devrait renvoyer une liste paginée ordonnée par nom d'entreprise sans paramètres de requête", async () => {
             expect.hasAssertions();
             await frisby
                 .get('http://api:3001/api/organizations')
@@ -202,7 +202,7 @@ describe('JobBoard Organizations API Endpoints', () => {
                     email: 'job@org.org',
                     telephone: '0606060606',
                     name: 'John Do, CTO',
-                    contactType: 'Offres d\'emploi',
+                    contactType: "Offres d'emploi",
                 },
             ],
         };
@@ -228,7 +228,7 @@ describe('JobBoard Organizations API Endpoints', () => {
                 )
                 .then(resp => {
                     expect(resp.json.message).toEqual(
-                        'RequestValidationError: Schema validation error ( should have required property \'name\')'
+                        "RequestValidationError: Schema validation error ( should have required property 'name')"
                     );
                 });
         });
@@ -257,7 +257,7 @@ describe('JobBoard Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait retourner l\'entreprise crée avec un nouvel id en cas de succès', async () => {
+        it("devrait retourner l'entreprise crée avec un nouvel id en cas de succès", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -279,6 +279,67 @@ describe('JobBoard Organizations API Endpoints', () => {
                         postalCode: '14000',
                         streetAddress: '5, place de la Répulique',
                     });
+                    return frisby.delete(
+                        `http://api:3001/api/organizations/${resp.json.id}`
+                    );
+                });
+        });
+    });
+
+    describe('GET: /api/organizations/:organizationId', () => {
+        it("devrait retourner une erreur 400 en cas d'id mal formaté", async () => {
+            expect.hasAssertions();
+            await frisby
+                .get('http://api:3001/api/organizations/id-mal-formaté')
+                .expect('status', 400)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
+                    );
+                });
+        });
+
+        it("devrait retourner une erreur 404 en cas d'id n'existant pas en base de données", async () => {
+            expect.hasAssertions();
+            await frisby
+                .get(
+                    'http://api:3001/api/organizations/9a6c8995-df54-446c-a5b8-71532c304751'
+                )
+                .expect('status', 404)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'The organization of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist.'
+                    );
+                });
+        });
+
+        it('devrait retourner une entreprise complete si elle existe', async () => {
+            expect.hasAssertions();
+            await frisby
+                .get('http://api:3001/api/organizations')
+                .expect('status', 200)
+                .then(async resp => {
+                    const qwarry = resp.json.find(org => org.name === 'Qwarry');
+                    const qwarryFromGet = await frisby
+                        .get(`http://api:3001/api/organizations/${qwarry.id}`)
+                        .expect('status', 200)
+                        .expect(
+                            'header',
+                            'Content-Type',
+                            'application/json; charset=utf-8'
+                        );
+
+                    expect(qwarry).toEqual(qwarryFromGet.json);
                 });
         });
     });
