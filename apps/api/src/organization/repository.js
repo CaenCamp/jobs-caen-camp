@@ -265,7 +265,7 @@ const getOrganizationByIdQuery = (client, organizationId) => {
  * @returns {Promise} - the created organization
  */
 const createOrganization = async ({ client, apiData }) => {
-    const { organization, contactPoint } = prepareOrganizationDataForSave(
+    const { organization, contactPoints } = prepareOrganizationDataForSave(
         apiData
     );
 
@@ -276,13 +276,25 @@ const createOrganization = async ({ client, apiData }) => {
                 .returning('id')
                 .insert(organization)
                 .then(([organizationId]) => {
-                    return client('contact_point')
-                        .transacting(trx)
-                        .insert({
-                            ...contactPoint,
-                            organizationId,
-                        })
-                        .then(() => organizationId);
+                    const contactsToCreate = contactPoints.reduce(
+                        (acc, contact) => {
+                            acc.push(
+                                client('contact_point')
+                                    .transacting(trx)
+                                    .insert({
+                                        ...contact,
+                                        organizationId,
+                                    })
+                            );
+
+                            return acc;
+                        },
+                        []
+                    );
+
+                    return Promise.all(contactsToCreate).then(
+                        () => organizationId
+                    );
                 })
                 .then(trx.commit)
                 .catch(trx.rollback);

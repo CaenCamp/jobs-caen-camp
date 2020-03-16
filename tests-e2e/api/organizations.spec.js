@@ -287,6 +287,40 @@ describe('JobBoard Organizations API Endpoints', () => {
                         .expect('status', 200);
                 });
         });
+
+        it('devrait permettre de créer une entreprise avec plusieurs contacts', async () => {
+            expect.hasAssertions();
+            await frisby
+                .post(
+                    'http://api:3001/api/organizations',
+                    {
+                        ...completeDataForCreation,
+                        contactPoints: [
+                            ...completeDataForCreation.contactPoints,
+                            {
+                                name: 'John C.',
+                                email: 'john@impulse.com',
+                                contactType: 'Conseilles en musique',
+                            },
+                        ],
+                    },
+                    { json: true }
+                )
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.contactPoints.length).toEqual(2);
+                    return frisby
+                        .delete(
+                            `http://api:3001/api/organizations/${resp.json.id}`
+                        )
+                        .expect('status', 200);
+                });
+        });
     });
 
     describe('GET: /api/organizations/:organizationId', () => {
