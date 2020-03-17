@@ -699,6 +699,7 @@ components:
         jobStartDate:
           type: string
           format: date
+          nullable: true
           example: '2020-05-02'
         skills:
           type: string
@@ -706,6 +707,7 @@ components:
         validThrough:
           type: string
           format: date
+          nullable: true
           example: '2010-05-05'
       required:
         - datePosted
@@ -771,7 +773,6 @@ components:
       required:
         - name
         - url
-        - contactPoints
     PostalAddress:
       title: PostalAddress
       type: object

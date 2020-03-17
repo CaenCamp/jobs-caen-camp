@@ -27,7 +27,7 @@ const completeDataForCreation = {
     ...incompleteDataForCreation,
 };
 
-describe('JobBoard Organizations API Endpoints', () => {
+describe('Organizations API Endpoints', () => {
     describe('GET: /api/organizations', () => {
         it('devrait renvoyer une liste paginée ordonnée par nom d\'entreprise sans paramètres de requête', async () => {
             expect.hasAssertions();

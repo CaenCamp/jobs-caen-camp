@@ -10,7 +10,7 @@
             "address": {
                 "addressCountry": "FR",
                 "addressLocality": "Colombelles",
-                "postalCode": "14460",
+                "postalCode": "14461",
                 "streetAddress": "Normandie – Village By CA, 8 rue Léopold Sedar-Senghor"
             },
             "contactPoints": [
@@ -29,7 +29,7 @@
         "experienceRequirements": "* Vous êtes Bac+4 / 5 issu(e) d’une formation supérieure (Ecole d’ingénieurs, Master, DESS…), avec une forte dominante mathématique * Vous avez déjà 4 ans d’expérience en Data Science * Vous avez des bases solides requises en algorithmes de Machine Learning * Vous maitrisez le langage python * Vous présentez un intérêt pour le NLP ou souhaitez approfondir vos connaissances en traitement de données non structurées * Vous êtes intéressé(e) par d’autres technos (Spark, SQL, …) et pouvez vous adapter à un contexte technologique qui évolue * Vous avez une très bonne communication orale * Autonome, passionné(e) par la data et le travail dans une start up * Une connaissance de l’adtech est un plus * Mais surtout : vous avez une passion pour un projet startup qui a de grandes ambitions et une volonté à toute épreuve !",
         "jobStartDate": "2020-05-02",
         "skills": "Machine learning, Python, Spark, SQL ",
-        "validThrough": ""
+        "validThrough": "2020-04-15"
     },
     {
         "title": "Ingénieur Lead Full Stack technico-fonctionnel",
@@ -55,13 +55,13 @@
             ]
         },
         "url": "https://www.linkedin.com/in/veyrin",
-        "datePosted": "2019-12-01",
+        "datePosted": "2019-12-02",
         "employerOverview": "Vous êtes un membre actif de l’équipe architecture, dont les missions sont décrites ci dessus De plus, vous êtes le lead technico-fonctionnel d’une équipe de développementd’une dizaine de personnes. A ce titre vous devrez assurer: * la qualité des livrables * la conformité des livrables avec les référentiels * la diffusion et le mentoring des procédures auprès des équipesle support technique et fonctionnel aux équipes * le développement de fonctionnalités. En tant que lead, vous serez l’interface privilégiée entre les métiers et le dev et devrez prendre des décisions et faire des arbitrages Compte tenu du contexte international de la mission, la maîtrise courante de l’anglaisest obligatoire.",
         "employmentType": "CDI",
         "experienceRequirements": "* Expert en développement web. Maîtrise des langages de programmation web * back/front (php, go, bash, js, etc ..), des frameworks (laravel, vue, react, etc ..) * Maîtrise en développement mobile * Connaissance et maitrise des ops: server, monitoring, backup, sécurité * Connaissance du métier de la BU",
-        "jobStartDate": "2020-05-02",
+        "jobStartDate": "2020-05-01",
         "skills": "Php, Go, Bash, Js, Laravel, Vue, React, admin sys",
-        "validThrough": ""
+        "validThrough": "2020-02-02"
     },
     {
         "title": "R&D Software Engineer",
@@ -87,11 +87,11 @@
             ]
         },
         "url": "https://www.flexcity.energy/fr/carrieres/offres-demplois",
-        "datePosted": "2019-12-01",
+        "datePosted": "2019-12-03",
         "employerOverview": "Are you passionate about algorithms? Are you a Java, Kotlin, and Docker wizard? Do you enjoy being creative with software? Then check to apply to be our Software Engineer with this skills ★ Java and Kotlin development of Springboot microservices ★ Database experience with SQL and MongoDB ★ Container-based development with Docker on Linux ★ You speak native or close to native French ★ You have an excellent level of English ★ Experience with Agile development ★ Knowledge of Continuous Integration, deployment, and DevOps culture",
         "employmentType": "CDI",
         "experienceRequirements": "★ Master in software engineering ★ You can translate real-world problems into automated real-time decision solutions. ★ You can build decision algorithms that work efficiently in regimes with high uncertainty. ★ You have experience in object-oriented and/or functional programming ★ You are deliverable-focused with a pragmatic and business-oriented attitude. ★ You are a team player, yet able to work independently. ★ You are eager to look for creative solutions using state of the art techniques. ★ You have an interest in Energy and IoT applications",
-        "jobStartDate": "2020-05-02",
+        "jobStartDate": "2020-06-01",
         "skills": "Java, Kotlin, Docker, Sql, Mongo, Devops",
         "validThrough": ""
     }

@@ -7,6 +7,7 @@ const error = require('koa-json-error');
 
 const dbMiddleware = require('./toolbox/middleware/db');
 const organizationRouter = require('./organization/router');
+const jobPostingRouter = require('./job-posting/router');
 
 const app = new Koa();
 const router = new Router();
@@ -53,7 +54,7 @@ app.use(
         file: `${__dirname}/../openapi/openapi.yaml`,
         endpoint: '/openapi.json',
         uiEndpoint: '/documentation',
-        validateResponse: false,
+        validateResponse: true,
         validatePaths: ['/api'],
         errorHandler,
     })
@@ -76,5 +77,6 @@ router.get('/api', ctx => {
 app.use(router.routes()).use(router.allowedMethods());
 app.use(dbMiddleware);
 app.use(organizationRouter.routes()).use(organizationRouter.allowedMethods());
+app.use(jobPostingRouter.routes()).use(jobPostingRouter.allowedMethods());
 
 app.listen(3001, () => global.console.log('API started on port 3001'));

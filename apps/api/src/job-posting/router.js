@@ -18,3 +18,5 @@ router.get('/', async ctx => {
     ctx.set('Content-Range', contentRange);
     ctx.body = jobPostings;
 });
+
+module.exports = router;
