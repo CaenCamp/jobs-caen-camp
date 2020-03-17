@@ -3,7 +3,6 @@ const pick = require('lodash.pick');
 
 const {
     filtersSanitizer,
-    formatPaginationContentRange,
     paginationSanitizer,
     sortSanitizer,
 } = require('../toolbox/sanitizers');
@@ -67,6 +66,20 @@ const getFilteredOrganizationsQuery = (client, filters, sort) => {
 
     return query;
 };
+
+/**
+ * Transforms the Knex paging object into a string compatible with the "content-Range" header.
+ * https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Range
+ *
+ * @param {string} objectType - type of object returned in the paginated collection
+ * @param {object} pagination - Knex pagination object (https://github.com/felixmosh/knex-paginate#pagination-object)
+ * @returns {string} string ready to be set has "Content-Range" http header
+ * @example Content-Range: posts 0-24/319
+ */
+const formatPaginationContentRange = (objectType, pagination) =>
+    `${objectType.toLowerCase()} ${pagination.from}-${pagination.to}/${
+        pagination.total
+    }`;
 
 /**
  * Transforms a db queried organization into an organization object for API.

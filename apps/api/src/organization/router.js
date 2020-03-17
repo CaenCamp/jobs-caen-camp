@@ -7,28 +7,11 @@ const {
     getOrganizationPaginatedList,
     updateOrganization,
 } = require('./repository');
+const { parseJsonQueryParameter } = require('../toolbox/sanitizers');
 
 const router = new Router({
     prefix: '/api/organizations',
 });
-
-/**
- * This method intercepts query parameters expected in JSON but incorrectly formatted.
- *
- * @param {string} parameter - the query parameter expected in JSON
- * @returns {(object|boolean)} the parsed parameter or false if incorrectly formatted
- */
-const parseJsonQueryParameter = parameter => {
-    if (parameter === undefined) {
-        return false;
-    }
-    try {
-        return JSON.parse(parameter);
-    } catch (e) {
-        // signale.debug('Problem with query param json encoding', e);
-        return false;
-    }
-};
 
 router.get('/', async ctx => {
     const { organizations, contentRange } = await getOrganizationPaginatedList({
@@ -133,4 +116,5 @@ router.put('/:organizationId', async ctx => {
 
     ctx.body = updatedOrganization;
 });
+
 module.exports = router;
