@@ -197,7 +197,93 @@ const getJobPostingPaginatedList = async ({
         }));
 };
 
+/**
+ * Knex query for single jobPosting
+ *
+ * @param {object} client - The Database client
+ * @param {string} jobPostingId - jobPosting Id
+ * @returns {Promise} - Knew query for single jobPosting
+ */
+const getJobPostingByIdQuery = (client, jobPostingId) => {
+    return client
+        .first(
+            'job_posting.*',
+            'organization.name as hiringOrganizationName',
+            'organization.postal_code as hiringOrganizationPostalCode',
+            'organization.address_locality as hiringOrganizationAddressLocality',
+            'organization.address_country as hiringOrganizationAddressCountry',
+            'organization.image as hiringOrganizationImage',
+            'organization.url as hiringOrganizationUrl'
+        )
+        .from('job_posting')
+        .join('organization', {
+            'organization.id': 'job_posting.hiring_organization_id',
+        })
+        .where({ 'job_posting.id': jobPostingId });
+};
+
+/**
+ * Return a jobPosting
+ *
+ * @param {object} client - The Database client
+ * @param {object} organizationId - The jobPosting identifier
+ * @returns {Promise} - the jobPosting
+ */
+const getJobPosting = async ({ client, jobPosting }) => {
+    return getJobPostingByIdQuery(client, jobPosting)
+        .then(formatJobPostingForAPI)
+        .catch(error => ({ error }));
+};
+
+/**
+ * Return the created jobPosting
+ *
+ * @param {object} client - The Database client
+ * @param {object} apiData - The validated data sent from API to create a new jobPosting
+ * @returns {Promise} - the created jobPosting
+ */
+const createJobPosting = async ({ client, apiData }) => {
+    const organization = await client
+        .first('id')
+        .from('organization')
+        .where({ id: apiData.hiringOrganizationId });
+
+    if (!organization) {
+        return { error: new Error('this organization does not exist') };
+    }
+
+    return client('job_posting')
+        .returning('id')
+        .insert(apiData)
+        .then(([newJobPostingId]) => {
+            return getJobPostingByIdQuery(client, newJobPostingId).then(
+                formatJobPostingForAPI
+            );
+        })
+        .catch(error => ({ error }));
+};
+
+/**
+ * Delete a jobPosting
+ *
+ * @param {object} client - The Database client
+ * @param {object} jobPostingId - The jobPosting identifier
+ * @returns {Promise} - the id of the deleted jobPosting or an empty object if jobPosting is not in db
+ */
+const deleteJobPosting = async ({ client, jobPostingId }) => {
+    return client('job_posting')
+        .where({ id: jobPostingId })
+        .del()
+        .then(nbDeletion => {
+            return nbDeletion ? { id: jobPostingId } : {};
+        })
+        .catch(error => ({ error }));
+};
+
 module.exports = {
+    createJobPosting,
+    deleteJobPosting,
     formatJobPostingForAPI,
+    getJobPosting,
     getJobPostingPaginatedList,
 };

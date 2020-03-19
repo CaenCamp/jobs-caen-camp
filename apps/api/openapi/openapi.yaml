@@ -141,7 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FullOrganization'
+                $ref: '#/components/schemas/JobPosting'
               examples:
                 example-1:
                   value:
