@@ -36,7 +36,7 @@
         "signale": "1.4.0"
     },
     "devDependencies": {
-        "@stoplight/spectral": "5.1.0",
+        "@stoplight/spectral": "5.2.0",
         "knex": "0.20.11",
         "pg": "7.18.2"
     }
