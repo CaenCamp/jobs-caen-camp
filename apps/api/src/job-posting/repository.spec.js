@@ -2,6 +2,10 @@ const { formatJobPostingForAPI } = require('./repository');
 
 describe('jobPosting repository', () => {
     describe('formatJobPostingForAPI', () => {
+        it('should return an empty object if return from db is null', () => {
+            expect(formatJobPostingForAPI(null)).toEqual({});
+        });
+
         it('should format jobPosting from db as a jobPosting object as describe in OpenAPI contract', () => {
             const dbJobPosting = {
                 id: '095e0d16-705d-4934-aa34-8f973eab0bdd',

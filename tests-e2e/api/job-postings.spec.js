@@ -416,4 +416,66 @@ describe('JobPostings API Endpoints', () => {
                 .expect('status', 200);
         });
     });
+
+    describe('GET: /api/job-posting/:id', () => {
+        it('devrait retourner une erreur 400 en cas d\'id mal formaté', async () => {
+            expect.hasAssertions();
+            await frisby
+                .get('http://api:3001/api/job-postings/id-mal-formaté')
+                .expect('status', 400)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
+                    );
+                });
+        });
+
+        it('devrait retourner une erreur 404 en cas d\'id n\'existant pas en base de données', async () => {
+            expect.hasAssertions();
+            await frisby
+                .get(
+                    'http://api:3001/api/job-postings/9a6c8995-df54-446c-a5b8-71532c304751'
+                )
+                .expect('status', 404)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'The jobPosting of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist.'
+                    );
+                });
+        });
+
+        it('devrait retourner l\'offre d\'emploi complete lorsqu\'elle existe', async () => {
+            expect.hasAssertions();
+            const jobPosting = await frisby
+                .get('http://api:3001/api/job-postings')
+                .expect('status', 200)
+                .then(resp => {
+                    return resp.json.find(
+                        org => org.title === 'Data Science Lead'
+                    );
+                });
+
+            await frisby
+                .get(`http://api:3001/api/job-postings/${jobPosting.id}`)
+                .expect('status', 200)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.title).toEqual('Data Science Lead');
+                });
+        });
+    });
 });

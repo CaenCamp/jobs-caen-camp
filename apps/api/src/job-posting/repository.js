@@ -132,37 +132,43 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
  * @param {object} dbOrganization - organization data from database
  * @returns {object} an organization object as describe in OpenAPI contract
  */
-const formatJobPostingForAPI = dbJobPosting => ({
-    ...omit(dbJobPosting, [
-        'hiringOrganizationId',
-        'hiringOrganizationName',
-        'hiringOrganizationPostalCode',
-        'hiringOrganizationAddressLocality',
-        'hiringOrganizationAddressCountry',
-        'hiringOrganizationImage',
-        'hiringOrganizationUrl',
-    ]),
-    hiringOrganization: {
-        identifier: dbJobPosting.hiringOrganizationId,
-        name: dbJobPosting.hiringOrganizationName,
-        image: dbJobPosting.hiringOrganizationImage,
-        url: dbJobPosting.hiringOrganizationUrl,
-        address: {
-            addressCountry: dbJobPosting.hiringOrganizationAddressCountry,
-            addressLocality: dbJobPosting.hiringOrganizationAddressLocality,
-            postalCode: dbJobPosting.hiringOrganizationPostalCode,
-        },
-    },
-    datePosted: dbJobPosting.datePosted
-        ? dbJobPosting.datePosted.toISOString().substring(0, 10)
-        : null,
-    jobStartDate: dbJobPosting.jobStartDate
-        ? dbJobPosting.jobStartDate.toISOString().substring(0, 10)
-        : null,
-    validThrough: dbJobPosting.validThrough
-        ? dbJobPosting.validThrough.toISOString().substring(0, 10)
-        : null,
-});
+const formatJobPostingForAPI = dbJobPosting => {
+    return dbJobPosting
+        ? {
+              ...omit(dbJobPosting, [
+                  'hiringOrganizationId',
+                  'hiringOrganizationName',
+                  'hiringOrganizationPostalCode',
+                  'hiringOrganizationAddressLocality',
+                  'hiringOrganizationAddressCountry',
+                  'hiringOrganizationImage',
+                  'hiringOrganizationUrl',
+              ]),
+              hiringOrganization: {
+                  identifier: dbJobPosting.hiringOrganizationId,
+                  name: dbJobPosting.hiringOrganizationName,
+                  image: dbJobPosting.hiringOrganizationImage,
+                  url: dbJobPosting.hiringOrganizationUrl,
+                  address: {
+                      addressCountry:
+                          dbJobPosting.hiringOrganizationAddressCountry,
+                      addressLocality:
+                          dbJobPosting.hiringOrganizationAddressLocality,
+                      postalCode: dbJobPosting.hiringOrganizationPostalCode,
+                  },
+              },
+              datePosted: dbJobPosting.datePosted
+                  ? dbJobPosting.datePosted.toISOString().substring(0, 10)
+                  : null,
+              jobStartDate: dbJobPosting.jobStartDate
+                  ? dbJobPosting.jobStartDate.toISOString().substring(0, 10)
+                  : null,
+              validThrough: dbJobPosting.validThrough
+                  ? dbJobPosting.validThrough.toISOString().substring(0, 10)
+                  : null,
+          }
+        : {};
+};
 
 /**
  * Return paginated and filtered list of jobPosting
@@ -229,8 +235,8 @@ const getJobPostingByIdQuery = (client, jobPostingId) => {
  * @param {object} organizationId - The jobPosting identifier
  * @returns {Promise} - the jobPosting
  */
-const getJobPosting = async ({ client, jobPosting }) => {
-    return getJobPostingByIdQuery(client, jobPosting)
+const getJobPosting = async ({ client, jobPostingId }) => {
+    return getJobPostingByIdQuery(client, jobPostingId)
         .then(formatJobPostingForAPI)
         .catch(error => ({ error }));
 };

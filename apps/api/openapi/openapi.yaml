@@ -181,20 +181,13 @@ paths:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       parameters: []
     parameters: []
-  '/api/job-postings/{jobId}':
+  '/api/job-postings/{identifier}':
     get:
       tags:
         - "Offres d'emploi"
       summary: Trouver une offre par son ID
       description: "Renvoi une offre d'emploi"
       operationId: getJobById
-      parameters:
-        - name: jobId
-          schema:
-            type: integer
-          in: path
-          description: ID of job to return
-          required: true
       responses:
         '200':
           description: "L'offre d'emploi demandée"
@@ -263,12 +256,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
     parameters:
-      - schema:
-          type: string
-        name: jobId
-        in: path
-        required: true
-        description: "L'identifiant de l'offre d'emploi"
+      - $ref: '#/components/parameters/UUID'
     put:
       tags:
         - "Offres d'emploi"
@@ -280,7 +268,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobPosting'
+                $ref: '#/components/schemas/FullJobPosting'
         '400':
           description: Bad Request
           content:
@@ -316,14 +304,7 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: '#/components/schemas/Organization'
-                - type: object
-                  properties:
-                    hiringOrganizationId:
-                      type: string
-                      format: uuid
-                      example: 9b24d771-1069-40b1-b6be-3f3e53fdadd0
+              $ref: '#/components/schemas/JobPosting'
             examples:
               example-1:
                 value:
@@ -384,13 +365,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       description: "Supprimer une offre d'emploi"
-      parameters:
-        - schema:
-            type: string
-          in: path
-          name: jobId
-          description: "Identifiant de l'offre d'emploi"
-          required: true
   /api/organizations:
     get:
       summary: Liste des entreprises
