@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   api:
-    image: node:12.14-alpine
+    image: node:12.16.1
     volumes:
       - .:/jobboard
     working_dir: "/jobboard/apps/api"

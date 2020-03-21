@@ -18,7 +18,7 @@ help: ## Display available commands
 
 install: ## Install all js deps
 	@cp -n ./config/development.dist ./config/development.env
-	@${DC_DEV} run --rm --no-deps api ash -ci '\
+	@${DC_DEV} run --rm --no-deps api bash -ci '\
 		cd ../../ && \
 		yarn \
 	'
@@ -45,7 +45,7 @@ logs-db: ## Display postgres logs
 	${DC_DEV} logs -f postgres
 
 connect-api: ## Start cli in api container
-	${DC_DEV} exec api ash
+	${DC_DEV} exec api bash
 
 # =====================================================================
 # OpenAPI =============================================================
@@ -74,25 +74,25 @@ adr-list: ## List all ADR
 # =====================================================================
 
 import-fixed-fixtures: ## Import fixtures from a json file create by hand
-	$(DC_DEV) exec api ash -ci 'node cli/load-fixed-fixtures'
+	$(DC_DEV) exec api bash -ci 'node cli/load-fixed-fixtures'
 
 migrate-create: ## Create a new migration file, ie make migrate-create name=whatever-title
-	$(DC_DEV) exec api ash -ci 'yarn migrate:create -- ${name}'
+	$(DC_DEV) exec api bash -ci 'yarn migrate:create -- ${name}'
 
 migrate-latest: ## Apply Migrations up to the last one
-	$(DC_DEV) exec api ash -ci 'yarn migrate:latest'
+	$(DC_DEV) exec api bash -ci 'yarn migrate:latest'
 
 migrate-rollback: ## Apply Migrations down to last state
-	$(DC_DEV) exec api ash -ci 'yarn migrate:rollback'
+	$(DC_DEV) exec api bash -ci 'yarn migrate:rollback'
 
 migrate-down: ## Apply Migrations down one step
-	$(DC_DEV) exec api ash -ci 'yarn migrate:down'
+	$(DC_DEV) exec api bash -ci 'yarn migrate:down'
 
 migrate-up: ## Apply Migrations up one step
-	$(DC_DEV) exec api ash -ci 'yarn migrate:up'
+	$(DC_DEV) exec api bash -ci 'yarn migrate:up'
 
 migrate-list: ## Apply Migrations list
-	$(DC_DEV) exec api ash -ci 'yarn migrate:list'
+	$(DC_DEV) exec api bash -ci 'yarn migrate:list'
 
 # =====================================================================
 # Testing =============================================================
@@ -101,13 +101,13 @@ migrate-list: ## Apply Migrations list
 test: test-unit test-e2e ## launch all tests in docker
 
 test-unit: ## launch only tests unit (front and api)
-	@${DC_TEST} run --rm --no-deps api ash -ci '\
+	@${DC_TEST} run --rm --no-deps api bash -ci '\
 		cd ../../ && \
 		yarn test \
 	'
 
 test-unit-watch: ## launch only tests unit in watch mode
-	@${DC_TEST} run --rm --no-deps api ash -ci '\
+	@${DC_TEST} run --rm --no-deps api bash -ci '\
 		cd ../../ && \
 		yarn test:watch \
 	'
@@ -118,19 +118,19 @@ test-e2e: ## Run whole e2e tests suite
 # Manual recipes for e2e test (api with frisby and front with cypress)
 test-env-start: build-front
 	@${DC_TEST} up -d
-	@$(DC_TEST) run --rm api ash -ci 'yarn migrate:latest'
-	@$(DC_TEST) run --rm api ash -ci 'node cli/load-fixed-fixtures'
+	@$(DC_TEST) run --rm api bash -ci 'yarn migrate:latest'
+	@$(DC_TEST) run --rm api bash -ci 'node cli/load-fixed-fixtures'
 test-env-stop:
 	@${DC_TEST} down
 test-env-logs:
 	@${DC_TEST} logs -f
 test-env-run:
-	@${DC_TEST} run --rm api ash -ci '\
+	@${DC_TEST} run --rm api bash -ci '\
 		cd ../../tests-e2e && \
 		yarn test \
 	'
 test-env-watch:
-	@${DC_TEST} run --rm api ash -ci '\
+	@${DC_TEST} run --rm api bash -ci '\
 		cd ../../tests-e2e && \
 		yarn test:watch \
 	'
@@ -142,7 +142,7 @@ cypress:
 # =====================================================================
 
 build-front: ## Build the front
-	@${DC_DEV} run --rm --no-deps front ash -ci '\
+	@${DC_DEV} run --rm --no-deps front bash -ci '\
 		rm -f public/bundle.* && \
 		yarn build \
 	'
