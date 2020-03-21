@@ -37,7 +37,7 @@
     },
     "devDependencies": {
         "@stoplight/spectral": "5.2.0",
-        "knex": "0.20.11",
+        "knex": "0.20.12",
         "pg": "7.18.2"
     }
 }
