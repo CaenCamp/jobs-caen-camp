@@ -1,6 +1,20 @@
 import frisby from 'frisby';
 import omit from 'lodash.omit';
 
+const newJobPosting = {
+    title: 'Developpeur Javascript',
+    url: 'https://jobs.caen.camp',
+    datePosted: '2010-03-02',
+    employerOverview:
+        "Au sein d'une équipe DSI composée de juniors et de séniors",
+    employmentType: 'CDD',
+    experienceRequirements: "3 ans d'experience sur un projet Javascript",
+    jobStartDate: '2020-05-02',
+    skills: 'JavaScript, Devops, Php, ...',
+    validThrough: null,
+    hiringOrganizationId: 'a122edec-5580-4a93-aff7-fc18b41e4c57',
+};
+
 describe('JobPostings API Endpoints', () => {
     describe('GET: /api/job-posting', () => {
         it('devrait renvoyer une liste paginée ordonnée par date de création sans paramètres de requête', async () => {
@@ -88,7 +102,7 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait pouvoir renvoyer une liste ordonnée par code postal de l\'entreprise [hiringOrganizationPostalCode, ASC]', async () => {
+        it("devrait pouvoir renvoyer une liste ordonnée par code postal de l'entreprise [hiringOrganizationPostalCode, ASC]", async () => {
             expect.hasAssertions();
             await frisby
                 .get(
@@ -254,21 +268,7 @@ describe('JobPostings API Endpoints', () => {
     });
 
     describe('POST: /api/job-posting', () => {
-        const newJobPosting = {
-            title: 'Developpeur Javascript',
-            url: 'https://jobs.caen.camp',
-            datePosted: '2010-03-02',
-            employerOverview:
-                'Au sein d\'une équipe DSI composée de juniors et de séniors',
-            employmentType: 'CDD',
-            experienceRequirements:
-                '3 ans d\'experience sur un projet Javascript',
-            jobStartDate: '2020-05-02',
-            skills: 'JavaScript, Devops, Php, ...',
-            validThrough: null,
-            hiringOrganizationId: 'a122edec-5580-4a93-aff7-fc18b41e4c57',
-        };
-        it('devrait retourner une erreur 400 si une props de l\'offre d\'emploi est manquante', async () => {
+        it("devrait retourner une erreur 400 si une props de l'offre d'emploi est manquante", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -284,12 +284,12 @@ describe('JobPostings API Endpoints', () => {
                 )
                 .then(resp => {
                     expect(resp.json.message).toEqual(
-                        'RequestValidationError: Schema validation error ( should have required property \'employmentType\')'
+                        "RequestValidationError: Schema validation error ( should have required property 'employmentType')"
                     );
                 });
         });
 
-        it('devrait retourner une erreur 400 si une props de l\'offre d\'emploi est mal formattée', async () => {
+        it("devrait retourner une erreur 400 si une props de l'offre d'emploi est mal formattée", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -313,7 +313,7 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait retourner une erreur 400 si l\'ìdentifiant de l\'entreprise est mal formatté', async () => {
+        it("devrait retourner une erreur 400 si l'ìdentifiant de l'entreprise est mal formatté", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -337,7 +337,7 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait retourner une erreur 400 si l\'entreprise associée n\'existe pas', async () => {
+        it("devrait retourner une erreur 400 si l'entreprise associée n'existe pas", async () => {
             expect.hasAssertions();
             await frisby
                 .post('http://api:3001/api/job-postings', newJobPosting, {
@@ -356,7 +356,7 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait retourner l\'offre d\'emploi complete lorsqu\'elle est créée', async () => {
+        it("devrait retourner l'offre d'emploi complete lorsqu'elle est créée", async () => {
             expect.hasAssertions();
             const organization = await frisby
                 .get('http://api:3001/api/organizations')
@@ -389,10 +389,10 @@ describe('JobPostings API Endpoints', () => {
                 url: 'https://jobs.caen.camp',
                 datePosted: '2010-03-02',
                 employerOverview:
-                    'Au sein d\'une équipe DSI composée de juniors et de séniors',
+                    "Au sein d'une équipe DSI composée de juniors et de séniors",
                 employmentType: 'CDD',
                 experienceRequirements:
-                    '3 ans d\'experience sur un projet Javascript',
+                    "3 ans d'experience sur un projet Javascript",
                 jobStartDate: '2020-05-02',
                 skills: 'JavaScript, Devops, Php, ...',
                 validThrough: null,
@@ -418,7 +418,7 @@ describe('JobPostings API Endpoints', () => {
     });
 
     describe('GET: /api/job-posting/:id', () => {
-        it('devrait retourner une erreur 400 en cas d\'id mal formaté', async () => {
+        it("devrait retourner une erreur 400 en cas d'id mal formaté", async () => {
             expect.hasAssertions();
             await frisby
                 .get('http://api:3001/api/job-postings/id-mal-formaté')
@@ -435,7 +435,7 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait retourner une erreur 404 en cas d\'id n\'existant pas en base de données', async () => {
+        it("devrait retourner une erreur 404 en cas d'id n'existant pas en base de données", async () => {
             expect.hasAssertions();
             await frisby
                 .get(
@@ -454,7 +454,7 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait retourner l\'offre d\'emploi complete lorsqu\'elle existe', async () => {
+        it("devrait retourner l'offre d'emploi complete lorsqu'elle existe", async () => {
             expect.hasAssertions();
             const jobPosting = await frisby
                 .get('http://api:3001/api/job-postings')
@@ -475,6 +475,98 @@ describe('JobPostings API Endpoints', () => {
                 )
                 .then(resp => {
                     expect(resp.json.title).toEqual('Data Science Lead');
+                });
+        });
+    });
+
+    describe('DELETE: /api/job-posting/:id', () => {
+        it("devrait retourner une erreur 400 en cas d'id mal formaté", async () => {
+            expect.hasAssertions();
+            await frisby
+                .delete('http://api:3001/api/job-postings/id-mal-formaté')
+                .expect('status', 400)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
+                    );
+                });
+        });
+
+        it("devrait retourner une erreur 404 en cas d'id n'existant pas en base de données", async () => {
+            expect.hasAssertions();
+            await frisby
+                .delete(
+                    'http://api:3001/api/job-postings/9a6c8995-df54-446c-a5b8-71532c304751'
+                )
+                .expect('status', 404)
+                .expect(
+                    'header',
+                    'Content-Type',
+                    'application/json; charset=utf-8'
+                )
+                .then(resp => {
+                    expect(resp.json.message).toEqual(
+                        'The jobPosting of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist.'
+                    );
+                });
+        });
+
+        it("devrait retourner l'identifiant de l'offre d'emploi complete en cas de succès", async () => {
+            expect.hasAssertions();
+            const organization = await frisby
+                .get('http://api:3001/api/organizations')
+                .expect('status', 200)
+                .then(resp => {
+                    return resp.json.find(org => org.name === 'Flexcity');
+                });
+
+            // A new job posting is being created
+            const { json: createdJobPosting } = await frisby
+                .post(
+                    'http://api:3001/api/job-postings',
+                    {
+                        ...newJobPosting,
+                        hiringOrganizationId: organization.id,
+                    },
+                    { json: true }
+                )
+                .expect('status', 200);
+
+            // We verify that the job offer has been created...
+            await frisby
+                .get('http://api:3001/api/job-postings')
+                .expect('status', 200)
+                .expect('header', 'content-range', 'jobpostings 0-4/4')
+                .then(resp => {
+                    expect(
+                        resp.json.find(jb => jb.id === createdJobPosting.id)
+                    ).toBeTruthy();
+                });
+
+            // We're removing the job offer
+            await frisby
+                .delete(
+                    `http://api:3001/api/job-postings/${createdJobPosting.id}`
+                )
+                .expect('status', 200)
+                .then(resp => {
+                    expect(resp.json.id).toEqual(createdJobPosting.id);
+                });
+
+            // We're checking to see if the offer has been deleted...
+            return frisby
+                .get('http://api:3001/api/job-postings')
+                .expect('status', 200)
+                .expect('header', 'content-range', 'jobpostings 0-3/3')
+                .then(resp => {
+                    expect(
+                        resp.json.find(jb => jb.id === createdJobPosting.id)
+                    ).toBeFalsy();
                 });
         });
     });
