@@ -38,25 +38,8 @@ paths:
               examples:
                 example-1:
                   value:
-                    - identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    - id: a122edec-5580-4a93-aff7-fc18b41e4c57
                       title: Developpeur Javascript
-                      hiringOrganization:
-                        identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
-                        name: Incaya
-                        description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
-                        image: 'https://www.incaya.fr/static/logo-incaya.svg'
-                        email: contact@organization.org
-                        url: 'https://www.incaya.fr/'
-                        address:
-                          addressCountry: France
-                          addressLocality: Caen
-                          postalCode: '14000'
-                          streetAddress: '5, place de la Répulique'
-                        contactPoints:
-                          - email: job@organization.org
-                            telephone: '0606060606'
-                            name: 'John Do, CTO'
-                            contactType: "Offres d'emploi"
                       url: 'https://jobs.caen.camp'
                       datePosted: '2010-03-02'
                       employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
@@ -65,6 +48,15 @@ paths:
                       jobStartDate: '2020-05-02'
                       skills: 'JavaScript, Devops, Php, ...'
                       validThrough: '2010-05-05'
+                      hiringOrganization:
+                        identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                        name: Incaya
+                        image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                        url: 'https://www.incaya.fr/'
+                        address:
+                          addressCountry: France
+                          addressLocality: Caen
+                          postalCode: '14000'
           headers:
             content-range:
               schema:
@@ -96,7 +88,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getJobPostings
-      description: "Obtenir une liste d'offres d'emploi"
+      description: "Obtenir une liste paginée d'offres d'emploi\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* title\n* skills\n* datePosted_before\n* datePosted_after\n* jobStartDate_before\n* jobStartDate_after\n* validThrough_before\n* validThrough_after\n* hiringOrganizationName\n* hiringOrganizationPostalCode\n* hiringOrganizationAddressLocality\n* hiringOrganizationAddressCountry\n\nCette liste est triable par sort=[key, sortDirection_ASC_DESC] : \n* datePosted\n* title\n* jobStartDate\n* validThrough\n* hiringOrganizationName\n* hiringOrganizationIdentifier\n* hiringOrganizationPostalCode\n* hiringOrganizationAddressLocality\n* hiringOrganizationAddressCountry\n\nLa pagination est controlable via le paramètre de requête pagination=[nombreDeRésultatsParPage, numeroDePage]"
       parameters:
         - $ref: '#/components/parameters/Sort'
         - $ref: '#/components/parameters/Filter'
@@ -145,6 +137,7 @@ paths:
               examples:
                 example-1:
                   value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
                     title: Developpeur Javascript
                     url: 'https://jobs.caen.camp'
                     datePosted: '2010-03-02'
@@ -198,25 +191,8 @@ paths:
               examples:
                 example-1:
                   value:
-                    identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
                     title: Developpeur Javascript
-                    hiringOrganization:
-                      identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
-                      name: Incaya
-                      description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
-                      image: 'https://www.incaya.fr/static/logo-incaya.svg'
-                      email: contact@organization.org
-                      url: 'https://www.incaya.fr/'
-                      address:
-                        addressCountry: France
-                        addressLocality: Caen
-                        postalCode: '14000'
-                        streetAddress: '5, place de la Répulique'
-                      contactPoints:
-                        - email: job@organization.org
-                          telephone: '0606060606'
-                          name: 'John Do, CTO'
-                          contactType: "Offres d'emploi"
                     url: 'https://jobs.caen.camp'
                     datePosted: '2010-03-02'
                     employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
@@ -225,6 +201,15 @@ paths:
                     jobStartDate: '2020-05-02'
                     skills: 'JavaScript, Devops, Php, ...'
                     validThrough: '2010-05-05'
+                    hiringOrganization:
+                      identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                      name: Incaya
+                      image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                      url: 'https://www.incaya.fr/'
+                      address:
+                        addressCountry: France
+                        addressLocality: Caen
+                        postalCode: '14000'
         '400':
           description: ID fourni invalide
           content:
@@ -269,6 +254,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FullJobPosting'
+              examples:
+                example-1:
+                  value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    title: Developpeur Javascript
+                    url: 'https://jobs.caen.camp'
+                    datePosted: '2010-03-02'
+                    employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
+                    employmentType: CDD
+                    experienceRequirements: "3 ans d'experience sur un projet Javascript"
+                    jobStartDate: '2020-05-02'
+                    skills: 'JavaScript, Devops, Php, ...'
+                    validThrough: '2010-05-05'
+                    hiringOrganization:
+                      identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                      name: Incaya
+                      image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                      url: 'https://www.incaya.fr/'
+                      address:
+                        addressCountry: France
+                        addressLocality: Caen
+                        postalCode: '14000'
         '400':
           description: Bad Request
           content:
@@ -334,6 +341,10 @@ paths:
                 properties:
                   message:
                     type: string
+              examples:
+                example-1:
+                  value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
         '400':
           description: Bad Request
           content:
@@ -382,7 +393,7 @@ paths:
               examples:
                 example-1:
                   value:
-                    - identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    - id: a122edec-5580-4a93-aff7-fc18b41e4c57
                       name: Incaya
                       description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
                       image: 'https://www.incaya.fr/static/logo-incaya.svg'
@@ -429,7 +440,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getOrganizations
-      description: Obtenir la liste des entreprises
+      description: "Obtenir la liste des entreprises.\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* name\n* address_locality\n* postal_code\n\nCette liste est triable par sort=[key, sortDirection_ASC_DESC] : \n* name\n* address_locality\n* postal_code\n\nLa pagination est controlable via le paramètre de requête pagination=[nombreDeRésultatsParPage, numeroDePage]"
       parameters:
         - $ref: '#/components/parameters/Filter'
         - $ref: '#/components/parameters/Sort'
@@ -444,6 +455,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FullOrganization'
+              examples:
+                example-1:
+                  value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    name: Incaya
+                    description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+                    image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                    email: contact@organization.org
+                    url: 'https://www.incaya.fr/'
+                    address:
+                      addressCountry: France
+                      addressLocality: Caen
+                      postalCode: '14000'
+                      streetAddress: '5, place de la Répulique'
+                    contactPoints:
+                      - email: job@organization.org
+                        telephone: '0606060606'
+                        name: 'John Do, CTO'
+                        contactType: "Offres d'emploi"
         '400':
           description: Bad Request
           content:
@@ -474,6 +504,23 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/OrganizationForCreation'
+            examples:
+              example-1:
+                value:
+                  description: desc
+                  image: 'https://www.org.org/logo.svg'
+                  email: contact@org.org
+                  url: 'https://www.org.org'
+                  address:
+                    addressCountry: FR
+                    addressLocality: Caen
+                    postalCode: '14000'
+                    streetAddress: '5, place de la Répulique'
+                  contactPoints:
+                    - email: job@org.org
+                      telephone: '0606060606'
+                      name: 'John Do, CTO'
+                      contactType: 'Offres d"emploi'
       tags:
         - Entreprises
     parameters: []
@@ -491,6 +538,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FullOrganization'
+              examples:
+                example-1:
+                  value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    name: Incaya
+                    description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+                    image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                    email: contact@organization.org
+                    url: 'https://www.incaya.fr/'
+                    address:
+                      addressCountry: France
+                      addressLocality: Caen
+                      postalCode: '14000'
+                      streetAddress: '5, place de la Répulique'
+                    contactPoints:
+                      - email: job@organization.org
+                        telephone: '0606060606'
+                        name: 'John Do, CTO'
+                        contactType: "Offres d'emploi"
         '400':
           description: Bad Request
           content:
@@ -569,6 +635,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Organization'
+            examples:
+              example-1:
+                value:
+                  id: a122edec-5580-4a93-aff7-fc18b41e4c57
+                  name: Incaya
+                  description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+                  image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                  email: contact@organization.org
+                  url: 'https://www.incaya.fr/'
+                  address:
+                    addressCountry: France
+                    addressLocality: Caen
+                    postalCode: '14000'
+                    streetAddress: '5, place de la Répulique'
+                  contactPoints:
+                    - email: job@organization.org
+                      telephone: '0606060606'
+                      name: 'John Do, CTO'
+                      contactType: "Offres d'emploi"
         description: "Les données de l'entreprise mises à jour"
       tags:
         - Entreprises
@@ -972,7 +1057,6 @@ components:
       explode: true
       schema:
         type: string
-      example: '{"locale":"fr","editor_name":"dd"}'
     Sort:
       name: sort
       in: query
