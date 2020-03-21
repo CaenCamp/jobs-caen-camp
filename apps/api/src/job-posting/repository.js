@@ -286,10 +286,60 @@ const deleteJobPosting = async ({ client, jobPostingId }) => {
         .catch(error => ({ error }));
 };
 
+/**
+ * Update a jobPosting
+ *
+ * @param {object} client - The Database client
+ * @param {object} jobPostingId - The jobPosting identifier
+ * @param {object} apiData - The validated data sent from API to update the jobPosting
+ * @returns {Promise} - the updated JobPosting
+ */
+const updateJobPosting = async ({ client, jobPostingId, apiData }) => {
+    // check that jobPosting exist
+    const currentJobPosting = await client
+        .first('id', 'hiringOrganizationId')
+        .from('job_posting')
+        .where({ id: jobPostingId });
+    if (!currentJobPosting) {
+        return {};
+    }
+
+    // check that if the hiringOrganizationId has change, the new organization exist
+    if (
+        currentJobPosting.hiringOrganizationId !== apiData.hiringOrganizationId
+    ) {
+        const organization = await client
+            .first('id')
+            .from('organization')
+            .where({ id: apiData.hiringOrganizationId });
+
+        if (!organization) {
+            return {
+                error: new Error('the new hiring organization does not exist'),
+            };
+        }
+    }
+
+    // update the jobPosting
+    const updatedJobPosting = await client('job_posting')
+        .where({ id: jobPostingId })
+        .update(apiData)
+        .catch(error => ({ error }));
+    if (updatedJobPosting.error) {
+        return updatedJobPosting;
+    }
+
+    // return the complete jobPosting from db
+    return getJobPostingByIdQuery(client, jobPostingId)
+        .then(formatJobPostingForAPI)
+        .catch(error => ({ error }));
+};
+
 module.exports = {
     createJobPosting,
     deleteJobPosting,
     formatJobPostingForAPI,
     getJobPosting,
     getJobPostingPaginatedList,
+    updateJobPosting,
 };

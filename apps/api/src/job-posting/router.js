@@ -5,6 +5,7 @@ const {
     deleteJobPosting,
     getJobPosting,
     getJobPostingPaginatedList,
+    updateJobPosting,
 } = require('./repository');
 const { parseJsonQueryParameter } = require('../toolbox/sanitizers');
 
@@ -88,6 +89,32 @@ router.delete('/:jobPostingId', async ctx => {
     }
 
     ctx.body = deletedJobPosting;
+});
+
+router.put('/:jobPostingId', async ctx => {
+    const updatedJobPosting = await updateJobPosting({
+        client: ctx.db,
+        jobPostingId: ctx.params.jobPostingId,
+        apiData: ctx.request.body,
+    });
+
+    if (updatedJobPosting.error) {
+        const explainedError = new Error(updatedJobPosting.error.message);
+        explainedError.status = 400;
+
+        throw explainedError;
+    }
+
+    if (!updatedJobPosting.id) {
+        const explainedError = new Error(
+            `The jobPosting of id ${ctx.params.jobPostingId} does not exist, so it could not be updated`
+        );
+        explainedError.status = 404;
+
+        throw explainedError;
+    }
+
+    ctx.body = updatedJobPosting;
 });
 
 module.exports = router;
