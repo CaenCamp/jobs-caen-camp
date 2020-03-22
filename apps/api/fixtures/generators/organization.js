@@ -15,7 +15,7 @@ module.exports = {
             caption: 'Logo',
             contentUrl: faker.image.imageUrl(300, 200),
             width: 300,
-            height: 200
+            height: 200,
         },
         url: faker.internet.url(),
         email: faker.internet.email(),
@@ -24,15 +24,15 @@ module.exports = {
             streetAddress: faker.address.streetAddress(),
             postalCode: faker.address.postalCode,
             addressLocality:
-                faker.address.city() + ', ' + faker.address.country()
+                faker.address.city() + ', ' + faker.address.country(),
         },
-        jobs: []
+        jobs: [],
     }),
     addJob: (organization, job) => {
         organization.jobs.push({
             '@type': 'JobPosting',
             '@id': '/jobs/' + job.id,
-            title: job.title
+            title: job.title,
         });
-    }
+    },
 };

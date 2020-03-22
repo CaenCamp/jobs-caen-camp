@@ -10,9 +10,8 @@
         "url": "git+https://github.com/CaenCamp/jobs-caen-camp.git"
     },
     "scripts": {
-        "dev": "nodemon --watch src src/index.js",
-        "start": "nodemon --watch src src/index.js",
-        "openapi:bundle": "swagger-cli bundle ./openapi/openapi.yaml -o ./openapi/openapi.json -r",
+        "dev": "nodemon --watch src --watch openapi src/index.js",
+        "start": "nodemon --watch src --watch openapi src/index.js",
         "openapi:check": "spectral lint ./openapi/openapi.yaml",
         "test": "jest",
         "test:watch": "jest --watchAll",
@@ -28,16 +27,22 @@
     },
     "dependencies": {
         "convict": "5.2.0",
+        "knex": "0.20.12",
+        "knex-paginate": "1.1.1",
+        "knex-stringcase": "1.4.1",
         "koa": "2.11.0",
+        "koa-bodyparser": "4.2.1",
+        "koa-json-error": "3.1.2",
+        "koa-oas3": "0.18.0",
         "koa-router": "8.0.8",
         "koa-static": "5.0.0",
         "lodash.omit": "4.5.0",
         "lodash.pick": "4.4.0",
+        "pg": "7.18.2",
         "signale": "1.4.0"
     },
     "devDependencies": {
         "@stoplight/spectral": "5.2.0",
-        "knex": "0.20.12",
-        "pg": "7.18.2"
+        "faker": "4.1.0"
     }
 }

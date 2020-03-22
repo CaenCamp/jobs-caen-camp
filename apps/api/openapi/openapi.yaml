@@ -12,8 +12,6 @@ info:
     name: GNU GPLv3
     url: 'https://github.com/CaenCamp/jobs-caen-camp/blob/master/LICENSE'
 servers:
-  - url: 'http://localhost:8004'
-    description: Mock server with Prism
   - url: 'http://localhost:8001'
     description: Local server
 security: []
@@ -23,7 +21,7 @@ tags:
   - name: Entreprises
     description: "Les routes d'API liées aux entreprises à l'origine des offres d'emploi"
 paths:
-  /job-postings:
+  /api/job-postings:
     get:
       tags:
         - "Offres d'emploi"
@@ -40,25 +38,8 @@ paths:
               examples:
                 example-1:
                   value:
-                    - identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    - id: a122edec-5580-4a93-aff7-fc18b41e4c57
                       title: Developpeur Javascript
-                      hiringOrganization:
-                        identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
-                        name: Incaya
-                        description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
-                        image: 'https://www.incaya.fr/static/logo-incaya.svg'
-                        email: contact@organization.org
-                        url: 'https://www.incaya.fr/'
-                        address:
-                          addressCountry: France
-                          addressLocality: Caen
-                          postalCode: '14000'
-                          streetAddress: '5, place de la Répulique'
-                        contactPoints:
-                          - email: job@organization.org
-                            telephone: '0606060606'
-                            name: 'John Do, CTO'
-                            contactType: "Offres d'emploi"
                       url: 'https://jobs.caen.camp'
                       datePosted: '2010-03-02'
                       employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
@@ -67,6 +48,15 @@ paths:
                       jobStartDate: '2020-05-02'
                       skills: 'JavaScript, Devops, Php, ...'
                       validThrough: '2010-05-05'
+                      hiringOrganization:
+                        identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                        name: Incaya
+                        image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                        url: 'https://www.incaya.fr/'
+                        address:
+                          addressCountry: France
+                          addressLocality: Caen
+                          postalCode: '14000'
           headers:
             content-range:
               schema:
@@ -98,7 +88,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getJobPostings
-      description: "Obtenir une liste d'offres d'emploi"
+      description: "Obtenir une liste paginée d'offres d'emploi\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* title\n* skills\n* datePosted_before\n* datePosted_after\n* jobStartDate_before\n* jobStartDate_after\n* validThrough_before\n* validThrough_after\n* hiringOrganizationName\n* hiringOrganizationPostalCode\n* hiringOrganizationAddressLocality\n* hiringOrganizationAddressCountry\n\nCette liste est triable par sort=[key, sortDirection_ASC_DESC] : \n* datePosted\n* title\n* jobStartDate\n* validThrough\n* hiringOrganizationName\n* hiringOrganizationIdentifier\n* hiringOrganizationPostalCode\n* hiringOrganizationAddressLocality\n* hiringOrganizationAddressCountry\n\nLa pagination est controlable via le paramètre de requête pagination=[nombreDeRésultatsParPage, numeroDePage]"
       parameters:
         - $ref: '#/components/parameters/Sort'
         - $ref: '#/components/parameters/Filter'
@@ -143,10 +133,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FullOrganization'
+                $ref: '#/components/schemas/JobPosting'
               examples:
                 example-1:
                   value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
                     title: Developpeur Javascript
                     url: 'https://jobs.caen.camp'
                     datePosted: '2010-03-02'
@@ -182,20 +173,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       parameters: []
-  '/job-postings/{jobId}':
+    parameters: []
+  '/api/job-postings/{identifier}':
     get:
       tags:
         - "Offres d'emploi"
       summary: Trouver une offre par son ID
       description: "Renvoi une offre d'emploi"
       operationId: getJobById
-      parameters:
-        - name: jobId
-          schema:
-            type: integer
-          in: path
-          description: ID of job to return
-          required: true
       responses:
         '200':
           description: "L'offre d'emploi demandée"
@@ -206,25 +191,8 @@ paths:
               examples:
                 example-1:
                   value:
-                    identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
                     title: Developpeur Javascript
-                    hiringOrganization:
-                      identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
-                      name: Incaya
-                      description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
-                      image: 'https://www.incaya.fr/static/logo-incaya.svg'
-                      email: contact@organization.org
-                      url: 'https://www.incaya.fr/'
-                      address:
-                        addressCountry: France
-                        addressLocality: Caen
-                        postalCode: '14000'
-                        streetAddress: '5, place de la Répulique'
-                      contactPoints:
-                        - email: job@organization.org
-                          telephone: '0606060606'
-                          name: 'John Do, CTO'
-                          contactType: "Offres d'emploi"
                     url: 'https://jobs.caen.camp'
                     datePosted: '2010-03-02'
                     employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
@@ -233,6 +201,15 @@ paths:
                     jobStartDate: '2020-05-02'
                     skills: 'JavaScript, Devops, Php, ...'
                     validThrough: '2010-05-05'
+                    hiringOrganization:
+                      identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                      name: Incaya
+                      image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                      url: 'https://www.incaya.fr/'
+                      address:
+                        addressCountry: France
+                        addressLocality: Caen
+                        postalCode: '14000'
         '400':
           description: ID fourni invalide
           content:
@@ -264,12 +241,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
     parameters:
-      - schema:
-          type: string
-        name: jobId
-        in: path
-        required: true
-        description: "L'identifiant de l'offre d'emploi"
+      - $ref: '#/components/parameters/UUID'
     put:
       tags:
         - "Offres d'emploi"
@@ -281,7 +253,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobPosting'
+                $ref: '#/components/schemas/FullJobPosting'
+              examples:
+                example-1:
+                  value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    title: Developpeur Javascript
+                    url: 'https://jobs.caen.camp'
+                    datePosted: '2010-03-02'
+                    employerOverview: "Au sein d'une équipe DSI composée de juniors et de séniors"
+                    employmentType: CDD
+                    experienceRequirements: "3 ans d'experience sur un projet Javascript"
+                    jobStartDate: '2020-05-02'
+                    skills: 'JavaScript, Devops, Php, ...'
+                    validThrough: '2010-05-05'
+                    hiringOrganization:
+                      identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                      name: Incaya
+                      image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                      url: 'https://www.incaya.fr/'
+                      address:
+                        addressCountry: France
+                        addressLocality: Caen
+                        postalCode: '14000'
         '400':
           description: Bad Request
           content:
@@ -317,14 +311,7 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: '#/components/schemas/Organization'
-                - type: object
-                  properties:
-                    hiringOrganizationId:
-                      type: string
-                      format: uuid
-                      example: 9b24d771-1069-40b1-b6be-3f3e53fdadd0
+              $ref: '#/components/schemas/JobPosting'
             examples:
               example-1:
                 value:
@@ -354,6 +341,10 @@ paths:
                 properties:
                   message:
                     type: string
+              examples:
+                example-1:
+                  value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
         '400':
           description: Bad Request
           content:
@@ -385,14 +376,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       description: "Supprimer une offre d'emploi"
-      parameters:
-        - schema:
-            type: string
-          in: path
-          name: jobId
-          description: "Identifiant de l'offre d'emploi"
-          required: true
-  /organizations:
+  /api/organizations:
     get:
       summary: Liste des entreprises
       tags:
@@ -409,7 +393,7 @@ paths:
               examples:
                 example-1:
                   value:
-                    - identifier: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    - id: a122edec-5580-4a93-aff7-fc18b41e4c57
                       name: Incaya
                       description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
                       image: 'https://www.incaya.fr/static/logo-incaya.svg'
@@ -456,7 +440,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getOrganizations
-      description: Obtenir la liste des entreprises
+      description: "Obtenir la liste des entreprises.\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* name\n* address_locality\n* postal_code\n\nCette liste est triable par sort=[key, sortDirection_ASC_DESC] : \n* name\n* address_locality\n* postal_code\n\nLa pagination est controlable via le paramètre de requête pagination=[nombreDeRésultatsParPage, numeroDePage]"
       parameters:
         - $ref: '#/components/parameters/Filter'
         - $ref: '#/components/parameters/Sort'
@@ -471,6 +455,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FullOrganization'
+              examples:
+                example-1:
+                  value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    name: Incaya
+                    description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+                    image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                    email: contact@organization.org
+                    url: 'https://www.incaya.fr/'
+                    address:
+                      addressCountry: France
+                      addressLocality: Caen
+                      postalCode: '14000'
+                      streetAddress: '5, place de la Répulique'
+                    contactPoints:
+                      - email: job@organization.org
+                        telephone: '0606060606'
+                        name: 'John Do, CTO'
+                        contactType: "Offres d'emploi"
         '400':
           description: Bad Request
           content:
@@ -500,17 +503,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Organization'
+              $ref: '#/components/schemas/OrganizationForCreation'
+            examples:
+              example-1:
+                value:
+                  description: desc
+                  image: 'https://www.org.org/logo.svg'
+                  email: contact@org.org
+                  url: 'https://www.org.org'
+                  address:
+                    addressCountry: FR
+                    addressLocality: Caen
+                    postalCode: '14000'
+                    streetAddress: '5, place de la Répulique'
+                  contactPoints:
+                    - email: job@org.org
+                      telephone: '0606060606'
+                      name: 'John Do, CTO'
+                      contactType: 'Offres d"emploi'
       tags:
         - Entreprises
-  '/organizations/{organizationId}':
+    parameters: []
+  '/api/organizations/{identifier}':
     parameters:
-      - schema:
-          type: string
-        name: organizationId
-        in: path
-        required: true
-        description: "L'identifiant de l'entreprise"
+      - $ref: '#/components/parameters/UUID'
     get:
       summary: "Donnée d'une entreprise"
       tags:
@@ -522,6 +538,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FullOrganization'
+              examples:
+                example-1:
+                  value:
+                    id: a122edec-5580-4a93-aff7-fc18b41e4c57
+                    name: Incaya
+                    description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+                    image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                    email: contact@organization.org
+                    url: 'https://www.incaya.fr/'
+                    address:
+                      addressCountry: France
+                      addressLocality: Caen
+                      postalCode: '14000'
+                      streetAddress: '5, place de la Répulique'
+                    contactPoints:
+                      - email: job@organization.org
+                        telephone: '0606060606'
+                        name: 'John Do, CTO'
+                        contactType: "Offres d'emploi"
         '400':
           description: Bad Request
           content:
@@ -600,6 +635,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Organization'
+            examples:
+              example-1:
+                value:
+                  id: a122edec-5580-4a93-aff7-fc18b41e4c57
+                  name: Incaya
+                  description: "INCAYA, société coopérative de services du numérique. Créons ensemble des outils qui ont du sens ! Collectivités, associations, entreprises : nous concevons avec vous des outils numériques qui transforment l'expérience de vos utilisateurs et usagers."
+                  image: 'https://www.incaya.fr/static/logo-incaya.svg'
+                  email: contact@organization.org
+                  url: 'https://www.incaya.fr/'
+                  address:
+                    addressCountry: France
+                    addressLocality: Caen
+                    postalCode: '14000'
+                    streetAddress: '5, place de la Répulique'
+                  contactPoints:
+                    - email: job@organization.org
+                      telephone: '0606060606'
+                      name: 'John Do, CTO'
+                      contactType: "Offres d'emploi"
         description: "Les données de l'entreprise mises à jour"
       tags:
         - Entreprises
@@ -614,15 +668,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
+                  id:
                     type: string
-                    example: ok
+                    format: uuid
+                    example: 9a6c8995-df54-446c-a5b8-71532c304751
                 required:
-                  - message
+                  - id
               examples:
                 example-1:
                   value:
-                    message: ok
+                    id: 9a6c8995-df54-446c-a5b8-71532c304751
         '400':
           description: Bad Request
           content:
@@ -703,6 +758,7 @@ components:
         jobStartDate:
           type: string
           format: date
+          nullable: true
           example: '2020-05-02'
         skills:
           type: string
@@ -710,6 +766,7 @@ components:
         validThrough:
           type: string
           format: date
+          nullable: true
           example: '2010-05-05'
       required:
         - datePosted
@@ -733,7 +790,8 @@ components:
             postalCode: '14000'
             streetAddress: '5, place de la Répulique'
           contactPoints:
-            - email: job@organization.org
+            - identifier: abeb9875-2191-4097-8249-5b8defc42a3e
+              email: job@organization.org
               telephone: '0606060606'
               name: 'John Do, CTO'
               contactType: "Offres d'emploi"
@@ -770,7 +828,7 @@ components:
           type: array
           minItems: 1
           items:
-            $ref: '#/components/schemas/ContactPoint'
+            $ref: '#/components/schemas/FullContactPoint'
       required:
         - name
         - url
@@ -822,12 +880,13 @@ components:
           minLength: 7
         telephone:
           type: string
-          minLength: 10
+          nullable: true
         name:
           type: string
         contactType:
           type: string
           example: "Offres d'emploi"
+          nullable: true
       required:
         - email
         - name
@@ -867,12 +926,12 @@ components:
     Identifier:
       title: Identifier
       type: object
+      description: "L'identifiant unique des objets persistés dans le JobBoard"
       properties:
         identifier:
           type: string
           format: uuid
           example: a122edec-5580-4a93-aff7-fc18b41e4c57
-      description: "L'identifiant unique des objets persistés dans le JobBoard"
     FullJobPosting:
       title: FullJobPosting
       description: "Une offre d'emploi complète (avec identifiant unique et entreprise liée)"
@@ -935,31 +994,99 @@ components:
               telephone: '0606060606'
               name: 'John Do, CTO'
               contactType: "Offres d'emploi"
+    FullContactPoint:
+      title: FullContactPoint
+      allOf:
+        - $ref: '#/components/schemas/Identifier'
+        - $ref: '#/components/schemas/ContactPoint'
+      x-examples:
+        example-1:
+          identifier: abeb9875-2191-4097-8249-5b8defc42a3e
+          email: job@organization.org
+          telephone: '0606060606'
+          name: 'John Do, CTO'
+          contactType: "Offres d'emploi"
+    OrganizationForCreation:
+      title: OrganizationForCreation
+      type: object
+      description: "Données nécessaires à la création d'une entreprise"
+      properties:
+        contactPoints:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ContactPoint'
+        address:
+          anyOf:
+            - type: string
+            - $ref: '#/components/schemas/PostalAddress'
+        image:
+          type: string
+          format: uri
+          example: 'https://www.incaya.fr/static/logo-incaya.svg'
+          minLength: 10
+          pattern: "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+        email:
+          type: string
+          format: email
+          example: email@organization.org
+        url:
+          type: string
+          format: uri
+          example: 'https://www.incaya.fr/'
+          minLength: 10
+          pattern: "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+        description:
+          type: string
+          example: Coopérative de services du numérique
+        name:
+          type: string
+          example: Incaya
+          minLength: 2
+          maxLength: 150
+      required:
+        - contactPoints
+        - url
+        - name
   parameters:
     Filter:
-      name: filter
+      name: filters
       in: query
       description: "Filtres appliquables à la requête. C'est un objet json stringifié, avec les filtres en clé/valeur séparé par des virgules."
       required: false
       explode: true
       schema:
         type: string
-      example: '{"locale":"fr","editor_name":"dd"}'
     Sort:
       name: sort
       in: query
       description: "Le tri applicable à la liste. C'est un tableau stringifié de la forme [sortProp, sortDirection]"
       required: false
-      explode: true
+      explode: false
       schema:
-        type: string
-      example: '["id","ASC"]'
+        type: array
+        maxItems: 2
+        minItems: 2
+        items:
+          type: string
     Pagination:
       name: pagination
       in: query
       description: "Les paramètres pour la pagination. C'est un tableau stringifié de la forme [perPage, currentPage]"
       required: false
-      explode: true
+      explode: false
+      schema:
+        type: array
+        maxItems: 2
+        minItems: 2
+        items:
+          type: string
+    UUID:
+      name: identifier
+      in: path
+      description: "Identifiant unique d'un objet de forme uuid"
+      required: true
       schema:
         type: string
-      example: '[10,3]'
+        format: uuid
+      example: 9a6c8995-df54-446c-a5b8-71532c304751

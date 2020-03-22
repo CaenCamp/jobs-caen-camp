@@ -20,16 +20,13 @@ et lancer les différentes applications avec :
 
 ```bash
 make start
-make migrate-latest
-make import-fixed-fixtures
 ```
 
 Vous pouvez ainsi accéder à :
 
 -   l’application web sur <http://localhost:8000>
 -   l’api sur <http://localhost:8001>
--   l’api _mockée_ sur <http://localhost:8002>
--   la documentation de l'API sur <http://localhost:8003>
+-   la documentation de l'API sur <http://localhost:8001/documentation>
 
 Lors du premier lancement du projet, vous devrez également initialiser la base de données :
 
