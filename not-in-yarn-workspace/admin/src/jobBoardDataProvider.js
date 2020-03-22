@@ -1,5 +1,6 @@
 import { stringify } from "query-string";
 import { fetchUtils, DataProvider } from "ra-core";
+import omit from "lodash.omit";
 
 /**
  * Maps react-admin queries to a simple REST API
@@ -39,7 +40,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson): DataProvider => ({
         const { field, order } = params.sort;
         const query = {
             sort: JSON.stringify([field, order]),
-            filter: JSON.stringify(params.filter),
+            filters: JSON.stringify(params.filter),
             pagination: JSON.stringify([perPage, page])
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
@@ -125,13 +126,42 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson): DataProvider => ({
             )
         ).then(responses => ({ data: responses.map(({ json }) => json.id) })),
 
-    create: (resource, params) =>
-        httpClient(`${apiUrl}/${resource}`, {
+    create: (resource, params) => {
+        let data;
+        if (resource === "organizations") {
+            data = {
+                ...omit(params.data, [
+                    "address",
+                    "contact_name",
+                    "contact_email",
+                    "contact_phone"
+                ]),
+                address: {
+                    ...params.data.address,
+                    addressCountry: "FR"
+                },
+                contactPoints: [
+                    {
+                        email: params.data.contact_email || params.data.email,
+                        telephone:
+                            params.data.contact_phone ||
+                            params.data.telephone ||
+                            null,
+                        name: params.data.contact_name,
+                        contactType: "Offres d'emploi"
+                    }
+                ]
+            };
+        } else {
+            data = params.data;
+        }
+        return httpClient(`${apiUrl}/${resource}`, {
             method: "POST",
-            body: JSON.stringify(params.data)
+            body: JSON.stringify(data)
         }).then(({ json }) => ({
-            data: { ...params.data, id: json.id }
-        })),
+            data: { ...data, id: json.id }
+        }));
+    },
 
     delete: (resource, params) =>
         httpClient(`${apiUrl}/${resource}/${params.id}`, {

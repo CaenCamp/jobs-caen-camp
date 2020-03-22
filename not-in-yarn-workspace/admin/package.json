@@ -32,6 +32,7 @@
         ]
     },
     "devDependencies": {
+        "lodash.omit": "^4.5.0",
         "prop-type": "0.0.1",
         "query-string": "6.11.1",
         "react-admin": "3.3.1"
