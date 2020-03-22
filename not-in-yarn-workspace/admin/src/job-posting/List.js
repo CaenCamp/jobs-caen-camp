@@ -8,13 +8,22 @@ import {
     Pagination,
     ReferenceField,
     TextField,
-    TextInput
+    TextInput,
+    SelectInput
 } from "react-admin";
+
+import { jobTypes } from "./index";
 
 const JobPostingFilter = props => (
     <Filter {...props}>
         <TextInput source="title" label="Filtre par titre" alwaysOn />
         <TextInput source="skills" label="Compétences" alwaysOn />
+        <SelectInput
+            source="employmentType"
+            label="Type de contrat"
+            choices={jobTypes}
+            alwaysOn
+        />
         <TextInput
             source="hiringOrganizationName"
             label="Nom d'entreprise"
@@ -66,6 +75,7 @@ export const JobPostingList = props => {
         >
             <Datagrid>
                 <TextField source="title" label="Titre de l'offre" />
+                <TextField source="employmentType" label="Type de contrat" />
                 <ReferenceField
                     sortable={false}
                     label="Entreprise"
