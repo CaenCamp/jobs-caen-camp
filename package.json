@@ -60,10 +60,10 @@
         }
     },
     "lint-staged": {
-        "*.{js,css,json,md}": [
+        "*.{js,css,json}": [
             "prettier --write"
         ],
-        "*.js": [
+        "apps/**/*.js": [
             "eslint --fix"
         ],
         "openapi.json": "spectral lint ./apps/api/openapi/openapi.yaml"
