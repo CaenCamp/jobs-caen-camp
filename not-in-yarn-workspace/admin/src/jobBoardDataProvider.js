@@ -109,11 +109,21 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson): DataProvider => ({
         });
     },
 
-    update: (resource, params) =>
-        httpClient(`${apiUrl}/${resource}/${params.id}`, {
+    update: (resource, params) => {
+        let data;
+        if (resource === "job-postings") {
+            data = {
+                ...omit(params.data, ["id", "hiringOrganization"]),
+                hiringOrganizationId: params.data.hiringOrganization.identifier
+            };
+        } else {
+            data = params.data;
+        }
+        return httpClient(`${apiUrl}/${resource}/${params.id}`, {
             method: "PUT",
-            body: JSON.stringify(params.data)
-        }).then(({ json }) => ({ data: json })),
+            body: JSON.stringify(data)
+        }).then(({ json }) => ({ data: json }));
+    },
 
     // simple-rest doesn't handle provide an updateMany route, so we fallback to calling update n times instead
     updateMany: (resource, params) =>
@@ -151,6 +161,12 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson): DataProvider => ({
                         contactType: "Offres d'emploi"
                     }
                 ]
+            };
+        } else if (resource === "job-postings") {
+            const now = new Date();
+            data = {
+                ...params.data,
+                datePosted: now.toISOString().substring(0, 10)
             };
         } else {
             data = params.data;
