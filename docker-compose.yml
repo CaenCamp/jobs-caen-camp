@@ -11,6 +11,23 @@ services:
       - 8000:8000
     command: "yarn dev"
 
+  admin:
+    image: node:12.16.1
+    volumes:
+      - ./not-in-yarn-workspace/admin:/admin
+    working_dir: "/admin"
+    user: ${CURRENT_UID}
+    ports:
+      - 8002:3000
+    command: "yarn run start"
+    depends_on:
+      - api
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - BROWSER=none
+      - CI=true
+
   api:
     image: node:12.16.1
     volumes:

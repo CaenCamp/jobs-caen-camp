@@ -44,8 +44,14 @@ logs-api: ## Display api logs
 logs-db: ## Display postgres logs
 	${DC_DEV} logs -f postgres
 
+logs-admin: ## Display admin logs
+	${DC_DEV} logs -f admin
+
 connect-api: ## Start cli in api container
 	${DC_DEV} exec api bash
+
+connect-admin: ## Start cli in admin container
+	${DC_DEV} exec admin bash
 
 # =====================================================================
 # OpenAPI =============================================================
