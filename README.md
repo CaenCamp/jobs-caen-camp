@@ -27,6 +27,7 @@ Vous pouvez ainsi accéder à :
 -   l’application web sur <http://localhost:8000>
 -   l’api sur <http://localhost:8001>
 -   la documentation de l'API sur <http://localhost:8001/documentation>
+-   Une interface d'administration sur <http://localhost:8002>
 
 Lors du premier lancement du projet, vous devrez également initialiser la base de données :
 

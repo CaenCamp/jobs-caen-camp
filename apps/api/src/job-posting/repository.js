@@ -13,6 +13,7 @@ const jobPostingSortableFields = [
     'title',
     'jobStartDate',
     'validThrough',
+    'employmentType',
     'hiringOrganizationName',
     'hiringOrganizationIdentifier',
     'hiringOrganizationPostalCode',
@@ -23,6 +24,7 @@ const jobPostingSortableFields = [
 const jobPostingFilterableFields = [
     'title',
     'skills',
+    'employmentType',
     'datePosted_before',
     'datePosted_after',
     'jobStartDate_before',
@@ -47,6 +49,7 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
     const {
         title,
         skills,
+        employmentType,
         hiringOrganizationName,
         hiringOrganizationPostalCode,
         hiringOrganizationAddressLocality,
@@ -73,6 +76,9 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
     }
     if (skills) {
         query.andWhere('skills', 'LIKE', `%${skills}%`);
+    }
+    if (employmentType) {
+        query.andWhere('employmentType', employmentType);
     }
     if (hiringOrganizationPostalCode) {
         query.andWhere(
