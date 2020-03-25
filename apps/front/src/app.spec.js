@@ -1,6 +1,6 @@
 import { render } from '@testing-library/svelte';
 
-import App from './App';
+import App from './app';
 
 describe('app component', () => {
     it('shows proper heading when rendered', () => {

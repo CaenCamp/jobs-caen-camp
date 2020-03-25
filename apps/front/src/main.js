@@ -1,9 +1,8 @@
-import App from './components/App.svelte';
-// import App from './rickAndMorty/App.svelte';
+import App from './App.svelte';
 
 const app = new App({
     target: document.body,
     hydrate: false,
 });
-
+console.log('ici');
 export default app;
