@@ -8,7 +8,7 @@ Date: 2020-03-04
 
 ## Statut
 
-2020-03-04 proposed
+2020-03-25 accepted
 
 ## Contexte et énoncé du problème
 
