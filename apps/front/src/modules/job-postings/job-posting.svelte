@@ -3,10 +3,10 @@
 </style>
 
 <script>
-    import { fetchJobPosting } from '../../stores/job-postings';
+    import { jobPostingsStore } from '../../stores';
+    const { fetchOne, jobPosting } = jobPostingsStore;
     export let id;
-
-    const jobPosting = fetchJobPosting(id);
+    fetchOne(id);
 </script>
 
 {#if $jobPosting != null}

@@ -1,10 +1,22 @@
-import { readable } from 'svelte/store';
-import { getList, getOne } from '../services/organizations';
+import { writable } from 'svelte/store';
+import { organizationsService } from '../services';
 
-export const organizations = readable([], set => {
-    getList().then(organizations => set(organizations));
-});
+const organizationListStore = writable([]);
+const organizationStore = writable(null);
 
-export const fetchOrganization = (id) => readable(null, set => {
-    getOne(id).then(organization => set(organization));
-});
+const fetchOne = async id => {
+    const organization = await organizationsService.fetchOne(id);
+    organizationStore.set(organization);
+};
+
+const fetchList = async () => {
+    const organizations = await organizationsService.fetchList();
+    organizationListStore.set(organizations);
+};
+
+export default {
+    fetchOne,
+    fetchList,
+    organizations: organizationListStore,
+    organization: organizationStore,
+};
