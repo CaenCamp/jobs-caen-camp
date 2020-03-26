@@ -1,22 +1,12 @@
 import { writable } from 'svelte/store';
 import { jobPostingsService } from '../services';
 
-const jobPostingListStore = writable([]);
-const jobPostingStore = writable(null);
+export const jobPostings = writable([]);
 
-const fetchOne = async id => {
-    const organization = await jobPostingsService.fetchOne(id);
-    jobPostingStore.set(organization);
-};
+jobPostings.fetch = async () =>
+    jobPostings.set(await jobPostingsService.fetchList());
 
-const fetchList = async () => {
-    const organizations = await jobPostingsService.fetchList();
-    jobPostingListStore.set(organizations);
-};
+export const jobPosting = writable(null);
 
-export default {
-    fetchOne,
-    fetchList,
-    jobPostings: jobPostingListStore,
-    jobPosting: jobPostingStore,
-};
+jobPosting.fetch = async id =>
+    jobPosting.set(await jobPostingsService.fetchOne(id));

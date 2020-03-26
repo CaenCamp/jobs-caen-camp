@@ -4,9 +4,9 @@
 
 <script>
     import { Link } from 'svelte-routing';
-    import { jobPostingsStore } from '../../stores';
-    const { fetchList, jobPostings } = jobPostingsStore;
-    fetchList();
+    import { jobPostings } from '../../stores';
+
+    jobPostings.fetch();
 </script>
 
 <ul>
