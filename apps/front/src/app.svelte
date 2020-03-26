@@ -6,10 +6,10 @@
 
 <script>
     import { Router, Route, Link } from 'svelte-routing';
-    import Organizations from './modules/organizations/organizations.svelte';
-    import Organization from './modules/organizations/organization.svelte';
-    import JobPostings from './modules/job-postings/job-postings.svelte';
-    import JobPosting from './modules/job-postings/job-posting.svelte';
+    import Organizations from './routes/organizations.svelte';
+    import Organization from './routes/organization.svelte';
+    import JobPostings from './routes/job-postings.svelte';
+    import JobPosting from './routes/job-posting.svelte';
 
     export let url = '';
 </script>

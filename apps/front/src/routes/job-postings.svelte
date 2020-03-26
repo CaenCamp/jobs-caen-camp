@@ -4,7 +4,7 @@
 
 <script>
     import { Link } from 'svelte-routing';
-    import { JobPostingsStore } from '../../store';
+    import { JobPostingsStore } from '../store';
     import { onMount } from 'svelte';
 
     onMount(() => JobPostingsStore.init());
