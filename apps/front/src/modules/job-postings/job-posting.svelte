@@ -3,7 +3,7 @@
 </style>
 
 <script>
-    import { JobPostingStore } from '../../stores';
+    import { JobPostingStore } from '../../store';
     import { onMount } from 'svelte';
 
     export let id;

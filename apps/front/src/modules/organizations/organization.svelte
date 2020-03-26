@@ -3,7 +3,7 @@
 </style>
 
 <script>
-    import { OrganizationStore } from '../../stores';
+    import { OrganizationStore } from '../../store';
     import { onMount } from 'svelte';
 
     export let id;

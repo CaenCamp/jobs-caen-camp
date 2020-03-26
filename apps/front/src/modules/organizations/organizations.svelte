@@ -4,7 +4,7 @@
 
 <script>
     import { Link } from 'svelte-routing';
-    import { OrganizationsStore } from '../../stores';
+    import { OrganizationsStore } from '../../store';
     import { onMount } from 'svelte';
 
     onMount(() => OrganizationsStore.init());
