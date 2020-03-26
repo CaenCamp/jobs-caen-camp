@@ -4,14 +4,14 @@
 
 <script>
     import { Link } from 'svelte-routing';
-    import { jobPostings } from '../../stores';
+    import { JobPostingsStore } from '../../stores';
     import { onMount } from 'svelte';
 
-    onMount(() => jobPostings.fetch());
+    onMount(() => JobPostingsStore.init());
 </script>
 
 <ul>
-    {#each $jobPostings as { id, title, url }, i}
+    {#each $JobPostingsStore as { id, title, url }, i}
         <li>
             <Link to="/jobs/{id}">{i} - {title} - {url}</Link>
         </li>

@@ -3,13 +3,13 @@
 </style>
 
 <script>
-    import { jobPosting } from '../../stores';
+    import { JobPostingStore } from '../../stores';
     import { onMount } from 'svelte';
 
     export let id;
-    onMount(() => jobPosting.fetch(id));
+    onMount(() => JobPostingStore.init(id));
 </script>
 
-{#if $jobPosting != null}
-    <p>{$jobPosting.title} - {$jobPosting.url}</p>
+{#if $JobPostingStore != null}
+    <p>{$JobPostingStore.title} - {$JobPostingStore.url}</p>
 {/if}

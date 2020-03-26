@@ -2,10 +2,11 @@ import { writable } from 'svelte/store';
 import axios from 'axios';
 
 const store = () => {
-    const { subscribe, set, update } = writable([]);
-    const init = async () => {
+    const { subscribe, set, update } = writable(null);
+
+    const init = async id => {
         const { data } = await axios.get(
-            'http://127.0.0.1:8001/api/job-postings'
+            `http://127.0.0.1:8001/api/job-postings/${id}`
         );
         set(data);
     };
@@ -18,4 +19,4 @@ const store = () => {
     };
 };
 
-export const JobPostingsStore = store();
+export const JobPostingStore = store();
