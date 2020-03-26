@@ -3,13 +3,13 @@
 </style>
 
 <script>
-    import { organization } from '../../stores';
+    import { OrganizationStore } from '../../stores';
     import { onMount } from 'svelte';
 
     export let id;
-    onMount(() => organization.fetch(id));
+    onMount(() => OrganizationStore.init(id));
 </script>
 
-{#if $organization != null}
-    <p>{$organization.id} - {$organization.name}</p>
+{#if $OrganizationStore != null}
+    <p>{$OrganizationStore.id} - {$OrganizationStore.name}</p>
 {/if}
