@@ -5,8 +5,9 @@
 <script>
     import { Link } from 'svelte-routing';
     import { organizations } from '../../stores';
+    import { onMount } from 'svelte';
 
-    organizations.fetch();
+    onMount(() => organizations.fetch());
 </script>
 
 <ul>

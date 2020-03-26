@@ -4,9 +4,10 @@
 
 <script>
     import { jobPosting } from '../../stores';
+    import { onMount } from 'svelte';
 
     export let id;
-    jobPosting.fetch(id);
+    onMount(() => jobPosting.fetch(id));
 </script>
 
 {#if $jobPosting != null}
