@@ -1,5 +1,7 @@
 <style>
-
+    nav {
+        background-color: #CCC;
+    }
 </style>
 
 <script>
@@ -27,6 +29,6 @@
         <Route path="organizations/:id" let:params>
             <Organization id="{params.id}" />
         </Route>
-        <Route path="/">Home</Route>
+        <Route path="/">Hello Test!</Route>
     </div>
 </Router>
