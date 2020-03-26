@@ -1,15 +1,17 @@
 <style>
     nav {
-        background-color: #CCC;
+        background-color: #ccc;
     }
 </style>
 
 <script>
     import { Router, Route, Link } from 'svelte-routing';
-    import Organizations from './routes/organizations.svelte';
-    import Organization from './routes/organization.svelte';
-    import JobPostings from './routes/job-postings.svelte';
-    import JobPosting from './routes/job-posting.svelte';
+    import {
+        Organizations,
+        Organization,
+        JobPostings,
+        JobPosting,
+    } from './routes';
 
     export let url = '';
 </script>
