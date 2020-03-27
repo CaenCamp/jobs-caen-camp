@@ -13,6 +13,6 @@ module.exports = {
     moduleFileExtensions: ['js', 'svelte'],
     testPathIgnorePatterns: ['node_modules'],
     bail: false,
-    transformIgnorePatterns: ['node_modules'],
+    transformIgnorePatterns: ['node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)'],
     setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
 };
