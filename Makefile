@@ -17,7 +17,7 @@ help: ## Display available commands
 # =====================================================================
 
 install: ## Install all js deps
-	@cp -n ./config/development.dist ./config/development.env
+	$(shell cp -n ./config/development.dist ./config/development.env)
 	@${DC_DEV} run --rm --no-deps api bash -ci '\
 		cd ../../ && \
 		yarn && \
