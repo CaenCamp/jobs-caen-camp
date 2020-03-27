@@ -9,7 +9,7 @@ import {
     Pagination
 } from "react-admin";
 
-const OrganizationLogo = ({ record }) => {
+const OrganizationLogo = ({record}) => {
     return record && record.image ? (
         <img src={record.image} height="50" alt={record.name} />
     ) : (
@@ -17,7 +17,7 @@ const OrganizationLogo = ({ record }) => {
     );
 };
 
-const OrganizationAddress = ({ record: { address } }) => {
+const OrganizationAddress = ({record: {address}}) => {
     return address
         ? `${address.streetAddress} ${address.postalCode} ${address.addressLocality}`
         : "L'adresse n'est pas renseignée.";
@@ -48,7 +48,7 @@ export const OrganizationList = props => {
         <List
             {...props}
             filters={<OrganizationFilter />}
-            sort={{ field: "name", order: "ASC" }}
+            sort={{field: "name", order: "ASC"}}
             exporter={false}
             pagination={<OrganizationPagination />}
             bulkActionButtons={false}

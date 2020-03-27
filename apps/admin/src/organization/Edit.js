@@ -1,7 +1,7 @@
 import React from "react";
-import { Edit, TextInput, TabbedForm, FormTab } from "react-admin";
+import {Edit, TextInput, TabbedForm, FormTab} from "react-admin";
 
-const OrganizationTitle = ({ record }) =>
+const OrganizationTitle = ({record}) =>
     record ? `Entreprise ${record.name}` : null;
 
 export const OrganizationEdit = props => {

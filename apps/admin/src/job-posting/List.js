@@ -12,7 +12,7 @@ import {
     SelectInput
 } from "react-admin";
 
-import { jobTypes } from "./index";
+import {jobTypes} from "./index";
 
 const JobPostingFilter = props => (
     <Filter {...props}>
@@ -58,7 +58,7 @@ const JobPostingPagination = props => (
     <Pagination rowsPerPageOptions={[1, 10, 25, 50]} {...props} />
 );
 
-const Organization = ({ record }) => {
+const Organization = ({record}) => {
     return `${record.name} (${record.address.postalCode} ${record.address.addressLocality})`;
 };
 
@@ -67,7 +67,7 @@ export const JobPostingList = props => {
         <List
             {...props}
             filters={<JobPostingFilter />}
-            sort={{ field: "name", order: "ASC" }}
+            sort={{field: "name", order: "ASC"}}
             exporter={false}
             pagination={<JobPostingPagination />}
             bulkActionButtons={false}
