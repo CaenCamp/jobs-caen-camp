@@ -13,5 +13,13 @@
         "axios": "0.19.2",
         "svelte": "3.20.1",
         "svelte-routing": "1.4.2"
+    },
+    "devDependencies": {
+        "@fullhuman/postcss-purgecss": "^2.1.0",
+        "postcss": "^7.0.27",
+        "postcss-load-config": "^2.1.0",
+        "postcss-loader": "^3.0.0",
+        "svelte-preprocess": "^3.6.0",
+        "tailwindcss": "^1.2.0"
     }
 }
