@@ -12,9 +12,12 @@
         JobPostings,
         JobPosting,
     } from './routes';
+    import Tailwindcss from './utils/tailwind-css.svelte';
 
     export let url = '';
 </script>
+
+<Tailwindcss />
 
 <Router {url}>
     <nav>
