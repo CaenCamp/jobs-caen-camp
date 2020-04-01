@@ -1,7 +1,4 @@
 <style>
-    nav {
-        background-color: #ccc;
-    }
 </style>
 
 <script>
@@ -20,12 +17,12 @@
 <Tailwindcss />
 
 <Router {url}>
-    <nav>
+    <nav class="flex flex-col flex-initial">
         <Link to="/">Home</Link>
         <Link to="/jobs">Jobs</Link>
         <Link to="/organizations">Organizations</Link>
     </nav>
-    <div>
+    <div class="flex flex-col flex-auto">
         <Route path="jobs" component="{JobPostings}" />
         <Route path="jobs/:id" let:params>
             <JobPosting id="{params.id}" />
