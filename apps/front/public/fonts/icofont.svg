@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<defs>
+<font id="icofont" horiz-adv-x="1000" >
+<font-face font-family="IcoFont" font-weight="400" font-style="Regular" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="location-pin" horiz-adv-x="1000" unicode="&#xef79;" d="M481-66c-19 25-38 51-55 76-62 87-118 177-164 273-22 47-43 96-53 147-19 97 4 184 69 257 63 72 144 104 239 100 132-5 247-105 274-235 11-53 8-105-9-157-33-104-84-198-143-288-42-65-88-127-132-190-1-1-2-3-4-4-2-3-12 7-22 21z m165 552c3 75-59 145-134 149-86 5-153-55-157-142-4-75 60-145 136-148 84-4 150 56 155 141z" />
+<glyph glyph-name="clock-time" horiz-adv-x="1000" unicode="&#xeedc;" d="M500 788c-239 0-432-193-437-428-5-245 189-444 430-448 251-3 440 198 444 429 5 246-194 447-437 447z m3-788c-196-1-353 156-353 350 0 193 157 350 350 350 193 0 349-157 350-350 1-186-150-348-347-350z m27 612h-59c-4 0-7-3-7-7v-210c0-4-4-7-8-7h-134c-4 0-7-3-7-7v-60c0-4 3-7 7-7h208c4 0 7 3 7 7v284c0 4-3 7-7 7z" />
+</font>
+</defs>
+</svg>
