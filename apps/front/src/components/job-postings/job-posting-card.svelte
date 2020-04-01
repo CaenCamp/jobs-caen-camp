@@ -19,6 +19,8 @@
     import { link } from 'svelte-routing';
 
     export let jobPosting;
+
+    // @TODO Temporaire, à supprimer après détermination du modèle
     jobPosting = {
         ...jobPosting,
         identifier: 'a122edec-5580-4a93-aff7-fc18b41e4c37',
@@ -26,10 +28,11 @@
         baseSalary: '30k - 34k',
         skills: [],
     };
+    const detailUrl = ({ id }) => `/jobs/${id}`;
 </script>
 
 <a
-    href="/jobs/{jobPosting.id}"
+    href="{detailUrl(jobPosting.id)}"
     use:link
     class="container flex relative flex-col my-5 mt-2-5 w-full
     md:max-w-screen-sm max-w-sm md:ml-15"
@@ -43,7 +46,7 @@
         <img
             class="max-w-full max-h-full"
             src="{jobPosting.hiringOrganization.image}"
-            alt="{jobPosting.hiringOrganization.name}-logo"
+            alt="{jobPosting.hiringOrganization.name}"
         />
     </div>
     <div
