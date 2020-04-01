@@ -19,17 +19,12 @@
     import { link } from 'svelte-routing';
 
     export let jobPosting;
-    const jobPostingTest = {
+    jobPosting = {
         ...jobPosting,
         identifier: 'a122edec-5580-4a93-aff7-fc18b41e4c37',
         jobLocationType: 'Télétravail',
         baseSalary: '30k - 34k',
-        skills: [
-            { javascript: 3 },
-            { reactjs: 2 },
-            { nodejs: 2 },
-            { vuejs: 1 },
-        ],
+        skills: [],
     };
 </script>
 
@@ -47,8 +42,8 @@
     >
         <img
             class="max-w-full max-h-full"
-            src="{jobPostingTest.hiringOrganization.image}"
-            alt="{jobPostingTest.hiringOrganization.name}-logo"
+            src="{jobPosting.hiringOrganization.image}"
+            alt="{jobPosting.hiringOrganization.name}-logo"
         />
     </div>
     <div
@@ -67,7 +62,7 @@
                 class="leading-5 font-bold text-lg text-indigo-900 max-h-full
                 truncate-2-lines mr-5"
             >
-                {jobPostingTest.hiringOrganization.name}, {jobPostingTest.hiringOrganization.address.addressLocality}
+                {jobPosting.hiringOrganization.name}, {jobPosting.hiringOrganization.address.addressLocality}
             </p>
         </div>
         <div
@@ -75,7 +70,7 @@
         >
             <p class="leading-5 text-xl inline-block">
                 <span class="leading-5 font-bold pr-1 text-indigo-900">
-                    {jobPostingTest.title}
+                    {jobPosting.title}
                 </span>
                 <span class="leading-5 text-indigo-900">H/F</span>
             </p>
@@ -87,19 +82,19 @@
         >
             <div class="flex flex-col mt-2-5 md:m-0">
                 <p class="text-base text-indigo-900 whitespace-no-wrap">
-                    {jobPostingTest.employmentType}
+                    {jobPosting.employmentType}
                 </p>
             </div>
             <div class="w-0-5 h-5 bg-gray-200 md:mx-2-5 hidden md:flex"></div>
             <div class="flex flex-col">
                 <p class="text-base text-indigo-900 whitespace-no-wrap">
-                    {jobPostingTest.jobLocationType}
+                    {jobPosting.jobLocationType}
                 </p>
             </div>
             <div class="w-0-5 h-5 bg-gray-200 md:mx-2-5 hidden md:flex"></div>
             <div class="flex flex-col mb-2-5 md:m-0">
                 <p class="text-base text-indigo-900 whitespace-no-wrap">
-                    {jobPostingTest.baseSalary}
+                    {jobPosting.baseSalary}
                 </p>
             </div>
             <div class="h-0-5 w-5 md:hidden bg-gray-200"></div>
@@ -116,51 +111,6 @@
             <img
                 class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
                 src="https://d33wubrfki0l68.cloudfront.net/e937e774cbbe23635999615ad5d7732decad182a/26072/logo-small.ede75a6b.svg"
-                alt=""
-            />
-            <img
-                class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
-                src="https://d33wubrfki0l68.cloudfront.net/e937e774cbbe23635999615ad5d7732decad182a/26072/logo-small.ede75a6b.svg"
-                alt=""
-            />
-            <img
-                class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
-                src="https://d33wubrfki0l68.cloudfront.net/e937e774cbbe23635999615ad5d7732decad182a/26072/logo-small.ede75a6b.svg"
-                alt=""
-            />
-            <img
-                class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
-                src="https://d33wubrfki0l68.cloudfront.net/e937e774cbbe23635999615ad5d7732decad182a/26072/logo-small.ede75a6b.svg"
-                alt=""
-            />
-            <img
-                class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
-                src="https://d33wubrfki0l68.cloudfront.net/e937e774cbbe23635999615ad5d7732decad182a/26072/logo-small.ede75a6b.svg"
-                alt=""
-            />
-            <img
-                class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
-                src="https://d33wubrfki0l68.cloudfront.net/e937e774cbbe23635999615ad5d7732decad182a/26072/logo-small.ede75a6b.svg"
-                alt=""
-            />
-            <img
-                class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
-                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K"
-                alt=""
-            />
-            <img
-                class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
-                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K"
-                alt=""
-            />
-            <img
-                class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
-                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K"
-                alt=""
-            />
-            <img
-                class="h-5 w-5 mr-1-25 mb-1-25 md:mb-0"
-                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K"
                 alt=""
             />
         </div>
