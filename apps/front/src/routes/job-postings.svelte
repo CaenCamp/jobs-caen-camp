@@ -5,15 +5,14 @@
 <script>
     import { Link } from 'svelte-routing';
     import { JobPostingsStore } from '../store';
+    import { JobPostingCard } from '../components/job-postings';
     import { onMount } from 'svelte';
 
     onMount(() => JobPostingsStore.init());
 </script>
 
-<ul>
-    {#each $JobPostingsStore as { id, title, url }, i}
-        <li>
-            <Link to="/jobs/{id}">{i} - {title} - {url}</Link>
-        </li>
+<div class="flex flex-col items-center p-5 bg-gray-100">
+    {#each $JobPostingsStore as jobPosting, i}
+        <JobPostingCard {jobPosting} />
     {/each}
-</ul>
+</div>
