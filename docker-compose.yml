@@ -14,8 +14,8 @@ services:
   admin:
     image: node:12.16.1
     volumes:
-      - ./not-in-yarn-workspace/admin:/admin
-    working_dir: "/admin"
+      - ./:/jobboard
+    working_dir: "/jobboard/apps/admin"
     user: ${CURRENT_UID}
     ports:
       - 8002:3000

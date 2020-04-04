@@ -1,45 +1,39 @@
 import React from "react";
 import {
-    Create,
+    Edit,
     TextInput,
     SimpleForm,
     SelectInput,
     DateInput,
-    ReferenceInput,
-    required
+    ReferenceInput
 } from "react-admin";
 
-import { jobTypes } from "./index";
+import {jobTypes} from "./index";
 
-export const JobPostingCreate = props => {
+const JobPostingTitle = ({record}) =>
+    record ? `Edition de l'offre "${record.title}"` : null;
+
+export const JobPostingEdit = props => {
     return (
-        <Create title="Création d'une nouvelle offre d'emploi" {...props}>
+        <Edit title={<JobPostingTitle />} {...props}>
             <SimpleForm>
-                <TextInput
-                    source="title"
-                    label="titre"
-                    fullWidth
-                    validate={required()}
-                />
+                <TextInput source="title" label="titre" fullWidth />
                 <TextInput
                     source="employerOverview"
                     multiline
                     label="Description"
                     fullWidth
-                    validate={required()}
                 />
                 <TextInput
                     source="experienceRequirements"
                     multiline
                     label="Experience requise"
                     fullWidth
-                    validate={required()}
                 />
                 <TextInput
                     source="skills"
                     label="Compétences demandées"
                     fullWidth
-                    validate={required()}
                 />
                 <TextInput source="url" label="Lien vers l'annonce" fullWidth />
                 <SelectInput
@@ -47,13 +41,11 @@ export const JobPostingCreate = props => {
                     label="Type de contrat"
                     fullWidth
                     choices={jobTypes}
-                    validate={required()}
                 />
                 <DateInput
                     source="jobStartDate"
                     label="Date de prise de poste"
                     fullWidth
-                    validate={required()}
                 />
                 <DateInput
                     source="validThrough"
@@ -62,13 +54,12 @@ export const JobPostingCreate = props => {
                 />
                 <ReferenceInput
                     label="Entreprise"
-                    source="hiringOrganizationId"
+                    source="hiringOrganization.identifier"
                     reference="organizations"
-                    validate={required()}
                 >
                     <SelectInput optionText="name" />
                 </ReferenceInput>
             </SimpleForm>
-        </Create>
+        </Edit>
     );
 };

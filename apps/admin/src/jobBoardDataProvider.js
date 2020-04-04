@@ -1,5 +1,5 @@
-import { stringify } from "query-string";
-import { fetchUtils } from "ra-core";
+import {stringify} from "query-string";
+import {fetchUtils} from "ra-core";
 import omit from "lodash.omit";
 
 /**
@@ -16,8 +16,8 @@ import omit from "lodash.omit";
  */
 export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
     getList: (resource, params) => {
-        const { page, perPage } = params.pagination;
-        const { field, order } = params.sort;
+        const {page, perPage} = params.pagination;
+        const {field, order} = params.sort;
         const query = {
             sort: JSON.stringify([field, order]),
             filters: JSON.stringify(params.filter),
@@ -25,7 +25,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-        return httpClient(url).then(({ headers, json }) => {
+        return httpClient(url).then(({headers, json}) => {
             if (!headers.has("content-range")) {
                 throw new Error(
                     "The Content-Range header is missing in the HTTP Response."
@@ -45,21 +45,21 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
     },
 
     getOne: (resource, params) =>
-        httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
+        httpClient(`${apiUrl}/${resource}/${params.id}`).then(({json}) => ({
             data: json
         })),
 
     getMany: (resource, params) => {
         const query = {
-            filter: JSON.stringify({ id: params.ids })
+            filter: JSON.stringify({id: params.ids})
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
-        return httpClient(url).then(({ json }) => ({ data: json }));
+        return httpClient(url).then(({json}) => ({data: json}));
     },
 
     getManyReference: (resource, params) => {
-        const { page, perPage } = params.pagination;
-        const { field, order } = params.sort;
+        const {page, perPage} = params.pagination;
+        const {field, order} = params.sort;
         const query = {
             sort: JSON.stringify([field, order]),
             filters: JSON.stringify({
@@ -70,7 +70,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-        return httpClient(url).then(({ headers, json }) => {
+        return httpClient(url).then(({headers, json}) => {
             if (!headers.has("content-range")) {
                 throw new Error(
                     "The Content-Range header is missing in the HTTP Response"
@@ -102,7 +102,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
         return httpClient(`${apiUrl}/${resource}/${params.id}`, {
             method: "PUT",
             body: JSON.stringify(data)
-        }).then(({ json }) => ({ data: json }));
+        }).then(({json}) => ({data: json}));
     },
 
     // JobBoard API doesn't handle provide an updateMany route yet,
@@ -123,9 +123,9 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
                 return httpClient(`${apiUrl}/${resource}/${id}`, {
                     method: "PUT",
                     body: JSON.stringify(data)
-                }).then(({ json }) => ({ data: json }));
+                }).then(({json}) => ({data: json}));
             })
-        ).then(responses => ({ data: responses.map(({ json }) => json.id) })),
+        ).then(responses => ({data: responses.map(({json}) => json.id)})),
 
     create: (resource, params) => {
         let data;
@@ -165,15 +165,15 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
         return httpClient(`${apiUrl}/${resource}`, {
             method: "POST",
             body: JSON.stringify(data)
-        }).then(({ json }) => ({
-            data: { ...data, id: json.id }
+        }).then(({json}) => ({
+            data: {...data, id: json.id}
         }));
     },
 
     delete: (resource, params) =>
         httpClient(`${apiUrl}/${resource}/${params.id}`, {
             method: "DELETE"
-        }).then(({ json }) => ({ data: json })),
+        }).then(({json}) => ({data: json})),
 
     // JobBoard doesn't handle filters on DELETE route yet,
     // so we fallback to calling DELETE n times instead
@@ -184,5 +184,5 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
                     method: "DELETE"
                 })
             )
-        ).then(responses => ({ data: responses.map(({ json }) => json.id) }))
+        ).then(responses => ({data: responses.map(({json}) => json.id)}))
 });

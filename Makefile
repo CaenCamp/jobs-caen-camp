@@ -20,9 +20,7 @@ install: ## Install all js deps
 	$(shell cp -n ./config/development.dist ./config/development.env)
 	@${DC_DEV} run --rm --no-deps api bash -ci '\
 		cd ../../ && \
-		yarn && \
-        cd not-in-yarn-workspace/admin && \
-        npm install \
+		yarn \
 	'
 
 install-cypress: ## Install cypress.io bin on local environment, not in Docker !
