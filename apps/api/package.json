@@ -27,11 +27,11 @@
     },
     "dependencies": {
         "convict": "5.2.0",
-        "knex": "0.20.12",
-        "knex-paginate": "1.1.1",
+        "knex": "0.20.13",
+        "knex-paginate": "1.2.0",
         "knex-stringcase": "1.4.1",
         "koa": "2.11.0",
-        "koa-bodyparser": "4.2.1",
+        "koa-bodyparser": "4.3.0",
         "koa-json-error": "3.1.2",
         "koa-oas3": "0.18.0",
         "koa-router": "8.0.8",
@@ -43,7 +43,7 @@
         "signale": "1.4.0"
     },
     "devDependencies": {
-        "@stoplight/spectral": "5.2.0",
+        "@stoplight/spectral": "5.3.0",
         "faker": "4.1.0"
     }
 }

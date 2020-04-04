@@ -5,7 +5,11 @@
     "dependencies": {
         "@testing-library/react": "9.5.0",
         "@testing-library/user-event": "7.2.1",
+        "lodash.omit": "^4.5.0",
+        "prop-type": "0.0.1",
+        "query-string": "6.11.1",
         "react": "^16.13.1",
+        "react-admin": "3.4.0",
         "react-dom": "^16.13.1",
         "react-scripts": "3.4.1"
     },
@@ -29,11 +33,5 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "devDependencies": {
-        "lodash.omit": "^4.5.0",
-        "prop-type": "0.0.1",
-        "query-string": "6.11.1",
-        "react-admin": "3.3.1"
     }
 }
