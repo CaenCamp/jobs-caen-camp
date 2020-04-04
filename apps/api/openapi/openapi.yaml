@@ -1062,25 +1062,17 @@ components:
       in: query
       description: "Le tri applicable à la liste. C'est un tableau stringifié de la forme [sortProp, sortDirection]"
       required: false
-      explode: false
+      explode: true
       schema:
-        type: array
-        maxItems: 2
-        minItems: 2
-        items:
-          type: string
+        type: string
     Pagination:
       name: pagination
       in: query
       description: "Les paramètres pour la pagination. C'est un tableau stringifié de la forme [perPage, currentPage]"
       required: false
-      explode: false
+      explode: true
       schema:
-        type: array
-        maxItems: 2
-        minItems: 2
-        items:
-          type: string
+        type: string
     UUID:
       name: identifier
       in: path
