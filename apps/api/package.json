@@ -39,7 +39,7 @@
         "koa2-cors": "2.0.6",
         "lodash.omit": "4.5.0",
         "lodash.pick": "4.4.0",
-        "pg": "7.18.2",
+        "pg": "8.0.0",
         "signale": "1.4.0"
     },
     "devDependencies": {
