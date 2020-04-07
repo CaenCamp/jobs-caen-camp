@@ -29,6 +29,14 @@ Vous pouvez ainsi accéder à :
 -   la documentation de l'API sur <http://localhost:8001/documentation>
 -   Une interface d'administration sur <http://localhost:8002>
 
+En utilisant la commande
+
+```bash
+make storybook
+```
+
+Vous lancerez le storybook (documentation des composants Svelte) sur <http://localhost:6006/>
+
 Lors du premier lancement du projet, vous devrez également initialiser la base de données :
 
 ```bash
