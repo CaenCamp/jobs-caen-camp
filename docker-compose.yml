@@ -11,6 +11,16 @@ services:
       - 8000:8000
     command: "yarn dev"
 
+  storybook:
+    image: node:12.16.1
+    volumes:
+      - .:/jobboard
+    working_dir: "/jobboard/apps/front"
+    user: ${CURRENT_UID}
+    ports:
+      - 8010:6006
+    command: "yarn storybook"
+
   admin:
     image: node:12.16.1
     volumes:
