@@ -20,6 +20,7 @@
   - [La documentation](#la-documentation)
     - [Les ADR.s](#les-adrs)
   - [OpenAPI](#openapi)
+  - [Storybook](#storybook)
   - [Faire une Pull request](#faire-une-pull-request)
     - [le git flow](#le-git-flow)
     - [La convention de codage (coding style)](#la-convention-de-codage-coding-style)
@@ -110,10 +111,19 @@ cd apps/api
 yarn dev
 ```
 
+Si vous souhaitez lancer le storybook, il faudra également entrer dans une autre console :
+
+```bash
+cd apps/front
+yarn storybook
+```
+
+
 Vous pouvez ainsi acceder à :
 
 - l’API sur <http://localhost:3001>
 - l’application web sur <http://localhost:5000>
+- le storybook sur <http://localhost:6006>
 
 Dans les premières phases de développement du projet, nous utiliserons un _faux_ serveur d’API afin de mettre en place rapidement et facilement le modèle du projet. Ce serveur _"mocked"_ d’api doit être lancer en plus des autres applications :
 
@@ -146,6 +156,7 @@ Vous pouvez ainsi accéder à :
 - l’api sur <http://localhost:8001>
 - l’api _mockée_ sur <http://localhost:8002>
 - la documentation de l'API sur <http://localhost:8003>
+- le storybook sur <http://localhost:8010>
 
 Pour arrêter le projet, faites un :
 
@@ -162,7 +173,7 @@ Voici l’organisation des principaux répertoires du projet :
 - **.github** : On trouve ici les fichiers d’aide sur le projet et les templates pour Github.
 - **apps/front** : On trouve ici le code de l’application web.
 - **apps/api** : On trouve ici le code de l’api.
-- **not-in-yarn-workspace/admin** : On trouve ici le code de l'administration réalisée avec [React Admin](https://marmelab.com/react-admin/). Ce code est dans un répertoire spécifique car l'administration se base sur une application [CRA](https://create-react-app.dev/) qui n'est pas compatible avec les workspaces de Yarn.
+- **apps/admin** : On trouve ici le code de l'administration réalisée avec [React Admin](https://marmelab.com/react-admin/). Ce code est dans un répertoire spécifique car l'administration se base sur une application [CRA](https://create-react-app.dev/) qui n'est pas compatible avec les workspaces de Yarn.
 
 ## La base de données
 
@@ -244,6 +255,17 @@ Et enfin, si vous effectuer des modifications au contrat, il faut penser à vali
 ```bash
 make openapi-validate
 ```
+
+## Storybook
+
+L'application développée SvelteJS est découpée en composant.
+
+Un composant accepte des propriétés qui sont parfois des strings, des booléens ou un objet JSON.
+Afin de pouvoir facilement s'y retrouver dans les composants que nous auront, il convient de les documenter sur un [Storybook](https://storybook.js.org/).
+Un nouveau contributeur pourra facilement s'y retrouver s'il souhaite utiliser nos boutons, liens, cartes ou tout autre composant susceptible d'être réutilisé pour accélérer nos développements.
+
+De plus, de cette manière, nous pourrons même développer directement nos composants depuis cette interface afin de s'assurer que le composant puisse facilement être réutilisable.
+Dans le Storybook, le composant est totalement isolé du reste de l'application.
 
 ## Faire une Pull request
 
