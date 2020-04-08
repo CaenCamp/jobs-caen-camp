@@ -154,3 +154,5 @@ build-front: ## Build the front
 		yarn build \
 	'
 
+storybook: ## Start the storybook
+	yarn workspace cc-jobboard-front storybook
