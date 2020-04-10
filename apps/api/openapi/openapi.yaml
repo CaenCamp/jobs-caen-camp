@@ -92,7 +92,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Sort'
         - $ref: '#/components/parameters/Filter'
-        - $ref: '#/components/parameters/Pagination'
+        - $ref: '#/components/parameters/PaginationCurrentPage'
+        - $ref: '#/components/parameters/PaginationPerPage'
     post:
       tags:
         - "Offres d'emploi"
@@ -444,7 +445,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Filter'
         - $ref: '#/components/parameters/Sort'
-        - $ref: '#/components/parameters/Pagination'
+        - $ref: '#/components/parameters/PaginationCurrentPage'
+        - $ref: '#/components/parameters/PaginationPerPage'
     post:
       summary: "Création d'une entreprise"
       operationId: createOrganization
@@ -1069,18 +1071,22 @@ components:
         minItems: 2
         items:
           type: string
-    Pagination:
-      name: pagination
+    PaginationCurrentPage:
+      name: currentPage
       in: query
-      description: "Les paramètres pour la pagination. C'est un tableau stringifié de la forme [perPage, currentPage]"
+      description: "Le paramètre de pagination pour définir la page courrante."
       required: false
-      explode: false
       schema:
-        type: array
-        maxItems: 2
-        minItems: 2
-        items:
-          type: string
+        type: integer
+        example: 1
+    PaginationPerPage:
+      name: perPage
+      in: query
+      description: "Le paramètre de pagination pour définir le nombre d'éléments par page."
+      required: false
+      schema:
+        type: integer
+        example: 10
     UUID:
       name: identifier
       in: path

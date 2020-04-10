@@ -18,7 +18,10 @@ router.get('/', async ctx => {
         client: ctx.db,
         filters: parseJsonQueryParameter(ctx.query.filters),
         sort: parseJsonQueryParameter(ctx.query.sort),
-        pagination: parseJsonQueryParameter(ctx.query.pagination),
+        pagination: {
+            currentPage: ctx.query.currentPage,
+            perPage: ctx.query.perPage,
+        },
     });
 
     ctx.set('Content-Range', contentRange);

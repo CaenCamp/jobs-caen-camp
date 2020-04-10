@@ -57,20 +57,8 @@ const sortSanitizer = (sort, sortableFields) => {
  * @param {object} pagination - pagination object from query parameters
  * @returns {object} Ready-to-use filters for the sql query
  */
-const paginationSanitizer = pagination => {
-    const sortTwoFirstParameters = [
-        pagination ? parseInt(pagination[0]) || null : null,
-        pagination ? parseInt(pagination[1]) || null : null,
-    ];
-
-    if (
-        !Number.isInteger(sortTwoFirstParameters[0]) ||
-        !Number.isInteger(sortTwoFirstParameters[1])
-    ) {
-        return [10, 1];
-    }
-
-    return sortTwoFirstParameters;
+const paginationSanitizer = ({ perPage, currentPage }) => {
+    return [parseInt(perPage) || 10, parseInt(currentPage) || 1];
 };
 
 /**

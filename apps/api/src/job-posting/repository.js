@@ -182,7 +182,7 @@ const formatJobPostingForAPI = dbJobPosting => {
  * @param {object} client - The Database client
  * @param {object} filters - JobPosting Filters
  * @param {Array} sort - Sort parameters [columnName, direction]
- * @param {Array} pagination - Pagination [perPage, currentPage]
+ * @param {object} pagination - Pagination {perPage: 10, currentPage: 1}
  * @returns {Promise} - paginated object with paginated jobPosting list and totalCount
  */
 const getJobPostingPaginatedList = async ({

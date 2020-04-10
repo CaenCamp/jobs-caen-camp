@@ -97,7 +97,7 @@ const formatOrganizationForAPI = dbOrganization => ({
  * @param {object} client - The Database client
  * @param {object} filters - Organization Filter
  * @param {Array} sort - Sort parameters [columnName, direction]
- * @param {Array} pagination - Pagination [perPage, currentPage]
+ * @param {object} pagination - Pagination {perPage: 10, currentPage: 1}
  * @returns {Promise} - paginated object with paginated organization list and totalCount
  */
 const getOrganizationPaginatedList = async ({
