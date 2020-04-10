@@ -39,6 +39,12 @@ const config = convict({
             env: 'POSTGRES_PASSWORD',
         },
     },
+    bcryptSaltRounds: {
+        doc: 'the cost of processing the salt used during password hashing',
+        format: 'integer',
+        default: 10,
+        env: 'PASSWORD_SALT_ROUNDS',
+    },
 });
 
 config.validate({ allowed: 'strict' });

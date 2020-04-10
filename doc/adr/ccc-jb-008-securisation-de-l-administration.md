@@ -57,6 +57,12 @@ Du coup, ne reste dans cette table :
 
 Il y a un index de type `UNIQUE` sur le `username`.
 
+### L'objet user
+
+1) Le `username` devra avoir entre 3 et 20 [caractères alphanumériques](https://fr.wikipedia.org/wiki/Caract%C3%A8re_alphanum%C3%A9rique), sans espace, avec éventuellement un `-`.
+2) Le mot de passe devra être complexe suivant la norme [OWASP Guidelines for enforcing secure passwords](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/migrated_content). Pour cela, nous utiliserons le module [OWASP Password Strength Test](https://www.npmjs.com/package/owasp-password-strength-test).
+3) Le mot de passe sera stocké en base sous forme d'un [hash BCrypt](https://fr.wikipedia.org/wiki/Bcrypt). Pour effectuer le hashage et pour tester les mots de passe lors de la connexion, nous utiliserons le module [bcrypt](https://www.npmjs.com/package/bcrypt).
+
 ## Liens
 
 - articles de référence

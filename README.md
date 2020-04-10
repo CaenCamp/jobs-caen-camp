@@ -44,6 +44,14 @@ make migrate-latest
 make import-fixed-fixtures
 ```
 
+Vous devrez également créer un premier utilisateur pour pouvoir vous connecter à l'interface d'administration. Pour cela, vous devrez definir sont `username` ansi que sont `password` (respectant la definition d'un [mot de passe sécurisé de OWASP](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/migrated_content) via des variables d'environement *temporaires*. Par exemple :
+
+```
+USERNAME=myFirstUser PASSWORD=n33dToB3+Str0ng node ./cli/create-user.js
+```
+
+*Remarque: Si vous utilisez Docker, vous devrez être dans le conteneur du service api pour lancer cette commende.*
+
 ## Vous souhaitez participer
 
 Merci à vous :+1:
