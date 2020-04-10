@@ -87,7 +87,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getJobPostings
-      description: "Obtenir une liste paginée d'offres d'emploi\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* title\n* skills\n* employmentType\n* datePosted_before\n* datePosted_after\n* jobStartDate_before\n* jobStartDate_after\n* validThrough_before\n* validThrough_after\n* hiringOrganizationName\n* hiringOrganizationPostalCode\n* hiringOrganizationAddressLocality\n* hiringOrganizationAddressCountry\n\nCette liste est triable par sort=[key, sortDirection_ASC_DESC] : \n* datePosted\n* title\n* jobStartDate\n* validThrough\n* hiringOrganizationName\n* hiringOrganizationIdentifier\n* hiringOrganizationPostalCode\n* hiringOrganizationAddressLocality\n* hiringOrganizationAddressCountry\n\nLa pagination est controlable via le paramètre de requête pagination=[nombreDeRésultatsParPage, numeroDePage]"
+      description: |
+        Obtenir une liste paginée d'offres d'emploi
+
+        Cette liste est filtrable par filters={ key: value, key2: value ...} :
+        * title
+        * skills
+        * employmentType
+        * datePosted_before
+        * datePosted_after
+        * jobStartDate_before
+        * jobStartDate_after
+        * validThrough_before
+        * validThrough_after
+        * hiringOrganizationName
+        * hiringOrganizationPostalCode
+        * hiringOrganizationAddressLocality
+        * hiringOrganizationAddressCountry
+
+        Cette liste est triable par sort=[key, sortDirection_ASC_DESC] :
+        * datePosted
+        * title
+        * jobStartDate
+        * validThrough
+        * hiringOrganizationName
+        * hiringOrganizationIdentifier
+        * hiringOrganizationPostalCode
+        * hiringOrganizationAddressLocality
+        * hiringOrganizationAddressCountry
       parameters:
         - $ref: '#/components/parameters/Sort'
         - $ref: '#/components/parameters/Filter'
@@ -439,7 +466,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getOrganizations
-      description: "Obtenir la liste des entreprises.\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* name\n* address_locality\n* postal_code\n\nCette liste est triable par sort=[key, sortDirection_ASC_DESC] : \n* name\n* address_locality\n* postal_code\n\nLa pagination est controlable via le paramètre de requête pagination=[nombreDeRésultatsParPage, numeroDePage]"
+      description: |
+        Obtenir la liste des entreprises.\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :
+        * name
+        * address_locality
+        * postal_code
+
+        Cette liste est triable par sort=[key, sortDirection_ASC_DESC] :
+        * name
+        * address_locality
+        * postal_code
       parameters:
         - $ref: '#/components/parameters/Filter'
         - $ref: '#/components/parameters/Sort'
