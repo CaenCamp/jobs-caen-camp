@@ -7,14 +7,17 @@ const {
     getOrganizationPaginatedList,
     updateOrganization,
 } = require('./repository');
-const { parseJsonQueryParameter } = require('../toolbox/sanitizers');
+const {
+    parseJsonQueryParameter,
+    formatPaginationToLinkHeader,
+} = require('../toolbox/sanitizers');
 
 const router = new Router({
     prefix: '/api/organizations',
 });
 
-router.get('/', async ctx => {
-    const { organizations } = await getOrganizationPaginatedList({
+router.get('/', async (ctx) => {
+    const { organizations, pagination } = await getOrganizationPaginatedList({
         client: ctx.db,
         filters: parseJsonQueryParameter(ctx.query.filters),
         sort: parseJsonQueryParameter(ctx.query.sort),
@@ -24,14 +27,19 @@ router.get('/', async ctx => {
         },
     });
 
-    // ToDo: Add X-Total-Count Header
-    ctx.set('X-Total-Count', 0);
-    // ToDo: Add Link Header
-    ctx.set('Link', 'TODO');
+    const linkHeaderValue = formatPaginationToLinkHeader({
+        resourceURI: '/api/job-postings',
+        pagination,
+    });
+
+    ctx.set('X-Total-Count', pagination.total);
+    if (linkHeaderValue) {
+        ctx.set('Link', linkHeaderValue);
+    }
     ctx.body = organizations;
 });
 
-router.post('/', async ctx => {
+router.post('/', async (ctx) => {
     const newOrganization = await createOrganization({
         client: ctx.db,
         apiData: ctx.request.body,
@@ -47,7 +55,7 @@ router.post('/', async ctx => {
     ctx.body = newOrganization;
 });
 
-router.get('/:organizationId', async ctx => {
+router.get('/:organizationId', async (ctx) => {
     const organization = await getOrganization({
         client: ctx.db,
         organizationId: ctx.params.organizationId,
@@ -72,7 +80,7 @@ router.get('/:organizationId', async ctx => {
     ctx.body = organization;
 });
 
-router.delete('/:organizationId', async ctx => {
+router.delete('/:organizationId', async (ctx) => {
     const deletedOrganization = await deleteOrganization({
         client: ctx.db,
         organizationId: ctx.params.organizationId,
@@ -97,7 +105,7 @@ router.delete('/:organizationId', async ctx => {
     ctx.body = deletedOrganization;
 });
 
-router.put('/:organizationId', async ctx => {
+router.put('/:organizationId', async (ctx) => {
     const updatedOrganization = await updateOrganization({
         client: ctx.db,
         organizationId: ctx.params.organizationId,

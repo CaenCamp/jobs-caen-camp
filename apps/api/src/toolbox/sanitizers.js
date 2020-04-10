@@ -1,3 +1,5 @@
+const querystring = require('querystring');
+
 /**
  * Method to clean the filters sent in query parameters
  *
@@ -11,9 +13,9 @@ const filtersSanitizer = (filters, filterableFields) => {
     }
 
     return Object.keys(filters)
-        .filter(key => filterableFields.includes(key))
-        .filter(key => filters[key] !== undefined)
-        .filter(key => {
+        .filter((key) => filterableFields.includes(key))
+        .filter((key) => filters[key] !== undefined)
+        .filter((key) => {
             if (typeof filters[key] === 'string') {
                 return filters[key].trim() !== '';
             }
@@ -67,7 +69,7 @@ const paginationSanitizer = ({ perPage, currentPage }) => {
  * @param {string} parameter - the query parameter expected in JSON
  * @returns {(object|boolean)} the parsed parameter or false if incorrectly formatted
  */
-const parseJsonQueryParameter = parameter => {
+const parseJsonQueryParameter = (parameter) => {
     if (parameter === undefined) {
         return false;
     }
@@ -78,9 +80,56 @@ const parseJsonQueryParameter = parameter => {
     }
 };
 
+const linkHeaderItem = ({ resourceURI, currentPage, perPage, rel }) => {
+    const params = {
+        currentPage,
+        perPage,
+    };
+    return `<${resourceURI}?${querystring.stringify(params)}>; rel="${rel}"`;
+};
+
+const formatPaginationToLinkHeader = ({ resourceURI, pagination }) => {
+    const { currentPage, perPage, lastPage } = pagination;
+
+    if (!resourceURI || !currentPage || !perPage || !lastPage) {
+        return null;
+    }
+
+    const prevPage =
+        currentPage - 1 <= lastPage ? currentPage - 1 : currentPage;
+    const nextPage =
+        currentPage + 1 <= lastPage ? currentPage + 1 : currentPage;
+
+    let items = [
+        { resourceURI, currentPage: 1, perPage, rel: 'first' },
+        {
+            resourceURI,
+            currentPage: prevPage,
+            perPage,
+            rel: 'prev',
+        },
+        { resourceURI, currentPage, perPage, rel: 'self' },
+        {
+            resourceURI,
+            currentPage: nextPage,
+            perPage,
+            rel: 'next',
+        },
+        {
+            resourceURI,
+            currentPage: lastPage,
+            perPage,
+            rel: 'last',
+        },
+    ];
+
+    return items.map((item) => linkHeaderItem(item)).join(',');
+};
+
 module.exports = {
     filtersSanitizer,
     paginationSanitizer,
     parseJsonQueryParameter,
     sortSanitizer,
+    formatPaginationToLinkHeader,
 };

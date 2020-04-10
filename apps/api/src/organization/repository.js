@@ -74,7 +74,7 @@ const getFilteredOrganizationsQuery = (client, filters, sort) => {
  * @param {object} dbOrganization - organization data from database
  * @returns {object} an organization object as describe in OpenAPI contract
  */
-const formatOrganizationForAPI = dbOrganization => ({
+const formatOrganizationForAPI = (dbOrganization) => ({
     ...omit(dbOrganization, [
         'addressCountry',
         'addressLocality',
@@ -115,8 +115,9 @@ const getOrganizationPaginatedList = async ({
 
     return query
         .paginate({ perPage, currentPage, isLengthAware: true })
-        .then(result => ({
+        .then((result) => ({
             organizations: result.data.map(formatOrganizationForAPI),
+            pagination: result.pagination,
         }));
 };
 
@@ -127,7 +128,7 @@ const getOrganizationPaginatedList = async ({
  * @param {object} dataFromApi - The validated data sent from API to create a new organization
  * @returns {object} - an object with valid data for an organization and for a contactPoint
  */
-const prepareOrganizationDataForSave = dataFromApi => ({
+const prepareOrganizationDataForSave = (dataFromApi) => ({
     organization: {
         ...omit(dataFromApi, ['address', 'contactPoints']),
         addressCountry: dataFromApi.address.addressCountry || null,
@@ -181,7 +182,7 @@ const createOrganization = async ({ client, apiData }) => {
     );
 
     return client
-        .transaction(trx => {
+        .transaction((trx) => {
             client('organization')
                 .transacting(trx)
                 .returning('id')
@@ -210,12 +211,12 @@ const createOrganization = async ({ client, apiData }) => {
                 .then(trx.commit)
                 .catch(trx.rollback);
         })
-        .then(newOrganizationId => {
+        .then((newOrganizationId) => {
             return getOrganizationByIdQuery(client, newOrganizationId).then(
                 formatOrganizationForAPI
             );
         })
-        .catch(error => ({ error }));
+        .catch((error) => ({ error }));
 };
 
 /**
@@ -228,7 +229,7 @@ const createOrganization = async ({ client, apiData }) => {
 const getOrganization = async ({ client, organizationId }) => {
     return getOrganizationByIdQuery(client, organizationId)
         .then(formatOrganizationForAPI)
-        .catch(error => ({ error }));
+        .catch((error) => ({ error }));
 };
 
 /**
@@ -242,10 +243,10 @@ const deleteOrganization = async ({ client, organizationId }) => {
     return client('organization')
         .where({ id: organizationId })
         .del()
-        .then(nbDeletion => {
+        .then((nbDeletion) => {
             return nbDeletion ? { id: organizationId } : {};
         })
-        .catch(error => ({ error }));
+        .catch((error) => ({ error }));
 };
 
 /**
@@ -257,9 +258,9 @@ const deleteOrganization = async ({ client, organizationId }) => {
  */
 const getIdsToDelete = (idsInDb, objectsFromApi) => {
     const idsApi = objectsFromApi
-        .map(object => object.identifier)
-        .filter(id => id);
-    return idsInDb.filter(id => !idsApi.includes(id));
+        .map((object) => object.identifier)
+        .filter((id) => id);
+    return idsInDb.filter((id) => !idsApi.includes(id));
 };
 
 /**
@@ -275,7 +276,7 @@ const updateOrganization = async ({ client, organizationId, apiData }) => {
     );
 
     try {
-        await client.transaction(trx => {
+        await client.transaction((trx) => {
             client('organization')
                 .transacting(trx)
                 .where({ id: organizationId })
@@ -284,7 +285,9 @@ const updateOrganization = async ({ client, organizationId, apiData }) => {
                     const existingContactIds = await client('contact_point')
                         .select('id')
                         .where({ organization_id: organizationId })
-                        .then(contacts => contacts.map(contact => contact.id));
+                        .then((contacts) =>
+                            contacts.map((contact) => contact.id)
+                        );
 
                     const contactUpdates = contactPoints.reduce(
                         (acc, contact) => {
@@ -322,7 +325,7 @@ const updateOrganization = async ({ client, organizationId, apiData }) => {
                         existingContactIds,
                         contactPoints
                     );
-                    idsToDelete.map(id =>
+                    idsToDelete.map((id) =>
                         contactUpdates.push(
                             client('contact_point')
                                 .transacting(trx)
@@ -341,7 +344,7 @@ const updateOrganization = async ({ client, organizationId, apiData }) => {
 
     return getOrganizationByIdQuery(client, organizationId)
         .then(formatOrganizationForAPI)
-        .catch(error => ({ error }));
+        .catch((error) => ({ error }));
 };
 
 module.exports = {
