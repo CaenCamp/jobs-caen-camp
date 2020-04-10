@@ -117,10 +117,6 @@ const getOrganizationPaginatedList = async ({
         .paginate({ perPage, currentPage, isLengthAware: true })
         .then(result => ({
             organizations: result.data.map(formatOrganizationForAPI),
-            contentRange: formatPaginationContentRange(
-                'organizations',
-                result.pagination
-            ),
         }));
 };
 

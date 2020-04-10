@@ -58,11 +58,10 @@ paths:
                           addressLocality: Caen
                           postalCode: '14000'
           headers:
-            content-range:
-              schema:
-                type: string
-              description: "Return information about pagination, with form 'objectType from-to/total'"
-              required: true
+            X-Total-Count:
+                $ref: '#/components/headers/X-Total-Count'
+            Link:
+                $ref: '#/components/headers/Link'
         '400':
           description: Bad Request
           content:
@@ -411,11 +410,10 @@ paths:
                           name: 'John Do, CTO'
                           contactType: "Offres d'emploi"
           headers:
-            content-range:
-              schema:
-                type: string
-              required: true
-              description: "Return information about pagination, with form 'objectType from-to/total'"
+            X-Total-Count:
+                $ref: '#/components/headers/X-Total-Count'
+            Link:
+                $ref: '#/components/headers/Link'
         '400':
           description: Bad Request
           content:
@@ -715,6 +713,24 @@ paths:
         - Entreprises
 components:
   securitySchemes: {}
+  headers:
+    X-Total-Count:
+        description: "Return information about total items to paginate"
+        schema:
+            type: integer
+        example: 42
+        required: false
+    Link:
+        description: "Return information about pagination actions"
+        schema:
+            type: string
+        example: |
+            </resources?currentPage=3&perPage=10>; rel="self",
+            </resources?currentPage=1&perPage=10>; rel="first",
+            </resources?currentPage=2&perPage=10>; rel="prev",
+            </resources?currentPage=4&perPage=10>; rel="next",
+            </resources?currentPage=5&perPage=10>; rel="last",
+        required: false
   schemas:
     JobPosting:
       description: "Une offre d'emploi"

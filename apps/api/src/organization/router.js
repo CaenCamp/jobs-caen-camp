@@ -14,7 +14,7 @@ const router = new Router({
 });
 
 router.get('/', async ctx => {
-    const { organizations, contentRange } = await getOrganizationPaginatedList({
+    const { organizations } = await getOrganizationPaginatedList({
         client: ctx.db,
         filters: parseJsonQueryParameter(ctx.query.filters),
         sort: parseJsonQueryParameter(ctx.query.sort),
@@ -24,7 +24,10 @@ router.get('/', async ctx => {
         },
     });
 
-    ctx.set('Content-Range', contentRange);
+    // ToDo: Add X-Total-Count Header
+    ctx.set('X-Total-Count', 0);
+    // ToDo: Add Link Header
+    ctx.set('Link', 'TODO');
     ctx.body = organizations;
 });
 

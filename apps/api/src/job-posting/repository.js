@@ -3,7 +3,6 @@ const signale = require('signale');
 
 const {
     filtersSanitizer,
-    formatPaginationContentRange,
     paginationSanitizer,
     sortSanitizer,
 } = require('../toolbox/sanitizers');
@@ -202,10 +201,6 @@ const getJobPostingPaginatedList = async ({
         .paginate({ perPage, currentPage, isLengthAware: true })
         .then(result => ({
             jobPostings: result.data.map(formatJobPostingForAPI),
-            contentRange: formatPaginationContentRange(
-                'jobPostings',
-                result.pagination
-            ),
         }));
 };
 

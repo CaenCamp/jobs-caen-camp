@@ -167,17 +167,4 @@ describe('Sanitizers', () => {
             ).toEqual([22, 3]);
         });
     });
-
-    describe('formatPaginationContentRange', () => {
-        it('should transforms the Knex paging object into a string compatible with the "content-Range" header', () => {
-            const knexPagination = {
-                from: 33,
-                to: 42,
-                total: 666,
-            };
-            expect(
-                formatPaginationContentRange('fooOBJECT', knexPagination)
-            ).toEqual('fooobject 33-42/666');
-        });
-    });
 });
