@@ -144,16 +144,16 @@ describe('Sanitizers', () => {
         it('should return default pagination if one of pagination params could not be cast as integer', () => {
             expect(
                 paginationSanitizer({ perPage: 'douze', currentPage: '2' })
-            ).toEqual([10, 1]);
+            ).toEqual([10, 2]);
             expect(
                 paginationSanitizer({ perPage: '12', currentPage: 'deux' })
-            ).toEqual([10, 1]);
+            ).toEqual([12, 1]);
             expect(
                 paginationSanitizer({ perPage: {}, currentPage: '2' })
-            ).toEqual([10, 1]);
+            ).toEqual([10, 2]);
             expect(
                 paginationSanitizer({ perPage: null, currentPage: '2' })
-            ).toEqual([10, 1]);
+            ).toEqual([10, 2]);
         });
 
         it('should remove the supernumerary parameters of the pagination array', () => {
