@@ -8,5 +8,6 @@
     "editor.codeActionsOnSave": {
         "source.fixAll": true
     },
-    "cSpell.enabled": true
+    "cSpell.enabled": true,
+    "editor.rulers": [80]
 }
