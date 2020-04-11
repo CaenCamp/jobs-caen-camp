@@ -1,3 +1,4 @@
+import querystring from 'querystring';
 import frisby from 'frisby';
 import omit from 'lodash.omit';
 
@@ -27,7 +28,7 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].title).toStrictEqual(
@@ -57,7 +58,7 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].title).toStrictEqual(
@@ -87,7 +88,7 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].title).toStrictEqual(
@@ -117,7 +118,7 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(
@@ -132,13 +133,14 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait pouvoir modifier la pagination avevc le paramètre de requête "pagination"', async () => {
+        it('devrait pouvoir modifier la pagination avec les paramètres de requête "pagination"', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?pagination=${JSON.stringify(
-                        [2, 1]
-                    )}`
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        perPage: 2,
+                        currentPage: 1
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -146,15 +148,16 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-2/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(2);
                 });
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?pagination=${JSON.stringify(
-                        [2, 2]
-                    )}`
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        perPage: 2,
+                        currentPage: 2
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -162,7 +165,7 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 2-3/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(1);
                 });
@@ -182,7 +185,7 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-2/2')
+                .expect('header', 'x-total-count', '2')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(2);
                     expect(resp.json[0].title).toStrictEqual(
@@ -208,7 +211,7 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-2/2')
+                .expect('header', 'x-total-count', '2')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(2);
                     expect(resp.json[0].title).toStrictEqual(
@@ -234,7 +237,7 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-1/1')
+                .expect('header', 'x-total-count', '1')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].title).toStrictEqual(
@@ -257,7 +260,7 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-1/1')
+                .expect('header', 'x-total-count', '1')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].title).toStrictEqual(
@@ -541,7 +544,7 @@ describe('JobPostings API Endpoints', () => {
             await frisby
                 .get('http://api:3001/api/job-postings')
                 .expect('status', 200)
-                .expect('header', 'content-range', 'jobpostings 0-4/4')
+                .expect('header', 'x-total-count', '4')
                 .then(resp => {
                     expect(
                         resp.json.find(jb => jb.id === createdJobPosting.id)
@@ -562,7 +565,7 @@ describe('JobPostings API Endpoints', () => {
             return frisby
                 .get('http://api:3001/api/job-postings')
                 .expect('status', 200)
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(
                         resp.json.find(jb => jb.id === createdJobPosting.id)

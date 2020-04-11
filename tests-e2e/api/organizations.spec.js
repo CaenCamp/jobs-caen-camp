@@ -1,3 +1,4 @@
+import querystring from 'querystring';
 import frisby from 'frisby';
 import omit from 'lodash.omit';
 
@@ -39,7 +40,7 @@ describe('Organizations API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'organizations 0-3/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
@@ -48,13 +49,14 @@ describe('Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait changer la pagination via le paramètre de requête pagination', async () => {
+        it('devrait changer la pagination via les paramètres de requête pagination', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?pagination=${JSON.stringify(
-                        [1, 1]
-                    )}`
+                    `http://api:3001/api/organizations?${querystring.stringify({
+                        perPage: 1,
+                        currentPage: 1
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -62,16 +64,17 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'Content-Range', 'organizations 0-1/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?pagination=${JSON.stringify(
-                        [1, 3]
-                    )}`
+                    `http://api:3001/api/organizations?${querystring.stringify({
+                        perPage: 1,
+                        currentPage: 3
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -79,7 +82,7 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'Content-Range', 'organizations 2-3/3')
+                .expect('header', 'x-total-count', '3')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].name).toStrictEqual('Qwarry');
@@ -131,7 +134,7 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'Content-Range', 'organizations 0-1/1')
+                .expect('header', 'x-total-count', '1')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
@@ -152,7 +155,7 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'Content-Range', 'organizations 0-1/1')
+                .expect('header', 'x-total-count', '1')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
@@ -169,7 +172,7 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'Content-Range', 'organizations 0-0/0')
+                .expect('header', 'x-total-count', '0')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(0);
                 });
@@ -189,7 +192,7 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'Content-Range', 'organizations 0-2/2')
+                .expect('header', 'x-total-count', '2')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(2);
                 });
@@ -205,7 +208,7 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'Content-Range', 'organizations 0-0/0')
+                .expect('header', 'x-total-count', '0')
                 .then(resp => {
                     expect(resp.json.length).toStrictEqual(0);
                 });
@@ -436,11 +439,7 @@ describe('Organizations API Endpoints', () => {
                     const { json: organizationList } = await frisby
                         .get('http://api:3001/api/organizations')
                         .expect('status', 200)
-                        .expect(
-                            'header',
-                            'content-range',
-                            'organizations 0-4/4'
-                        );
+                        .expect('header', 'x-total-count', '4');
                     expect(
                         organizationList.find(
                             org => org.id === newOrganization.id
@@ -454,11 +453,7 @@ describe('Organizations API Endpoints', () => {
                     const { json: updatedOrganizationList } = await frisby
                         .get('http://api:3001/api/organizations')
                         .expect('status', 200)
-                        .expect(
-                            'header',
-                            'content-range',
-                            'organizations 0-3/3'
-                        );
+                        .expect('header', 'x-total-count', '3');
                     expect(
                         updatedOrganizationList.find(
                             org => org.id === newOrganization.id
