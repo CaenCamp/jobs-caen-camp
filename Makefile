@@ -156,3 +156,22 @@ build-front: ## Build the front
 
 storybook: ## Start the storybook
 	yarn workspace cc-jobboard-front storybook
+
+# =====================================================================
+# Others ==============================================================
+# =====================================================================
+
+lint: ## Lint apps and tests-e2e files
+	@${DC_DEV} run --rm --no-deps api bash -ci '\
+		cd ../../ && \
+		yarn run lint
+
+format: ## Format apps and tests-e2e files
+	@${DC_DEV} run --rm --no-deps api bash -ci '\
+		cd ../../ && \
+		yarn run format
+
+format-ci: ## Check format apps and tests-e2e files
+	@${DC_DEV} run --rm --no-deps api bash -ci '\
+		cd ../../ && \
+		yarn run format:ci

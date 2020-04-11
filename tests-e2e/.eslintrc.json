@@ -1,13 +1,11 @@
 {
     "env": {
-        "es6": true,
-        "node": true
+        "cypress/globals": true
     },
-    "parserOptions": {
-        "sourceType": "module",
-        "ecmaVersion": 2019
-    },
-    "rules": {
-        "jest/expect-expect": 0
-    }
+    "plugins": [
+        "cypress"
+    ],
+    "extends": [
+        "plugin:cypress/recommended"
+    ]
 }
