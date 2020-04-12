@@ -28,7 +28,7 @@ router.get('/', async (ctx) => {
     });
 
     const linkHeaderValue = formatPaginationToLinkHeader({
-        resourceURI: '/api/job-postings',
+        resourceURI: '/api/organizations',
         pagination,
     });
 

@@ -18,7 +18,7 @@ const incompleteDataForCreation = {
             email: 'job@org.org',
             telephone: '0606060606',
             name: 'John Do, CTO',
-            contactType: 'Offres d\'emploi',
+            contactType: "Offres d'emploi",
         },
     ],
 };
@@ -30,7 +30,7 @@ const completeDataForCreation = {
 
 describe('Organizations API Endpoints', () => {
     describe('GET: /api/organizations', () => {
-        it('devrait renvoyer une liste paginée ordonnée par nom d\'entreprise sans paramètres de requête', async () => {
+        it("devrait renvoyer une liste paginée ordonnée par nom d'entreprise sans paramètres de requête", async () => {
             expect.hasAssertions();
             await frisby
                 .get('http://api:3001/api/organizations')
@@ -41,7 +41,18 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '3')
-                .then(resp => {
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                     expect(resp.json[1].name).toStrictEqual('Limengo');
@@ -55,7 +66,7 @@ describe('Organizations API Endpoints', () => {
                 .get(
                     `http://api:3001/api/organizations?${querystring.stringify({
                         perPage: 1,
-                        currentPage: 1
+                        currentPage: 1,
                     })}`
                 )
                 .expect('status', 200)
@@ -65,7 +76,18 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '3')
-                .then(resp => {
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/organizations?currentPage=1&perPage=1>; rel="first"',
+                        // '</api/organizations?currentPage=1&perPage=1>; rel="prev"',
+                        // '</api/organizations?currentPage=1&perPage=1>; rel="self"',
+                        // '</api/organizations?currentPage=2&perPage=1>; rel="next"',
+                        // '</api/organizations?currentPage=3&perPage=1>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
@@ -73,7 +95,7 @@ describe('Organizations API Endpoints', () => {
                 .get(
                     `http://api:3001/api/organizations?${querystring.stringify({
                         perPage: 1,
-                        currentPage: 3
+                        currentPage: 3,
                     })}`
                 )
                 .expect('status', 200)
@@ -83,7 +105,18 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '3')
-                .then(resp => {
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/organizations?currentPage=1&perPage=1>; rel="first"',
+                        // '</api/organizations?currentPage=2&perPage=1>; rel="prev"',
+                        // '</api/organizations?currentPage=3&perPage=1>; rel="self"',
+                        // '</api/organizations?currentPage=3&perPage=1>; rel="next"',
+                        // '</api/organizations?currentPage=3&perPage=1>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].name).toStrictEqual('Qwarry');
                 });
@@ -99,7 +132,7 @@ describe('Organizations API Endpoints', () => {
                     ])}`
                 )
                 .expect('status', 200)
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                     expect(resp.json[1].name).toStrictEqual('Limengo');
@@ -112,7 +145,7 @@ describe('Organizations API Endpoints', () => {
                         'DESC',
                     ])}`
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].name).toStrictEqual('Qwarry');
                     expect(resp.json[1].name).toStrictEqual('Limengo');
@@ -135,7 +168,18 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '1')
-                .then(resp => {
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
@@ -156,7 +200,18 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '1')
-                .then(resp => {
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
@@ -173,7 +228,7 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '0')
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(0);
                 });
         });
@@ -193,7 +248,18 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '2')
-                .then(resp => {
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(2);
                 });
             await frisby
@@ -209,7 +275,7 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '0')
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(0);
                 });
         });
@@ -230,9 +296,9 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
-                        'RequestValidationError: Schema validation error ( should have required property \'name\')'
+                        "RequestValidationError: Schema validation error ( should have required property 'name')"
                     );
                 });
         });
@@ -254,14 +320,14 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/email: format should match format "email")'
                     );
                 });
         });
 
-        it('devrait retourner l\'entreprise crée avec un nouvel id en cas de succès', async () => {
+        it("devrait retourner l'entreprise crée avec un nouvel id en cas de succès", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -275,7 +341,7 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.id).not.toBeUndefined();
                     expect(resp.json.address).toEqual({
                         addressCountry: 'FR',
@@ -315,7 +381,7 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.contactPoints.length).toEqual(2);
                     return frisby
                         .delete(
@@ -327,7 +393,7 @@ describe('Organizations API Endpoints', () => {
     });
 
     describe('GET: /api/organizations/:organizationId', () => {
-        it('devrait retourner une erreur 400 en cas d\'id mal formaté', async () => {
+        it("devrait retourner une erreur 400 en cas d'id mal formaté", async () => {
             expect.hasAssertions();
             await frisby
                 .get('http://api:3001/api/organizations/id-mal-formaté')
@@ -337,14 +403,14 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
                     );
                 });
         });
 
-        it('devrait retourner une erreur 404 en cas d\'id n\'existant pas en base de données', async () => {
+        it("devrait retourner une erreur 404 en cas d'id n'existant pas en base de données", async () => {
             expect.hasAssertions();
             await frisby
                 .get(
@@ -356,7 +422,7 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'The organization of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist.'
                     );
@@ -368,8 +434,10 @@ describe('Organizations API Endpoints', () => {
             await frisby
                 .get('http://api:3001/api/organizations')
                 .expect('status', 200)
-                .then(async resp => {
-                    const qwarry = resp.json.find(org => org.name === 'Qwarry');
+                .then(async (resp) => {
+                    const qwarry = resp.json.find(
+                        (org) => org.name === 'Qwarry'
+                    );
                     const qwarryFromGet = await frisby
                         .get(`http://api:3001/api/organizations/${qwarry.id}`)
                         .expect('status', 200)
@@ -385,7 +453,7 @@ describe('Organizations API Endpoints', () => {
     });
 
     describe('DELETE: /api/organizations/:organizationId', () => {
-        it('devrait retourner une erreur 400 en cas d\'id mal formaté', async () => {
+        it("devrait retourner une erreur 400 en cas d'id mal formaté", async () => {
             expect.hasAssertions();
             await frisby
                 .delete('http://api:3001/api/organizations/id-mal-formaté')
@@ -395,14 +463,14 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
                     );
                 });
         });
 
-        it('devrait retourner une erreur 404 en cas d\'id n\'existant pas en base de données', async () => {
+        it("devrait retourner une erreur 404 en cas d'id n'existant pas en base de données", async () => {
             expect.hasAssertions();
             await frisby
                 .delete(
@@ -414,14 +482,14 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'The organization of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist.'
                     );
                 });
         });
 
-        it('devrait retourner l\'identifiant de l\'entreprise supprimée en cas de succes', async () => {
+        it("devrait retourner l'identifiant de l'entreprise supprimée en cas de succes", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -439,10 +507,21 @@ describe('Organizations API Endpoints', () => {
                     const { json: organizationList } = await frisby
                         .get('http://api:3001/api/organizations')
                         .expect('status', 200)
-                        .expect('header', 'x-total-count', '4');
+                        .expect('header', 'x-total-count', '4')
+                        .expect(
+                            'header',
+                            'link',
+                            [
+                                '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                                // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                                // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                                // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                                // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                            ].join(',')
+                        );
                     expect(
                         organizationList.find(
-                            org => org.id === newOrganization.id
+                            (org) => org.id === newOrganization.id
                         )
                     ).toBeTruthy();
                     await frisby
@@ -453,10 +532,21 @@ describe('Organizations API Endpoints', () => {
                     const { json: updatedOrganizationList } = await frisby
                         .get('http://api:3001/api/organizations')
                         .expect('status', 200)
-                        .expect('header', 'x-total-count', '3');
+                        .expect('header', 'x-total-count', '3')
+                        .expect(
+                            'header',
+                            'link',
+                            [
+                                '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                                // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                                // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                                // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                                // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                            ].join(',')
+                        );
                     expect(
                         updatedOrganizationList.find(
-                            org => org.id === newOrganization.id
+                            (org) => org.id === newOrganization.id
                         )
                     ).toBeFalsy();
                 });
@@ -464,11 +554,11 @@ describe('Organizations API Endpoints', () => {
     });
 
     describe('PUT: /api/organizations/:organizationId', () => {
-        it('devrait retourner une erreur 404 en cas d\'id n\'existant pas en base de données', async () => {
+        it("devrait retourner une erreur 404 en cas d'id n'existant pas en base de données", async () => {
             const completeDataForEdition = {
                 ...completeDataForCreation,
                 contactPoints: completeDataForCreation.contactPoints.map(
-                    contact => ({
+                    (contact) => ({
                         identifier: '999904e7-37a3-4eaf-92bb-4f51f70dc595',
                         ...contact,
                     })
@@ -487,14 +577,14 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'The organization of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist, so it could not be updated'
                     );
                 });
         });
 
-        it('devrait retourner une erreur 400 en cas d\'id mal formaté', async () => {
+        it("devrait retourner une erreur 400 en cas d'id mal formaté", async () => {
             expect.hasAssertions();
             await frisby
                 .put(
@@ -508,14 +598,14 @@ describe('Organizations API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
                     );
                 });
         });
 
-        it('devrait retourner une erreur 400 si il manque une donnée sur l\'entreprise', async () => {
+        it("devrait retourner une erreur 400 si il manque une donnée sur l'entreprise", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -543,9 +633,9 @@ describe('Organizations API Endpoints', () => {
                             'Content-Type',
                             'application/json; charset=utf-8'
                         )
-                        .then(resp => {
+                        .then((resp) => {
                             expect(resp.json.message).toEqual(
-                                'RequestValidationError: Schema validation error ( should have required property \'name\')'
+                                "RequestValidationError: Schema validation error ( should have required property 'name')"
                             );
                         });
                     return frisby
@@ -556,7 +646,7 @@ describe('Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait retourner une erreur 400 si une donnée sur l\'entreprise est mal formatée', async () => {
+        it("devrait retourner une erreur 400 si une donnée sur l'entreprise est mal formatée", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -587,7 +677,7 @@ describe('Organizations API Endpoints', () => {
                             'Content-Type',
                             'application/json; charset=utf-8'
                         )
-                        .then(resp => {
+                        .then((resp) => {
                             expect(resp.json.message).toEqual(
                                 'RequestValidationError: Schema validation error (/email: format should match format "email")'
                             );
@@ -618,7 +708,7 @@ describe('Organizations API Endpoints', () => {
                     const incompleteOrganization = {
                         ...organization,
                         contactPoints: organization.contactPoints.map(
-                            contact => ({ ...omit(contact, ['email']) })
+                            (contact) => ({ ...omit(contact, ['email']) })
                         ),
                     };
                     await frisby
@@ -633,9 +723,9 @@ describe('Organizations API Endpoints', () => {
                             'Content-Type',
                             'application/json; charset=utf-8'
                         )
-                        .then(resp => {
+                        .then((resp) => {
                             expect(resp.json.message).toEqual(
-                                'RequestValidationError: Schema validation error (/contactPoints/0 should have required property \'email\')'
+                                "RequestValidationError: Schema validation error (/contactPoints/0 should have required property 'email')"
                             );
                         });
                     return frisby
@@ -664,7 +754,7 @@ describe('Organizations API Endpoints', () => {
                     const notWellFormatedOrganization = {
                         ...organization,
                         contactPoints: organization.contactPoints.map(
-                            contact => ({
+                            (contact) => ({
                                 ...contact,
                                 email: 'not-an-email',
                             })
@@ -682,7 +772,7 @@ describe('Organizations API Endpoints', () => {
                             'Content-Type',
                             'application/json; charset=utf-8'
                         )
-                        .then(resp => {
+                        .then((resp) => {
                             expect(resp.json.message).toEqual(
                                 'RequestValidationError: Schema validation error (/contactPoints/0/email: format should match format "email")'
                             );
@@ -714,7 +804,7 @@ describe('Organizations API Endpoints', () => {
                         ...omit(organization, ['id']),
                         name: 'Ma petite entreprise',
                         contactPoints: organization.contactPoints.map(
-                            contact => ({
+                            (contact) => ({
                                 ...contact,
                                 name: 'Alain B.',
                             })
@@ -732,7 +822,7 @@ describe('Organizations API Endpoints', () => {
                             'Content-Type',
                             'application/json; charset=utf-8'
                         )
-                        .then(resp => {
+                        .then((resp) => {
                             expect(resp.json.name).toEqual(
                                 'Ma petite entreprise'
                             );
@@ -741,7 +831,7 @@ describe('Organizations API Endpoints', () => {
                                     `http://api:3001/api/organizations/${organization.id}`
                                 )
                                 .expect('status', 200)
-                                .then(resp => {
+                                .then((resp) => {
                                     expect(resp.json.name).toEqual(
                                         'Ma petite entreprise'
                                     );
@@ -758,7 +848,7 @@ describe('Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait permettre d\'ajouter et de supprimer des contacts', async () => {
+        it("devrait permettre d'ajouter et de supprimer des contacts", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -804,7 +894,7 @@ describe('Organizations API Endpoints', () => {
                                     `http://api:3001/api/organizations/${organization.id}`
                                 )
                                 .expect('status', 200)
-                                .then(resp => {
+                                .then((resp) => {
                                     expect(
                                         resp.json.contactPoints.length
                                     ).toEqual(2);
@@ -819,9 +909,9 @@ describe('Organizations API Endpoints', () => {
                                 ...updatedData,
                                 contactPoints: updatedContactPoints
                                     .filter(
-                                        contact => contact.name === 'John C.'
+                                        (contact) => contact.name === 'John C.'
                                     )
-                                    .map(contact => ({
+                                    .map((contact) => ({
                                         ...contact,
                                         email: 'john-updated@impulse.com',
                                     })),
@@ -840,7 +930,7 @@ describe('Organizations API Endpoints', () => {
                                     `http://api:3001/api/organizations/${organization.id}`
                                 )
                                 .expect('status', 200)
-                                .then(resp => {
+                                .then((resp) => {
                                     expect(
                                         resp.json.contactPoints.length
                                     ).toEqual(1);

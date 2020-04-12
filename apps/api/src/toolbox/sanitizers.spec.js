@@ -180,7 +180,13 @@ describe('Sanitizers', () => {
                     },
                 })
             ).toEqual(
-                `</api/resources?currentPage=1&perPage=10>; rel="first",</api/resources?currentPage=2&perPage=10>; rel="prev",</api/resources?currentPage=3&perPage=10>; rel="self",</api/resources?currentPage=4&perPage=10>; rel="next",</api/resources?currentPage=5&perPage=10>; rel="last"`
+                [
+                    '</api/resources?currentPage=1&perPage=10>; rel="first"',
+                    '</api/resources?currentPage=2&perPage=10>; rel="prev"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="self"',
+                    '</api/resources?currentPage=4&perPage=10>; rel="next"',
+                    '</api/resources?currentPage=5&perPage=10>; rel="last"',
+                ].join(',')
             );
         });
 
@@ -195,7 +201,13 @@ describe('Sanitizers', () => {
                     },
                 })
             ).toEqual(
-                `</api/resources?currentPage=1&perPage=10>; rel="first",</api/resources?currentPage=1&perPage=10>; rel="prev",</api/resources?currentPage=1&perPage=10>; rel="self",</api/resources?currentPage=2&perPage=10>; rel="next",</api/resources?currentPage=3&perPage=10>; rel="last"`
+                [
+                    '</api/resources?currentPage=1&perPage=10>; rel="first"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="prev"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="self"',
+                    '</api/resources?currentPage=2&perPage=10>; rel="next"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="last"',
+                ].join(',')
             );
         });
 
@@ -210,7 +222,13 @@ describe('Sanitizers', () => {
                     },
                 })
             ).toEqual(
-                `</api/resources?currentPage=1&perPage=10>; rel="first",</api/resources?currentPage=2&perPage=10>; rel="prev",</api/resources?currentPage=3&perPage=10>; rel="self",</api/resources?currentPage=3&perPage=10>; rel="next",</api/resources?currentPage=3&perPage=10>; rel="last"`
+                [
+                    '</api/resources?currentPage=1&perPage=10>; rel="first"',
+                    '</api/resources?currentPage=2&perPage=10>; rel="prev"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="self"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="next"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="last"',
+                ].join(',')
             );
         });
 
@@ -225,7 +243,13 @@ describe('Sanitizers', () => {
                     },
                 })
             ).toEqual(
-                `</api/resources?currentPage=1&perPage=10>; rel="first",</api/resources?currentPage=1&perPage=10>; rel="prev",</api/resources?currentPage=1&perPage=10>; rel="self",</api/resources?currentPage=1&perPage=10>; rel="next",</api/resources?currentPage=1&perPage=10>; rel="last"`
+                [
+                    '</api/resources?currentPage=1&perPage=10>; rel="first"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="prev"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="self"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="next"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="last"',
+                ].join(',')
             );
         });
 
