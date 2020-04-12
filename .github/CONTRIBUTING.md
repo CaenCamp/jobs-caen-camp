@@ -290,6 +290,10 @@ Si vous vous sentez un peu perdu.e, la lecture de [Using the Fork-and-Branch Git
 Le code suit le style de code basé sur [ESLint](https://eslint.org/docs/rules/) et [Prettier](https://prettier.io/).
 Nous vous conseillons d’utiliser [l’integration du linter avec votre ide](https://eslint.org/docs/user-guide/integrations), d’autant plus qu’un [pre-commit Hook git](https://github.com/okonet/lint-staged) validera le formatage de votre code avant de pouvoir ajouter vos modifications à l’index git.
 
+Vous pouvez exécuter vous-même les vérifications du style de code avec les commandes suivantes :
+- `make lint` pour afficher les erreurs
+- `make lint` pour corriger les erreurs
+
 #### La convention de message de commit
 
 Nous utilisons la convention de commit dîte conventionnelle provenant de [conventional commits](https://conventionalcommits.org) initiée par Angular.
