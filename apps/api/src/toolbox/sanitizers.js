@@ -57,7 +57,7 @@ const sortSanitizer = (sort, sortableFields) => {
  * Function to clean the pagination sent in query parameters
  *
  * @param {object} pagination - pagination object from query parameters
- * @returns {object} Ready-to-use filters for the sql query
+ * @returns {Array} Ready-to-use filters for the sql query
  */
 const paginationSanitizer = ({ perPage, currentPage }) => {
     return [parseInt(perPage) || 10, parseInt(currentPage) || 1];
@@ -80,6 +80,13 @@ const parseJsonQueryParameter = (parameter) => {
     }
 };
 
+/**
+ * Function to return a single pagination information
+ * e.g. </api/job-postings?currentPage=1&perPage=10>; rel="self"
+ *
+ * @param {object}
+ * @returns {String}
+ */
 const linkHeaderItem = ({ resourceURI, currentPage, perPage, rel }) => {
     const params = {
         currentPage,
@@ -88,7 +95,14 @@ const linkHeaderItem = ({ resourceURI, currentPage, perPage, rel }) => {
     return `<${resourceURI}?${querystring.stringify(params)}>; rel="${rel}"`;
 };
 
-const formatPaginationToLinkHeader = ({ resourceURI, pagination }) => {
+/**
+ * Function to return a fill pagination information with
+ * first, prev, self, next and last relations.
+ *
+ * @param {object}
+ * @returns {String}
+ */
+const formatPaginationToLinkHeader = ({ resourceURI, pagination = {} }) => {
     const { currentPage, perPage, lastPage } = pagination;
 
     if (!resourceURI || !currentPage || !perPage || !lastPage) {
@@ -96,7 +110,9 @@ const formatPaginationToLinkHeader = ({ resourceURI, pagination }) => {
     }
 
     const prevPage =
-        currentPage - 1 <= lastPage ? currentPage - 1 : currentPage;
+        currentPage - 1 <= lastPage && currentPage - 1 > 0
+            ? currentPage - 1
+            : currentPage;
     const nextPage =
         currentPage + 1 <= lastPage ? currentPage + 1 : currentPage;
 

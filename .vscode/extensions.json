@@ -5,7 +5,8 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "jamesbirtles.svelte-vscode",
-        "orta.vscode-jest"
+        "orta.vscode-jest",
+        "42crunch.vscode-openapi"
     ],
     "unwantedRecommendations": ["hookyqr.beautify"]
 }

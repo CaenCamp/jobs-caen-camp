@@ -1,6 +1,6 @@
 const {
     filtersSanitizer,
-    formatPaginationContentRange,
+    formatPaginationToLinkHeader,
     paginationSanitizer,
     sortSanitizer,
 } = require('./sanitizers');
@@ -165,6 +165,102 @@ describe('Sanitizers', () => {
                     isPage: 'bar',
                 })
             ).toEqual([22, 3]);
+        });
+    });
+
+    describe('formatPaginationToLinkHeader', () => {
+        it('should contain all pagination elements', () => {
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 3,
+                        perPage: 10,
+                        lastPage: 5,
+                    },
+                })
+            ).toEqual(
+                `</api/resources?currentPage=1&perPage=10>; rel="first",</api/resources?currentPage=2&perPage=10>; rel="prev",</api/resources?currentPage=3&perPage=10>; rel="self",</api/resources?currentPage=4&perPage=10>; rel="next",</api/resources?currentPage=5&perPage=10>; rel="last"`
+            );
+        });
+
+        it('should have same first, prev and self elements', () => {
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 1,
+                        perPage: 10,
+                        lastPage: 3,
+                    },
+                })
+            ).toEqual(
+                `</api/resources?currentPage=1&perPage=10>; rel="first",</api/resources?currentPage=1&perPage=10>; rel="prev",</api/resources?currentPage=1&perPage=10>; rel="self",</api/resources?currentPage=2&perPage=10>; rel="next",</api/resources?currentPage=3&perPage=10>; rel="last"`
+            );
+        });
+
+        it('should have same self, next and last elements', () => {
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 3,
+                        perPage: 10,
+                        lastPage: 3,
+                    },
+                })
+            ).toEqual(
+                `</api/resources?currentPage=1&perPage=10>; rel="first",</api/resources?currentPage=2&perPage=10>; rel="prev",</api/resources?currentPage=3&perPage=10>; rel="self",</api/resources?currentPage=3&perPage=10>; rel="next",</api/resources?currentPage=3&perPage=10>; rel="last"`
+            );
+        });
+
+        it('should have same first, prev, self, next and last elements', () => {
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 1,
+                        perPage: 10,
+                        lastPage: 1,
+                    },
+                })
+            ).toEqual(
+                `</api/resources?currentPage=1&perPage=10>; rel="first",</api/resources?currentPage=1&perPage=10>; rel="prev",</api/resources?currentPage=1&perPage=10>; rel="self",</api/resources?currentPage=1&perPage=10>; rel="next",</api/resources?currentPage=1&perPage=10>; rel="last"`
+            );
+        });
+
+        it('should contain return null if any element is missing', () => {
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 3,
+                        perPage: 10,
+                    },
+                })
+            ).toBeNull();
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 3,
+                        lastPage: 5,
+                    },
+                })
+            ).toBeNull();
+            expect(
+                formatPaginationToLinkHeader({
+                    pagination: {
+                        currentPage: 3,
+                        lastPage: 5,
+                    },
+                })
+            ).toBeNull();
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                })
+            ).toBeNull();
         });
     });
 });
