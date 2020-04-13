@@ -41,18 +41,16 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '3')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/organizations?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json).toHaveLength(3);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                     expect(resp.json[1].name).toStrictEqual('Limengo');
@@ -76,18 +74,16 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '3')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/organizations?currentPage=1&perPage=1>; rel="first"',
-                        // '</api/organizations?currentPage=1&perPage=1>; rel="prev"',
-                        // '</api/organizations?currentPage=1&perPage=1>; rel="self"',
-                        // '</api/organizations?currentPage=2&perPage=1>; rel="next"',
-                        // '</api/organizations?currentPage=3&perPage=1>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/organizations?currentPage=1&perPage=1>; rel="first"',
+                            '</api/organizations?currentPage=1&perPage=1>; rel="prev"',
+                            '</api/organizations?currentPage=1&perPage=1>; rel="self"',
+                            '</api/organizations?currentPage=2&perPage=1>; rel="next"',
+                            '</api/organizations?currentPage=3&perPage=1>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
@@ -105,18 +101,16 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '3')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/organizations?currentPage=1&perPage=1>; rel="first"',
-                        // '</api/organizations?currentPage=2&perPage=1>; rel="prev"',
-                        // '</api/organizations?currentPage=3&perPage=1>; rel="self"',
-                        // '</api/organizations?currentPage=3&perPage=1>; rel="next"',
-                        // '</api/organizations?currentPage=3&perPage=1>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/organizations?currentPage=1&perPage=1>; rel="first"',
+                            '</api/organizations?currentPage=2&perPage=1>; rel="prev"',
+                            '</api/organizations?currentPage=3&perPage=1>; rel="self"',
+                            '</api/organizations?currentPage=3&perPage=1>; rel="next"',
+                            '</api/organizations?currentPage=3&perPage=1>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].name).toStrictEqual('Qwarry');
                 });
@@ -168,18 +162,16 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '1')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/organizations?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
@@ -200,18 +192,16 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '1')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/organizations?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
@@ -248,18 +238,16 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '2')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/organizations?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                            '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json).toHaveLength(2);
                 });
             await frisby
@@ -508,17 +496,17 @@ describe('Organizations API Endpoints', () => {
                         .get('http://api:3001/api/organizations')
                         .expect('status', 200)
                         .expect('header', 'x-total-count', '4')
-                        .expect(
-                            'header',
-                            'link',
-                            [
-                                '</api/organizations?currentPage=1&perPage=10>; rel="first"',
-                                // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
-                                // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
-                                // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
-                                // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
-                            ].join(',')
-                        );
+                        .then((resp) => {
+                            expect(resp.headers.get('link')).toBe(
+                                [
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                                ].join(',')
+                            );
+                        });
                     expect(
                         organizationList.find(
                             (org) => org.id === newOrganization.id
@@ -533,17 +521,17 @@ describe('Organizations API Endpoints', () => {
                         .get('http://api:3001/api/organizations')
                         .expect('status', 200)
                         .expect('header', 'x-total-count', '3')
-                        .expect(
-                            'header',
-                            'link',
-                            [
-                                '</api/organizations?currentPage=1&perPage=10>; rel="first"',
-                                // '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
-                                // '</api/organizations?currentPage=1&perPage=10>; rel="self"',
-                                // '</api/organizations?currentPage=1&perPage=10>; rel="next"',
-                                // '</api/organizations?currentPage=1&perPage=10>; rel="last"',
-                            ].join(',')
-                        );
+                        .then((resp) => {
+                            expect(resp.headers.get('link')).toBe(
+                                [
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="first"',
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="prev"',
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="self"',
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="next"',
+                                    '</api/organizations?currentPage=1&perPage=10>; rel="last"',
+                                ].join(',')
+                            );
+                        });
                     expect(
                         updatedOrganizationList.find(
                             (org) => org.id === newOrganization.id
