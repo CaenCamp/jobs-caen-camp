@@ -152,18 +152,16 @@ describe('JobPostings API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '3')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json.length).toStrictEqual(3);
                     expect(
                         resp.json[0].hiringOrganization.address.postalCode
@@ -193,18 +191,16 @@ describe('JobPostings API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '3')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/job-postings?currentPage=1&perPage=2>; rel="first"',
-                        // '</api/job-postings?currentPage=1&perPage=2>; rel="prev"',
-                        // '</api/job-postings?currentPage=1&perPage=2>; rel="self"',
-                        // '</api/job-postings?currentPage=2&perPage=2>; rel="next"',
-                        // '</api/job-postings?currentPage=2&perPage=2>; rel="last"'
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/job-postings?currentPage=1&perPage=2>; rel="first"',
+                            '</api/job-postings?currentPage=1&perPage=2>; rel="prev"',
+                            '</api/job-postings?currentPage=1&perPage=2>; rel="self"',
+                            '</api/job-postings?currentPage=2&perPage=2>; rel="next"',
+                            '</api/job-postings?currentPage=2&perPage=2>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json.length).toStrictEqual(2);
                 });
             await frisby
@@ -221,18 +217,16 @@ describe('JobPostings API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '3')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/job-postings?currentPage=1&perPage=2>; rel="first"',
-                        // '</api/job-postings?currentPage=1&perPage=2>; rel="prev"',
-                        // '</api/job-postings?currentPage=2&perPage=2>; rel="self"',
-                        // '</api/job-postings?currentPage=2&perPage=2>; rel="next"',
-                        // '</api/job-postings?currentPage=2&perPage=2>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/job-postings?currentPage=1&perPage=2>; rel="first"',
+                            '</api/job-postings?currentPage=1&perPage=2>; rel="prev"',
+                            '</api/job-postings?currentPage=2&perPage=2>; rel="self"',
+                            '</api/job-postings?currentPage=2&perPage=2>; rel="next"',
+                            '</api/job-postings?currentPage=2&perPage=2>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json.length).toStrictEqual(1);
                 });
         });
@@ -252,18 +246,16 @@ describe('JobPostings API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '2')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json.length).toStrictEqual(2);
                     expect(resp.json[0].title).toStrictEqual(
                         'Ingénieur Lead Full Stack technico-fonctionnel'
@@ -289,18 +281,16 @@ describe('JobPostings API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '2')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json.length).toStrictEqual(2);
                     expect(resp.json[0].title).toStrictEqual(
                         'Ingénieur Lead Full Stack technico-fonctionnel'
@@ -326,18 +316,16 @@ describe('JobPostings API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '1')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].title).toStrictEqual(
                         'R&D Software Engineer'
@@ -360,18 +348,16 @@ describe('JobPostings API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .expect('header', 'x-total-count', '1')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].title).toStrictEqual(
                         'Ingénieur Lead Full Stack technico-fonctionnel'
@@ -655,18 +641,16 @@ describe('JobPostings API Endpoints', () => {
                 .get('http://api:3001/api/job-postings')
                 .expect('status', 200)
                 .expect('header', 'x-total-count', '4')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/job-postings?currentPage=2&perPage=10>; rel="next"',
-                        // '</api/job-postings?currentPage=2&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(
                         resp.json.find((jb) => jb.id === createdJobPosting.id)
                     ).toBeTruthy();
@@ -687,18 +671,16 @@ describe('JobPostings API Endpoints', () => {
                 .get('http://api:3001/api/job-postings')
                 .expect('status', 200)
                 .expect('header', 'x-total-count', '3')
-                .expect(
-                    'header',
-                    'link',
-                    [
-                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
-                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
-                    ].join(',')
-                )
                 .then((resp) => {
+                    expect(resp.headers.get('link')).toBe(
+                        [
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                            '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                        ].join(',')
+                    );
                     expect(
                         resp.json.find((jb) => jb.id === createdJobPosting.id)
                     ).toBeFalsy();
