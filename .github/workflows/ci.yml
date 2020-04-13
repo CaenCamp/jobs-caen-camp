@@ -1,0 +1,26 @@
+name: ci
+
+on: [push]
+
+jobs:
+  lint_format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install
+        run: make install
+      - name: Lint
+        run: make lint
+      - name: Format
+        run: make format:ci
+      - name: Open Api Check
+        run: make openapi-validate
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install
+        run: make install
+      - name: Test
+        run: make test

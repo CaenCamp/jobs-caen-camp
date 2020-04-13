@@ -1,57 +1,49 @@
 {
     "name": "cc-jobboard",
     "private": true,
-    "version": "1.0.0",
+    "version": "0.1.0",
     "license": "GPL-3.0",
+    "author": "Alexis Janvier <contact@alexisjanvier.net>",
+    "contributors": [],
+    "homepage": "https://github.com/CaenCamp/jobs-caen-camp#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CaenCamp/jobs-caen-camp.git"
+    },
+    "bugs": {
+        "url": "https://github.com/CaenCamp/jobs-caen-camp/issues"
+    },
     "workspaces": [
         "apps/*",
         "tests-e2e"
     ],
     "scripts": {
+        "lint": "eslint .",
+        "format": "prettier --write --check \"**/*.+(js|md|json)\"",
+        "format:ci": "prettier --check \"**/*.+(js|md|json)\"",
         "test": "jest",
         "test:watch": "jest --watchAll",
         "adr:new": "adr-tools new",
         "adr:list": "adr-tools list"
     },
-    "homepage": "https://github.com/CaenCamp/jobs-caen-camp#readme",
     "devDependencies": {
-        "@babel/core": "7.9.0",
-        "@babel/preset-env": "7.9.5",
         "@commitlint/cli": "8.3.5",
         "@commitlint/config-conventional": "8.3.4",
-        "@stoplight/spectral": "5.3.0",
-        "@testing-library/cypress": "6.0.0",
         "@testing-library/jest-dom": "5.4.0",
         "@testing-library/svelte": "3.0.0",
         "adr-tools": "2.0.4",
-        "babel-jest": "25.3.0",
-        "cross-env": "7.0.2",
-        "css-loader": "3.5.1",
         "eslint": "6.8.0",
         "eslint-config-prettier": "6.10.1",
-        "eslint-plugin-cypress": "2.10.3",
         "eslint-plugin-jest": "23.8.2",
         "eslint-plugin-prettier": "3.1.2",
-        "eslint-plugin-svelte3": "2.7.3",
-        "frisby": "2.1.2",
+        "eslint-plugin-react": "7.19.0",
+        "eslint-plugin-testing-library": "3.0.1",
         "husky": "4.2.3",
         "jest": "25.3.0",
-        "jest-transform-svelte": "2.1.1",
         "lint-staged": "10.1.2",
-        "mini-css-extract-plugin": "0.9.0",
-        "nodemon": "2.0.3",
-        "npm-run-all": "4.1.5",
         "prettier": "2.0.4",
         "prettier-plugin-svelte": "0.7.0",
-        "serve": "11.3.0",
-        "style-loader": "1.1.3",
-        "svelte": "3.20.1",
-        "svelte-jester": "1.0.5",
-        "svelte-loader": "2.13.6",
-        "swagger-cli": "4.0.2",
-        "webpack": "4.42.1",
-        "webpack-cli": "3.3.11",
-        "webpack-dev-server": "3.10.3"
+        "swagger-cli": "4.0.2"
     },
     "husky": {
         "hooks": {
@@ -60,12 +52,7 @@
         }
     },
     "lint-staged": {
-        "*.{js,css,json}": [
-            "prettier --write"
-        ],
-        "apps/**/*.js": [
-            "eslint --fix"
-        ],
-        "openapi.json": "spectral lint ./apps/api/openapi/openapi.yaml"
+        "*.{js,css,json}": "yarn run lint",
+        "openapi.json": "yarn workspace cc-jobboard-api openapi:check"
     }
 }
