@@ -2,44 +2,44 @@
 
 ## Sommaire
 
-- [Contribuer au site d’offres d’emploi des CaenCamp.s](#contribuer-au-site-doffres-demploi-des-caencamps)
-  - [Sommaire](#sommaire)
-  - [Code de conduite](#code-de-conduite)
-  - [Qu’est ce que je peux faire](#quest-ce-que-je-peux-faire)
-    - [Contribuer au design](#contribuer-au-design)
-    - [Contribuer au code](#contribuer-au-code)
-    - [Rapporter des bugs](#rapporter-des-bugs)
-  - [Installer le projet](#installer-le-projet)
-    - [Prérequis](#pr%c3%a9requis)
-    - [Sans Docker](#sans-docker)
-    - [Avec Docker](#avec-docker)
-    - [L’organisation du code](#lorganisation-du-code)
-  - [La base de données](#la-base-de-donn%c3%a9es)
-    - [Initialisation](#initialisation)
-    - [Les migrations](#les-migrations)
-    - [Guide de style pour les tables](#guide-de-style-pour-les-tables)
-  - [La documentation](#la-documentation)
-    - [Les ADR.s](#les-adrs)
-  - [OpenAPI](#openapi)
-  - [Storybook](#storybook)
-  - [Faire une Pull request](#faire-une-pull-request)
-    - [le git flow](#le-git-flow)
-    - [La convention de codage (coding style)](#la-convention-de-codage-coding-style)
-      - [La convention de message de commit](#la-convention-de-message-de-commit)
-    - [Les tests](#les-tests)
-      - [Les tests unitaires](#les-tests-unitaires)
-        - [Les tests unitaires avec Docker](#les-tests-unitaires-avec-docker)
-        - [Les tests unitaires sans Docker](#les-tests-unitaires-sans-docker)
-      - [Les tests e2e](#les-tests-e2e)
-    - [Les bonnes pratiques](#les-bonnes-pratiques)
-  - [Trouver de l’aide](#trouver-de-laide)
-    - [Dans une issue](#dans-une-issue)
-    - [Au cours d’une pull request](#au-cours-dune-pull-request)
-    - [Sur Slack](#sur-slack)
-    - [Le wiki](#le-wiki)
-    - [Aux Coding CaenCamp.s](#aux-coding-caencamps)
-  - [Notes additionnelles](#notes-additionnelles)
-    - [La Roadmap](#la-roadmap)
+-   [Contribuer au site d’offres d’emploi des CaenCamp.s](#contribuer-au-site-doffres-demploi-des-caencamps)
+    -   [Sommaire](#sommaire)
+    -   [Code de conduite](#code-de-conduite)
+    -   [Qu’est ce que je peux faire](#quest-ce-que-je-peux-faire)
+        -   [Contribuer au design](#contribuer-au-design)
+        -   [Contribuer au code](#contribuer-au-code)
+        -   [Rapporter des bugs](#rapporter-des-bugs)
+    -   [Installer le projet](#installer-le-projet)
+        -   [Prérequis](#pr%c3%a9requis)
+        -   [Sans Docker](#sans-docker)
+        -   [Avec Docker](#avec-docker)
+        -   [L’organisation du code](#lorganisation-du-code)
+    -   [La base de données](#la-base-de-donn%c3%a9es)
+        -   [Initialisation](#initialisation)
+        -   [Les migrations](#les-migrations)
+        -   [Guide de style pour les tables](#guide-de-style-pour-les-tables)
+    -   [La documentation](#la-documentation)
+        -   [Les ADR.s](#les-adrs)
+    -   [OpenAPI](#openapi)
+    -   [Storybook](#storybook)
+    -   [Faire une Pull request](#faire-une-pull-request)
+        -   [le git flow](#le-git-flow)
+        -   [La convention de codage (coding style)](#la-convention-de-codage-coding-style)
+            -   [La convention de message de commit](#la-convention-de-message-de-commit)
+        -   [Les tests](#les-tests)
+            -   [Les tests unitaires](#les-tests-unitaires)
+                -   [Les tests unitaires avec Docker](#les-tests-unitaires-avec-docker)
+                -   [Les tests unitaires sans Docker](#les-tests-unitaires-sans-docker)
+            -   [Les tests e2e](#les-tests-e2e)
+        -   [Les bonnes pratiques](#les-bonnes-pratiques)
+    -   [Trouver de l’aide](#trouver-de-laide)
+        -   [Dans une issue](#dans-une-issue)
+        -   [Au cours d’une pull request](#au-cours-dune-pull-request)
+        -   [Sur Slack](#sur-slack)
+        -   [Le wiki](#le-wiki)
+        -   [Aux Coding CaenCamp.s](#aux-coding-caencamps)
+    -   [Notes additionnelles](#notes-additionnelles)
+        -   [La Roadmap](#la-roadmap)
 
 ## Code de conduite
 
@@ -85,8 +85,8 @@ Ensuite vous devez ["_forker_"](https://guides.github.com/activities/forking/) l
 
 Enfin, vous devez faire un choix :
 
-- Soit vous décidez d’installer [Node.js](https://nodejs.org/en/download/) en version 12.14 (LTS) sur votre ordinateur. Node est un environnement d’exécution JavaScript .js (comme l’est un navigateur). C’est un bon choix, mais les recettes du fichier `Makefile` utilisent Docker ! Vous devrez donc lancer les différents serveurs « à la main » en utilisant les scripts des fichiers `package.json`. Le projet utilise [workspaces Yarn](https://yarnpkg.com/lang/en/docs/workspaces/). Vous devez donc également installer [Yarn](https://yarnpkg.com/fr/) et l’utiliser comme gestionnaire de dépendances sur le projet à la place de `npm`. Enfin, le projet utilise une base de données [PostgreSQL](https://www.postgresql.org/) : vous devrez donc l'installer si ce n'est pas déjà fait.
-- Soit vous préférez ne pas installer Node.js, et dans ce cas, vous devrez installer [Docker](https://docs.docker.com/engine/installation/). Docker va vous permettre d’exécuter Node.js au sein d’un container (une sorte de machine virtuelle), ainsi que de disposer d'e la base de données PostgreSQL sans avoir à l'installer. C’est aussi un bon choix. En plus de Docker, vous devrez aussi installer [Docker Compose](https://docs.docker.com/compose/) afin de lancer les diffentes applications en même temps.
+-   Soit vous décidez d’installer [Node.js](https://nodejs.org/en/download/) en version 12.14 (LTS) sur votre ordinateur. Node est un environnement d’exécution JavaScript .js (comme l’est un navigateur). C’est un bon choix, mais les recettes du fichier `Makefile` utilisent Docker ! Vous devrez donc lancer les différents serveurs « à la main » en utilisant les scripts des fichiers `package.json`. Le projet utilise [workspaces Yarn](https://yarnpkg.com/lang/en/docs/workspaces/). Vous devez donc également installer [Yarn](https://yarnpkg.com/fr/) et l’utiliser comme gestionnaire de dépendances sur le projet à la place de `npm`. Enfin, le projet utilise une base de données [PostgreSQL](https://www.postgresql.org/) : vous devrez donc l'installer si ce n'est pas déjà fait.
+-   Soit vous préférez ne pas installer Node.js, et dans ce cas, vous devrez installer [Docker](https://docs.docker.com/engine/installation/). Docker va vous permettre d’exécuter Node.js au sein d’un container (une sorte de machine virtuelle), ainsi que de disposer d'e la base de données PostgreSQL sans avoir à l'installer. C’est aussi un bon choix. En plus de Docker, vous devrez aussi installer [Docker Compose](https://docs.docker.com/compose/) afin de lancer les diffentes applications en même temps.
 
 Si vous ne savez pas que choisir, Docker présente l’avantage de bien isoler les dépendances du projet de votre OS ainsi que de rendre un peu plus facile le lancement des différentes applications en parallèle ou l’exécution des tests.
 
@@ -121,9 +121,9 @@ yarn storybook
 
 Vous pouvez ainsi acceder à :
 
-- l’API sur <http://localhost:3001>
-- l’application web sur <http://localhost:5000>
-- le storybook sur <http://localhost:6006>
+-   l’API sur <http://localhost:3001>
+-   l’application web sur <http://localhost:5000>
+-   le storybook sur <http://localhost:6006>
 
 Dans les premières phases de développement du projet, nous utiliserons un _faux_ serveur d’API afin de mettre en place rapidement et facilement le modèle du projet. Ce serveur _"mocked"_ d’api doit être lancer en plus des autres applications :
 
@@ -152,11 +152,11 @@ make start
 
 Vous pouvez ainsi accéder à :
 
-- l’application web sur <http://localhost:8000>
-- l’api sur <http://localhost:8001>
-- l’api _mockée_ sur <http://localhost:8002>
-- la documentation de l'API sur <http://localhost:8003>
-- le storybook sur <http://localhost:8010>
+-   l’application web sur <http://localhost:8000>
+-   l’api sur <http://localhost:8001>
+-   l’api _mockée_ sur <http://localhost:8002>
+-   la documentation de l'API sur <http://localhost:8003>
+-   le storybook sur <http://localhost:8010>
 
 Pour arrêter le projet, faites un :
 
@@ -170,10 +170,10 @@ make stop
 
 Voici l’organisation des principaux répertoires du projet :
 
-- **.github** : On trouve ici les fichiers d’aide sur le projet et les templates pour Github.
-- **apps/front** : On trouve ici le code de l’application web.
-- **apps/api** : On trouve ici le code de l’api.
-- **apps/admin** : On trouve ici le code de l'administration réalisée avec [React Admin](https://marmelab.com/react-admin/). Ce code est dans un répertoire spécifique car l'administration se base sur une application [CRA](https://create-react-app.dev/) qui n'est pas compatible avec les workspaces de Yarn.
+-   **.github** : On trouve ici les fichiers d’aide sur le projet et les templates pour Github.
+-   **apps/front** : On trouve ici le code de l’application web.
+-   **apps/api** : On trouve ici le code de l’api.
+-   **apps/admin** : On trouve ici le code de l'administration réalisée avec [React Admin](https://marmelab.com/react-admin/). Ce code est dans un répertoire spécifique car l'administration se base sur une application [CRA](https://create-react-app.dev/) qui n'est pas compatible avec les workspaces de Yarn.
 
 ## La base de données
 
@@ -216,8 +216,8 @@ make migrate-list
 
 ### Guide de style pour les tables
 
-1) Tout doit être nommé en `snake_case`. Knex est configuré pour faire la transformation `camelCase` <=> `snake_case` aussi bien en entrée qu'en sortie de requêtes.
-2 ) Le nom des tables doit être au singulier ! Par exemple, `job_posting` plutôt que `job_postings`.
+1. Tout doit être nommé en `snake_case`. Knex est configuré pour faire la transformation `camelCase` <=> `snake_case` aussi bien en entrée qu'en sortie de requêtes.
+   2 ) Le nom des tables doit être au singulier ! Par exemple, `job_posting` plutôt que `job_postings`.
 
 ## La documentation
 
@@ -282,9 +282,9 @@ Si vous n’aviez pas encore de compte Github, en voici une [bonne introduction]
 
 Pour le projet, nous utilisons le workflow suivant :
 
-- Le projet principal ne possède qu’une branche `master`.
-- Chaque participant réalise un [fork](https://guides.github.com/activities/forking/) du dépôt principal puis ouvre une [branche](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/) depuis son fork pour chaque nouvelle feature.
-- Une [PR](https://help.github.com/articles/about-pull-requests/) est créée depuis la branche du fork vers la branche `master` du dépôt principal.
+-   Le projet principal ne possède qu’une branche `master`.
+-   Chaque participant réalise un [fork](https://guides.github.com/activities/forking/) du dépôt principal puis ouvre une [branche](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/) depuis son fork pour chaque nouvelle feature.
+-   Une [PR](https://help.github.com/articles/about-pull-requests/) est créée depuis la branche du fork vers la branche `master` du dépôt principal.
 
 ![Git Flow](gitflow.png)
 
@@ -297,8 +297,8 @@ Nous vous conseillons d’utiliser [l’integration du linter avec votre ide](ht
 
 Vous pouvez exécuter vous-même les vérifications du style de code avec les commandes suivantes :
 
-- `make lint` pour afficher les erreurs
-- `make format` pour corriger les erreurs
+-   `make lint` pour afficher les erreurs
+-   `make format` pour corriger les erreurs
 
 #### La convention de message de commit
 
@@ -314,8 +314,8 @@ Afin de facililiter l’intégration (le merge) de vos PR, surtout si elles cont
 
 Il y a deux grands types de tests sur le projet:
 
-- des tests unitaires lancés par [Jest](https://facebook.github.io/jest/),
-- des tests [e2e](https://blog.kentcdodds.com/write-tests-not-too-many-mostly-integration-5e8c7fff591c).
+-   des tests unitaires lancés par [Jest](https://facebook.github.io/jest/),
+-   des tests [e2e](https://blog.kentcdodds.com/write-tests-not-too-many-mostly-integration-5e8c7fff591c).
 
 Les tests sont lancés sur la plateforme d’intégration continue de Github via les [Github actions](https://github.com/features/actions).
 
@@ -331,15 +331,15 @@ Les tests du front utilisent la librairie [Testing Libray](https://testing-libra
 
 Les tests unitaires peuvent être lancés au sein de Docker. Pour cela, il y a deux commandes à connaitre :
 
-- `make test-unit` pour lancer la suite de tests,
-- `make test-unit-watch` pour lancer les tests [en mode watch](https://jestjs.io/docs/en/cli#--watchall).
+-   `make test-unit` pour lancer la suite de tests,
+-   `make test-unit-watch` pour lancer les tests [en mode watch](https://jestjs.io/docs/en/cli#--watchall).
 
 ##### Les tests unitaires sans Docker
 
 La suite de tests peut également être lancée sans Docker :
 
-- soit depuis la racine du projet pour lancer tous les tests (`yarn test` et `yarn test:watch`),
-- soit depuis le répertoire d’un projet pour ne lancer que les tests du projet (par exemple `cd apps/api && yarn test:watch`).
+-   soit depuis la racine du projet pour lancer tous les tests (`yarn test` et `yarn test:watch`),
+-   soit depuis le répertoire d’un projet pour ne lancer que les tests du projet (par exemple `cd apps/api && yarn test:watch`).
 
 #### Les tests e2e
 
@@ -347,8 +347,8 @@ Contrairement aux tests unitaires, les tests e2e sont regroupés dans le répert
 
 Il existe des tests e2e pour l’api (dans le répertoire `/tests-e2e/api`) utilisant les framework de test [Frisby.js](https://www.frisbyjs.com/). Ces tests peuvent être lancés, **une fois l’environnement de test démarré**, avec les commandes :
 
-- `make test-env-run`,
-- `make test-env-watch` pour avoir le mode _watch_.
+-   `make test-env-run`,
+-   `make test-env-watch` pour avoir le mode _watch_.
 
 Les tests e2e du front sont eux basé sur [Cypress.io](https://www.cypress.io/). Pour démarrer Cypress, il faut donc avoir au préalable lancé l’environnement de test, puis utilisez la commande `make cypress`.
 
@@ -364,14 +364,14 @@ La bonne pratique, c’est de **faire des PR**, et puis c’est tout.
 
 Mais voici quelques conseils qui peuvent les rendre encore meilleures :
 
-- Faites des commits [courts et bien commentés](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
-- Faites des [PR courtes](https://dev.to/bosepchuk/optimal-pull-request-size-600), toute une tache (une issue) n’a pas forcement besoin d’être adressée dans une seule PR.
-- Faites référence à l’issue que la PR adresse.
-- N’hésitez pas à joindre des captures d’écran, fixes ou animées.
-- Ajouter une description et une _todo list_ en ouvrant la PR.
-- N’attendez pas que la PR soit terminée pour l’ouvrir : la communauté viendra plus facilement en aide en découvrant tôt la PR.
-- Utilisez les labels `WIP` (Work In Progress) et `RFR` (Ready For Review) pour indiquer l’avancement de la PR.
-- dernier point : tous les _textes_ (titre, description, commentaires, etc.) sont fait en **français**. En effet, même si la norme en opensource c’est l’anglais, nous avons collectivement décidé d’utiliser le français pour le projet.
+-   Faites des commits [courts et bien commentés](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
+-   Faites des [PR courtes](https://dev.to/bosepchuk/optimal-pull-request-size-600), toute une tache (une issue) n’a pas forcement besoin d’être adressée dans une seule PR.
+-   Faites référence à l’issue que la PR adresse.
+-   N’hésitez pas à joindre des captures d’écran, fixes ou animées.
+-   Ajouter une description et une _todo list_ en ouvrant la PR.
+-   N’attendez pas que la PR soit terminée pour l’ouvrir : la communauté viendra plus facilement en aide en découvrant tôt la PR.
+-   Utilisez les labels `WIP` (Work In Progress) et `RFR` (Ready For Review) pour indiquer l’avancement de la PR.
+-   dernier point : tous les _textes_ (titre, description, commentaires, etc.) sont fait en **français**. En effet, même si la norme en opensource c’est l’anglais, nous avons collectivement décidé d’utiliser le français pour le projet.
 
 ## Trouver de l’aide
 

@@ -2,9 +2,9 @@
 
 Date: 2020-04-09
 
-- Décideurs: [Alexis Janvier](https://github.com/alexisjanvier)
-- Ticket.s concerné.s: [Sécurisation de l’administration #47](https://github.com/CaenCamp/jobs-caen-camp/issues/47)
-- Pull Request: [Sécurisation de l’administration #61](https://github.com/CaenCamp/jobs-caen-camp/pull/61)
+-   Décideurs: [Alexis Janvier](https://github.com/alexisjanvier)
+-   Ticket.s concerné.s: [Sécurisation de l’administration #47](https://github.com/CaenCamp/jobs-caen-camp/issues/47)
+-   Pull Request: [Sécurisation de l’administration #61](https://github.com/CaenCamp/jobs-caen-camp/pull/61)
 
 ## Statut
 
@@ -22,8 +22,8 @@ Dans les règles de l'art
 
 ## Options envisagées
 
-1) un unique compte en dur
-2) des comptes en base de données
+1. un unique compte en dur
+2. des comptes en base de données
 
 ## Résultat de la décision
 
@@ -31,11 +31,11 @@ Option choisie : "option 2: gestion de comptes en base de données", parce que c
 
 ### Conséquences positives
 
-- Une administration protégée !
+-   Une administration protégée !
 
 ### Conséquences négatives
 
-- une gestion de comptes possiblement différentes de la gestion des utilisateurs. Mais ce n'est en fait pas forcement négatif.
+-   une gestion de comptes possiblement différentes de la gestion des utilisateurs. Mais ce n'est en fait pas forcement négatif.
 
 ## Détails sur la solution choisie
 
@@ -45,25 +45,25 @@ Tout d'abord, la table se nomme `user_account` car `user` est un nom réservé p
 
 Ensuite, cette table est minimal :
 
-- pas d'email, et bien parce que l'on en a pas besoin (pas de mécanisme permettant de faire un reset de mot de passe par email par exemple)
-- pas de rôle. Il aurait fallut choisir le type de stockage des rôles... L'utilisation d'un `enum` semble approprié, mais l'utilisation des `type` `enum` natif de postgreSQL semble posé problème lors des migration avec `knex` (problème rencontré sur le projet `usinePartagee`. Du coup, comme l'utilisation des rôle ne se pose pas à ce moment du projet, il est urgent d'attendre d'en avoir besoin pour les implémenter.
+-   pas d'email, et bien parce que l'on en a pas besoin (pas de mécanisme permettant de faire un reset de mot de passe par email par exemple)
+-   pas de rôle. Il aurait fallut choisir le type de stockage des rôles... L'utilisation d'un `enum` semble approprié, mais l'utilisation des `type` `enum` natif de postgreSQL semble posé problème lors des migration avec `knex` (problème rencontré sur le projet `usinePartagee`. Du coup, comme l'utilisation des rôle ne se pose pas à ce moment du projet, il est urgent d'attendre d'en avoir besoin pour les implémenter.
 
 Du coup, ne reste dans cette table :
 
-- id (uuid)
-- username (string)
-- password (hash)
-- created_at (datetime)
+-   id (uuid)
+-   username (string)
+-   password (hash)
+-   created_at (datetime)
 
 Il y a un index de type `UNIQUE` sur le `username`.
 
 ### L'objet user
 
-1) Le `username` devra avoir entre 3 et 20 [caractères alphanumériques](https://fr.wikipedia.org/wiki/Caract%C3%A8re_alphanum%C3%A9rique), sans espace, avec éventuellement un `-`.
-2) Le mot de passe devra être complexe suivant la norme [OWASP Guidelines for enforcing secure passwords](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/migrated_content). Pour cela, nous utiliserons le module [OWASP Password Strength Test](https://www.npmjs.com/package/owasp-password-strength-test).
-3) Le mot de passe sera stocké en base sous forme d'un [hash BCrypt](https://fr.wikipedia.org/wiki/Bcrypt). Pour effectuer le hashage et pour tester les mots de passe lors de la connexion, nous utiliserons le module [bcrypt](https://www.npmjs.com/package/bcrypt).
+1. Le `username` devra avoir entre 3 et 20 [caractères alphanumériques](https://fr.wikipedia.org/wiki/Caract%C3%A8re_alphanum%C3%A9rique), sans espace, avec éventuellement un `-`.
+2. Le mot de passe devra être complexe suivant la norme [OWASP Guidelines for enforcing secure passwords](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/migrated_content). Pour cela, nous utiliserons le module [OWASP Password Strength Test](https://www.npmjs.com/package/owasp-password-strength-test).
+3. Le mot de passe sera stocké en base sous forme d'un [hash BCrypt](https://fr.wikipedia.org/wiki/Bcrypt). Pour effectuer le hashage et pour tester les mots de passe lors de la connexion, nous utiliserons le module [bcrypt](https://www.npmjs.com/package/bcrypt).
 
 ## Liens
 
-- articles de référence
-- post de blog récapitulatif
+-   articles de référence
+-   post de blog récapitulatif

@@ -2,9 +2,9 @@
 
 Date: 2020-03-13
 
-- Décideurs: [Alexis Janvier](https://github.com/alexisjanvier)
-- Ticket.s concerné.s: -
-- Pull Request: [#34](https://github.com/CaenCamp/jobs-caen-camp/pull/34)
+-   Décideurs: [Alexis Janvier](https://github.com/alexisjanvier)
+-   Ticket.s concerné.s: -
+-   Pull Request: [#34](https://github.com/CaenCamp/jobs-caen-camp/pull/34)
 
 ## Statut
 
@@ -16,9 +16,9 @@ Au moment de l'implémentation des routes de CRUD sur les entreprises et les off
 
 ## Options envisagées
 
-- Créer les validateurs à la main sur toutes les routes
-- Mettre en place un générateur de validateurs à partir du contrat OpenAPI, et les implémenter sur les routes d'API
-- Utiliser un middleware capable de lire le contrat d'API et d'automatiquement en valider les routes en entrée et/ou sortie.
+-   Créer les validateurs à la main sur toutes les routes
+-   Mettre en place un générateur de validateurs à partir du contrat OpenAPI, et les implémenter sur les routes d'API
+-   Utiliser un middleware capable de lire le contrat d'API et d'automatiquement en valider les routes en entrée et/ou sortie.
 
 ## Résultat de la décision
 
@@ -26,9 +26,9 @@ Option choisie : "Utiliser un middleware", parce que le contrat OpenAPI étant d
 
 ### Conséquences positives
 
-- On s'assure que la documentation de l'API - et donc plus globalement le contrat qu'elle présente aux utilisateurs - corresponde toujours à l'implémentation réelle des routes.
-- Il faudra bien maintenir les tests fonctionnels sur les endpoints pour éviter les mauvaise surprises de mise en production !
+-   On s'assure que la documentation de l'API - et donc plus globalement le contrat qu'elle présente aux utilisateurs - corresponde toujours à l'implémentation réelle des routes.
+-   Il faudra bien maintenir les tests fonctionnels sur les endpoints pour éviter les mauvaise surprises de mise en production !
 
 ### Conséquences négatives
 
-- On impose une grosse dépendance entre le contrat d'API et le code de l'API. Il faudra toujours maintenir le contrat OpenAPI en parallèle de son implémentation lors de l'évolution du projet. En vrai, c'est une bonne chose, voir le but recherché. Mais c'est plus de travail !
+-   On impose une grosse dépendance entre le contrat d'API et le code de l'API. Il faudra toujours maintenir le contrat OpenAPI en parallèle de son implémentation lors de l'évolution du projet. En vrai, c'est une bonne chose, voir le but recherché. Mais c'est plus de travail !
