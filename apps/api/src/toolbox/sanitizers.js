@@ -82,10 +82,10 @@ const parseJsonQueryParameter = (parameter) => {
 
 /**
  * Function to return a single pagination information
- * e.g. </api/job-postings?currentPage=1&perPage=10>; rel="self"
  *
  * @param {object}
  * @returns {String}
+ * @example </api/job-postings?currentPage=1&perPage=10>; rel="self"
  */
 const linkHeaderItem = ({ resourceURI, currentPage, perPage, rel }) => {
     const params = {
