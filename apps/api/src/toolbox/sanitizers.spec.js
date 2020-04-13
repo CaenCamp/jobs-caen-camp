@@ -1,6 +1,6 @@
 const {
     filtersSanitizer,
-    formatPaginationContentRange,
+    formatPaginationToLinkHeader,
     paginationSanitizer,
     sortSanitizer,
 } = require('./sanitizers');
@@ -132,35 +132,159 @@ describe('Sanitizers', () => {
 
     describe('paginationSanitizer', () => {
         it('should return string pagination params as integer if it possible', () => {
-            expect(paginationSanitizer(['12', '2'])).toEqual([12, 2]);
+            expect(
+                paginationSanitizer({ perPage: '12', currentPage: '2' })
+            ).toEqual([12, 2]);
         });
 
         it('should return default pagination if pagination array is empty', () => {
-            expect(paginationSanitizer([])).toEqual([10, 1]);
+            expect(paginationSanitizer({})).toEqual([10, 1]);
         });
 
         it('should return default pagination if one of pagination params could not be cast as integer', () => {
-            expect(paginationSanitizer(['douze', '2'])).toEqual([10, 1]);
-            expect(paginationSanitizer(['12', 'deux'])).toEqual([10, 1]);
-            expect(paginationSanitizer([{}, '2'])).toEqual([10, 1]);
-            expect(paginationSanitizer([null, '2'])).toEqual([10, 1]);
+            expect(
+                paginationSanitizer({ perPage: 'douze', currentPage: '2' })
+            ).toEqual([10, 2]);
+            expect(
+                paginationSanitizer({ perPage: '12', currentPage: 'deux' })
+            ).toEqual([12, 1]);
+            expect(
+                paginationSanitizer({ perPage: {}, currentPage: '2' })
+            ).toEqual([10, 2]);
+            expect(
+                paginationSanitizer({ perPage: null, currentPage: '2' })
+            ).toEqual([10, 2]);
         });
 
         it('should remove the supernumerary parameters of the pagination array', () => {
-            expect(paginationSanitizer([22, 3, 'foo', 'bar'])).toEqual([22, 3]);
+            expect(
+                paginationSanitizer({
+                    perPage: 22,
+                    currentPage: 3,
+                    notPage: 'foo',
+                    isPage: 'bar',
+                })
+            ).toEqual([22, 3]);
         });
     });
 
-    describe('formatPaginationContentRange', () => {
-        it('should transforms the Knex paging object into a string compatible with the "content-Range" header', () => {
-            const knexPagination = {
-                from: 33,
-                to: 42,
-                total: 666,
-            };
+    describe('formatPaginationToLinkHeader', () => {
+        it('should contain all pagination elements', () => {
             expect(
-                formatPaginationContentRange('fooOBJECT', knexPagination)
-            ).toEqual('fooobject 33-42/666');
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 3,
+                        perPage: 10,
+                        lastPage: 5,
+                    },
+                })
+            ).toEqual(
+                [
+                    '</api/resources?currentPage=1&perPage=10>; rel="first"',
+                    '</api/resources?currentPage=2&perPage=10>; rel="prev"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="self"',
+                    '</api/resources?currentPage=4&perPage=10>; rel="next"',
+                    '</api/resources?currentPage=5&perPage=10>; rel="last"',
+                ].join(',')
+            );
+        });
+
+        it('should have same first, prev and self elements', () => {
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 1,
+                        perPage: 10,
+                        lastPage: 3,
+                    },
+                })
+            ).toEqual(
+                [
+                    '</api/resources?currentPage=1&perPage=10>; rel="first"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="prev"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="self"',
+                    '</api/resources?currentPage=2&perPage=10>; rel="next"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="last"',
+                ].join(',')
+            );
+        });
+
+        it('should have same self, next and last elements', () => {
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 3,
+                        perPage: 10,
+                        lastPage: 3,
+                    },
+                })
+            ).toEqual(
+                [
+                    '</api/resources?currentPage=1&perPage=10>; rel="first"',
+                    '</api/resources?currentPage=2&perPage=10>; rel="prev"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="self"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="next"',
+                    '</api/resources?currentPage=3&perPage=10>; rel="last"',
+                ].join(',')
+            );
+        });
+
+        it('should have same first, prev, self, next and last elements', () => {
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 1,
+                        perPage: 10,
+                        lastPage: 1,
+                    },
+                })
+            ).toEqual(
+                [
+                    '</api/resources?currentPage=1&perPage=10>; rel="first"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="prev"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="self"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="next"',
+                    '</api/resources?currentPage=1&perPage=10>; rel="last"',
+                ].join(',')
+            );
+        });
+
+        it('should contain return null if any element is missing', () => {
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 3,
+                        perPage: 10,
+                    },
+                })
+            ).toBeNull();
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                    pagination: {
+                        currentPage: 3,
+                        lastPage: 5,
+                    },
+                })
+            ).toBeNull();
+            expect(
+                formatPaginationToLinkHeader({
+                    pagination: {
+                        currentPage: 3,
+                        lastPage: 5,
+                    },
+                })
+            ).toBeNull();
+            expect(
+                formatPaginationToLinkHeader({
+                    resourceURI: '/api/resources',
+                })
+            ).toBeNull();
         });
     });
 });

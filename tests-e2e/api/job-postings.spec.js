@@ -1,3 +1,4 @@
+import querystring from 'querystring';
 import frisby from 'frisby';
 import omit from 'lodash.omit';
 
@@ -27,8 +28,19 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
-                .then(resp => {
+                .expect('header', 'x-total-count', '3')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].title).toStrictEqual(
                         'Data Science Lead'
@@ -57,8 +69,19 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
-                .then(resp => {
+                .expect('header', 'x-total-count', '3')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].title).toStrictEqual(
                         'R&D Software Engineer'
@@ -87,8 +110,19 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
-                .then(resp => {
+                .expect('header', 'x-total-count', '3')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(resp.json[0].title).toStrictEqual(
                         'Data Science Lead'
@@ -117,8 +151,19 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
-                .then(resp => {
+                .expect('header', 'x-total-count', '3')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(3);
                     expect(
                         resp.json[0].hiringOrganization.address.postalCode
@@ -132,13 +177,14 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait pouvoir modifier la pagination avevc le paramètre de requête "pagination"', async () => {
+        it('devrait pouvoir modifier la pagination avec les paramètres de requête "pagination"', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?pagination=${JSON.stringify(
-                        [2, 1]
-                    )}`
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        perPage: 2,
+                        currentPage: 1,
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -146,15 +192,27 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-2/3')
-                .then(resp => {
+                .expect('header', 'x-total-count', '3')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=2>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=2>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=2>; rel="self"',
+                        // '</api/job-postings?currentPage=2&perPage=2>; rel="next"',
+                        // '</api/job-postings?currentPage=2&perPage=2>; rel="last"'
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(2);
                 });
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?pagination=${JSON.stringify(
-                        [2, 2]
-                    )}`
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        perPage: 2,
+                        currentPage: 2,
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -162,8 +220,19 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 2-3/3')
-                .then(resp => {
+                .expect('header', 'x-total-count', '3')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=2>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=2>; rel="prev"',
+                        // '</api/job-postings?currentPage=2&perPage=2>; rel="self"',
+                        // '</api/job-postings?currentPage=2&perPage=2>; rel="next"',
+                        // '</api/job-postings?currentPage=2&perPage=2>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(1);
                 });
         });
@@ -182,8 +251,19 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-2/2')
-                .then(resp => {
+                .expect('header', 'x-total-count', '2')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(2);
                     expect(resp.json[0].title).toStrictEqual(
                         'Ingénieur Lead Full Stack technico-fonctionnel'
@@ -208,8 +288,19 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-2/2')
-                .then(resp => {
+                .expect('header', 'x-total-count', '2')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(2);
                     expect(resp.json[0].title).toStrictEqual(
                         'Ingénieur Lead Full Stack technico-fonctionnel'
@@ -234,8 +325,19 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-1/1')
-                .then(resp => {
+                .expect('header', 'x-total-count', '1')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].title).toStrictEqual(
                         'R&D Software Engineer'
@@ -257,8 +359,19 @@ describe('JobPostings API Endpoints', () => {
                     'content-type',
                     'application/json; charset=utf-8'
                 )
-                .expect('header', 'content-range', 'jobpostings 0-1/1')
-                .then(resp => {
+                .expect('header', 'x-total-count', '1')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(resp.json.length).toStrictEqual(1);
                     expect(resp.json[0].title).toStrictEqual(
                         'Ingénieur Lead Full Stack technico-fonctionnel'
@@ -282,7 +395,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         "RequestValidationError: Schema validation error ( should have required property 'employmentType')"
                     );
@@ -306,7 +419,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/jobStartDate: format should match format "date")'
                     );
@@ -330,7 +443,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/hiringOrganizationId: format should match format "uuid")'
                     );
@@ -349,7 +462,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'this organization does not exist'
                     );
@@ -361,8 +474,8 @@ describe('JobPostings API Endpoints', () => {
             const organization = await frisby
                 .get('http://api:3001/api/organizations')
                 .expect('status', 200)
-                .then(resp => {
-                    return resp.json.find(org => org.name === 'Flexcity');
+                .then((resp) => {
+                    return resp.json.find((org) => org.name === 'Flexcity');
                 });
             const { json: createdJobPosting } = await frisby
                 .post(
@@ -428,7 +541,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
                     );
@@ -447,7 +560,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'The jobPosting of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist.'
                     );
@@ -459,9 +572,9 @@ describe('JobPostings API Endpoints', () => {
             const jobPosting = await frisby
                 .get('http://api:3001/api/job-postings')
                 .expect('status', 200)
-                .then(resp => {
+                .then((resp) => {
                     return resp.json.find(
-                        org => org.title === 'Data Science Lead'
+                        (org) => org.title === 'Data Science Lead'
                     );
                 });
 
@@ -473,7 +586,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.title).toEqual('Data Science Lead');
                 });
         });
@@ -490,7 +603,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
                     );
@@ -509,7 +622,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'The jobPosting of id 9a6c8995-df54-446c-a5b8-71532c304751 does not exist.'
                     );
@@ -521,8 +634,8 @@ describe('JobPostings API Endpoints', () => {
             const organization = await frisby
                 .get('http://api:3001/api/organizations')
                 .expect('status', 200)
-                .then(resp => {
-                    return resp.json.find(org => org.name === 'Flexcity');
+                .then((resp) => {
+                    return resp.json.find((org) => org.name === 'Flexcity');
                 });
 
             // A new job posting is being created
@@ -541,10 +654,21 @@ describe('JobPostings API Endpoints', () => {
             await frisby
                 .get('http://api:3001/api/job-postings')
                 .expect('status', 200)
-                .expect('header', 'content-range', 'jobpostings 0-4/4')
-                .then(resp => {
+                .expect('header', 'x-total-count', '4')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=2&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=2&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(
-                        resp.json.find(jb => jb.id === createdJobPosting.id)
+                        resp.json.find((jb) => jb.id === createdJobPosting.id)
                     ).toBeTruthy();
                 });
 
@@ -554,7 +678,7 @@ describe('JobPostings API Endpoints', () => {
                     `http://api:3001/api/job-postings/${createdJobPosting.id}`
                 )
                 .expect('status', 200)
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.id).toEqual(createdJobPosting.id);
                 });
 
@@ -562,10 +686,21 @@ describe('JobPostings API Endpoints', () => {
             return frisby
                 .get('http://api:3001/api/job-postings')
                 .expect('status', 200)
-                .expect('header', 'content-range', 'jobpostings 0-3/3')
-                .then(resp => {
+                .expect('header', 'x-total-count', '3')
+                .expect(
+                    'header',
+                    'link',
+                    [
+                        '</api/job-postings?currentPage=1&perPage=10>; rel="first"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="prev"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="self"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="next"',
+                        // '</api/job-postings?currentPage=1&perPage=10>; rel="last"',
+                    ].join(',')
+                )
+                .then((resp) => {
                     expect(
-                        resp.json.find(jb => jb.id === createdJobPosting.id)
+                        resp.json.find((jb) => jb.id === createdJobPosting.id)
                     ).toBeFalsy();
                 });
         });
@@ -586,7 +721,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/identifier: format should match format "uuid")'
                     );
@@ -606,7 +741,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         "RequestValidationError: Schema validation error ( should have required property 'employmentType')"
                     );
@@ -630,7 +765,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'RequestValidationError: Schema validation error (/jobStartDate: format should match format "date")'
                     );
@@ -651,7 +786,7 @@ describe('JobPostings API Endpoints', () => {
                     'Content-Type',
                     'application/json; charset=utf-8'
                 )
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'The jobPosting of id b6c2cd95-1dfa-4fa0-a776-8f125918c45c does not exist, so it could not be updated'
                     );
@@ -663,9 +798,9 @@ describe('JobPostings API Endpoints', () => {
             const jobPosting = await frisby
                 .get('http://api:3001/api/job-postings')
                 .expect('status', 200)
-                .then(resp => {
+                .then((resp) => {
                     return resp.json.find(
-                        org => org.title === 'Data Science Lead'
+                        (org) => org.title === 'Data Science Lead'
                     );
                 });
 
@@ -680,7 +815,7 @@ describe('JobPostings API Endpoints', () => {
                     { json: true }
                 )
                 .expect('status', 400)
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.message).toEqual(
                         'the new hiring organization does not exist'
                     );
@@ -692,8 +827,8 @@ describe('JobPostings API Endpoints', () => {
             const organization = await frisby
                 .get('http://api:3001/api/organizations')
                 .expect('status', 200)
-                .then(resp => {
-                    return resp.json.find(org => org.name === 'Flexcity');
+                .then((resp) => {
+                    return resp.json.find((org) => org.name === 'Flexcity');
                 });
 
             const { json: createdJobPosting } = await frisby
@@ -728,7 +863,7 @@ describe('JobPostings API Endpoints', () => {
                     { json: true }
                 )
                 .expect('status', 200)
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.title).toEqual('Developpeur Php');
                     expect(resp.json.hiringOrganization.identifier).toEqual(
                         organization.id
@@ -747,13 +882,13 @@ describe('JobPostings API Endpoints', () => {
             const organizations = await frisby
                 .get('http://api:3001/api/organizations')
                 .expect('status', 200)
-                .then(resp => resp.json);
+                .then((resp) => resp.json);
 
             const firstOrganization = organizations.find(
-                org => org.name === 'Flexcity'
+                (org) => org.name === 'Flexcity'
             );
             const secondOrganization = organizations.find(
-                org => org.name === 'Limengo'
+                (org) => org.name === 'Limengo'
             );
 
             const { json: createdJobPosting } = await frisby
@@ -788,7 +923,7 @@ describe('JobPostings API Endpoints', () => {
                     { json: true }
                 )
                 .expect('status', 200)
-                .then(resp => {
+                .then((resp) => {
                     expect(resp.json.hiringOrganization.name).toEqual(
                         'Limengo'
                     );

@@ -4,8 +4,8 @@
     "private": true,
     "description": "Backend part of the caencamp jobboard",
     "scripts": {
-        "dev": "nodemon --watch src --watch openapi src/index.js",
-        "start": "nodemon --watch src --watch openapi src/index.js",
+        "dev": "nodemon --watch src --watch openapi src/index.js --ext js,json,yml",
+        "start": "nodemon --watch src --watch openapi src/index.js --ext js,json,yml",
         "openapi:check": "spectral lint ./openapi/openapi.yaml",
         "test": "jest",
         "test:watch": "jest --watchAll",

@@ -3,7 +3,6 @@ const signale = require('signale');
 
 const {
     filtersSanitizer,
-    formatPaginationContentRange,
     paginationSanitizer,
     sortSanitizer,
 } = require('../toolbox/sanitizers');
@@ -109,7 +108,7 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
         );
     }
 
-    Object.keys(restFiltersThatMustBeDates).map(key => {
+    Object.keys(restFiltersThatMustBeDates).map((key) => {
         try {
             const queryDate = new Date(restFiltersThatMustBeDates[key]);
             const [what, when] = key.split('_');
@@ -138,7 +137,7 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
  * @param {object} dbOrganization - organization data from database
  * @returns {object} an organization object as describe in OpenAPI contract
  */
-const formatJobPostingForAPI = dbJobPosting => {
+const formatJobPostingForAPI = (dbJobPosting) => {
     return dbJobPosting
         ? {
               ...omit(dbJobPosting, [
@@ -182,7 +181,7 @@ const formatJobPostingForAPI = dbJobPosting => {
  * @param {object} client - The Database client
  * @param {object} filters - JobPosting Filters
  * @param {Array} sort - Sort parameters [columnName, direction]
- * @param {Array} pagination - Pagination [perPage, currentPage]
+ * @param {object} pagination - Pagination {perPage: 10, currentPage: 1}
  * @returns {Promise} - paginated object with paginated jobPosting list and totalCount
  */
 const getJobPostingPaginatedList = async ({
@@ -200,12 +199,9 @@ const getJobPostingPaginatedList = async ({
 
     return query
         .paginate({ perPage, currentPage, isLengthAware: true })
-        .then(result => ({
+        .then((result) => ({
             jobPostings: result.data.map(formatJobPostingForAPI),
-            contentRange: formatPaginationContentRange(
-                'jobPostings',
-                result.pagination
-            ),
+            pagination: result.pagination,
         }));
 };
 
@@ -244,7 +240,7 @@ const getJobPostingByIdQuery = (client, jobPostingId) => {
 const getJobPosting = async ({ client, jobPostingId }) => {
     return getJobPostingByIdQuery(client, jobPostingId)
         .then(formatJobPostingForAPI)
-        .catch(error => ({ error }));
+        .catch((error) => ({ error }));
 };
 
 /**
@@ -272,7 +268,7 @@ const createJobPosting = async ({ client, apiData }) => {
                 formatJobPostingForAPI
             );
         })
-        .catch(error => ({ error }));
+        .catch((error) => ({ error }));
 };
 
 /**
@@ -286,10 +282,10 @@ const deleteJobPosting = async ({ client, jobPostingId }) => {
     return client('job_posting')
         .where({ id: jobPostingId })
         .del()
-        .then(nbDeletion => {
+        .then((nbDeletion) => {
             return nbDeletion ? { id: jobPostingId } : {};
         })
-        .catch(error => ({ error }));
+        .catch((error) => ({ error }));
 };
 
 /**
@@ -330,7 +326,7 @@ const updateJobPosting = async ({ client, jobPostingId, apiData }) => {
     const updatedJobPosting = await client('job_posting')
         .where({ id: jobPostingId })
         .update(apiData)
-        .catch(error => ({ error }));
+        .catch((error) => ({ error }));
     if (updatedJobPosting.error) {
         return updatedJobPosting;
     }
@@ -338,7 +334,7 @@ const updateJobPosting = async ({ client, jobPostingId, apiData }) => {
     // return the complete jobPosting from db
     return getJobPostingByIdQuery(client, jobPostingId)
         .then(formatJobPostingForAPI)
-        .catch(error => ({ error }));
+        .catch((error) => ({ error }));
 };
 
 module.exports = {

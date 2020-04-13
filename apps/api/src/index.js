@@ -17,7 +17,7 @@ app.use(
     cors({
         origin: '*',
         allowHeaders: ['Origin, Content-Type, Accept'],
-        exposeHeaders: ['Content-Range'],
+        exposeHeaders: ['X-Total-Count', 'Link'],
     })
 );
 

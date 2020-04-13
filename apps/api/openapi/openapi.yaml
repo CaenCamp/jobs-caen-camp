@@ -58,11 +58,10 @@ paths:
                           addressLocality: Caen
                           postalCode: '14000'
           headers:
-            content-range:
-              schema:
-                type: string
-              description: "Return information about pagination, with form 'objectType from-to/total'"
-              required: true
+            X-Total-Count:
+                $ref: '#/components/headers/X-Total-Count'
+            Link:
+                $ref: '#/components/headers/Link'
         '400':
           description: Bad Request
           content:
@@ -88,11 +87,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getJobPostings
-      description: "Obtenir une liste paginée d'offres d'emploi\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* title\n* skills\n* employmentType\n* datePosted_before\n* datePosted_after\n* jobStartDate_before\n* jobStartDate_after\n* validThrough_before\n* validThrough_after\n* hiringOrganizationName\n* hiringOrganizationPostalCode\n* hiringOrganizationAddressLocality\n* hiringOrganizationAddressCountry\n\nCette liste est triable par sort=[key, sortDirection_ASC_DESC] : \n* datePosted\n* title\n* jobStartDate\n* validThrough\n* hiringOrganizationName\n* hiringOrganizationIdentifier\n* hiringOrganizationPostalCode\n* hiringOrganizationAddressLocality\n* hiringOrganizationAddressCountry\n\nLa pagination est controlable via le paramètre de requête pagination=[nombreDeRésultatsParPage, numeroDePage]"
+      description: |
+        Obtenir une liste paginée d'offres d'emploi
+
+        Cette liste est filtrable par filters={ key: value, key2: value ...} :
+        * title
+        * skills
+        * employmentType
+        * datePosted_before
+        * datePosted_after
+        * jobStartDate_before
+        * jobStartDate_after
+        * validThrough_before
+        * validThrough_after
+        * hiringOrganizationName
+        * hiringOrganizationPostalCode
+        * hiringOrganizationAddressLocality
+        * hiringOrganizationAddressCountry
+
+        Cette liste est triable par sort=[key, sortDirection_ASC_DESC] :
+        * datePosted
+        * title
+        * jobStartDate
+        * validThrough
+        * hiringOrganizationName
+        * hiringOrganizationIdentifier
+        * hiringOrganizationPostalCode
+        * hiringOrganizationAddressLocality
+        * hiringOrganizationAddressCountry
       parameters:
         - $ref: '#/components/parameters/Sort'
         - $ref: '#/components/parameters/Filter'
-        - $ref: '#/components/parameters/Pagination'
+        - $ref: '#/components/parameters/PaginationCurrentPage'
+        - $ref: '#/components/parameters/PaginationPerPage'
     post:
       tags:
         - "Offres d'emploi"
@@ -410,11 +437,10 @@ paths:
                           name: 'John Do, CTO'
                           contactType: "Offres d'emploi"
           headers:
-            content-range:
-              schema:
-                type: string
-              required: true
-              description: "Return information about pagination, with form 'objectType from-to/total'"
+            X-Total-Count:
+                $ref: '#/components/headers/X-Total-Count'
+            Link:
+                $ref: '#/components/headers/Link'
         '400':
           description: Bad Request
           content:
@@ -440,11 +466,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getOrganizations
-      description: "Obtenir la liste des entreprises.\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* name\n* address_locality\n* postal_code\n\nCette liste est triable par sort=[key, sortDirection_ASC_DESC] : \n* name\n* address_locality\n* postal_code\n\nLa pagination est controlable via le paramètre de requête pagination=[nombreDeRésultatsParPage, numeroDePage]"
+      description: |
+        Obtenir la liste des entreprises.\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :
+        * name
+        * address_locality
+        * postal_code
+
+        Cette liste est triable par sort=[key, sortDirection_ASC_DESC] :
+        * name
+        * address_locality
+        * postal_code
       parameters:
         - $ref: '#/components/parameters/Filter'
         - $ref: '#/components/parameters/Sort'
-        - $ref: '#/components/parameters/Pagination'
+        - $ref: '#/components/parameters/PaginationCurrentPage'
+        - $ref: '#/components/parameters/PaginationPerPage'
     post:
       summary: "Création d'une entreprise"
       operationId: createOrganization
@@ -713,6 +749,24 @@ paths:
         - Entreprises
 components:
   securitySchemes: {}
+  headers:
+    X-Total-Count:
+        description: "Return information about total items to paginate"
+        schema:
+            type: integer
+        example: 42
+        required: false
+    Link:
+        description: "Return information about pagination actions"
+        schema:
+            type: string
+        example: |
+            </resources?currentPage=3&perPage=10>; rel="self",
+            </resources?currentPage=1&perPage=10>; rel="first",
+            </resources?currentPage=2&perPage=10>; rel="prev",
+            </resources?currentPage=4&perPage=10>; rel="next",
+            </resources?currentPage=5&perPage=10>; rel="last",
+        required: false
   schemas:
     JobPosting:
       description: "Une offre d'emploi"
@@ -1069,18 +1123,22 @@ components:
         minItems: 2
         items:
           type: string
-    Pagination:
-      name: pagination
+    PaginationCurrentPage:
+      name: currentPage
       in: query
-      description: "Les paramètres pour la pagination. C'est un tableau stringifié de la forme [perPage, currentPage]"
+      description: "Le paramètre de pagination pour définir la page courrante."
       required: false
-      explode: false
       schema:
-        type: array
-        maxItems: 2
-        minItems: 2
-        items:
-          type: string
+        type: integer
+        example: 1
+    PaginationPerPage:
+      name: perPage
+      in: query
+      description: "Le paramètre de pagination pour définir le nombre d'éléments par page."
+      required: false
+      schema:
+        type: integer
+        example: 10
     UUID:
       name: identifier
       in: path

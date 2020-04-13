@@ -2,44 +2,44 @@ import {stringify} from "query-string";
 import {fetchUtils} from "ra-core";
 import omit from "lodash.omit";
 
+const getXTotalCountHeaderValue = (headers) => {
+    if (!headers.has("x-total-count")) {
+        throw new Error(
+            "The X-Total-Count header is missing in the HTTP Response."
+        );
+    }
+
+    return parseInt(headers.get("x-total-count"), 10)
+}
+
 /**
  * Maps react-admin queries to a simple REST API
  *
  * @example
  *
- * getList     => GET http://my.api.url/posts?sort=['title','ASC']&range=[0, 24]
+ * getList     => GET http://my.api.url/posts?sort=['title','ASC']&currentPage=1&perPage=24
  * getOne      => GET http://my.api.url/posts/123
- * getMany     => GET http://my.api.url/posts?filter={id:[123,456,789]}
+ * getMany     => GET http://my.api.url/posts?filter={id:[123,456,789]}&currentPage=1&perPage=24
  * update      => PUT http://my.api.url/posts/123
  * create      => POST http://my.api.url/posts
  * delete      => DELETE http://my.api.url/posts/123
  */
 export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
     getList: (resource, params) => {
-        const {page, perPage} = params.pagination;
+        const {currentPage, perPage} = params;
         const {field, order} = params.sort;
         const query = {
             sort: JSON.stringify([field, order]),
             filters: JSON.stringify(params.filter),
-            pagination: JSON.stringify([perPage, page])
+            currentPage,
+            perPage
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
         return httpClient(url).then(({headers, json}) => {
-            if (!headers.has("content-range")) {
-                throw new Error(
-                    "The Content-Range header is missing in the HTTP Response."
-                );
-            }
             return {
                 data: json,
-                total: parseInt(
-                    headers
-                        .get("content-range")
-                        .split("/")
-                        .pop(),
-                    10
-                )
+                total: getXTotalCountHeaderValue(headers)
             };
         });
     },
@@ -58,7 +58,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
     },
 
     getManyReference: (resource, params) => {
-        const {page, perPage} = params.pagination;
+        const {currentPage, perPage} = params;
         const {field, order} = params.sort;
         const query = {
             sort: JSON.stringify([field, order]),
@@ -66,25 +66,15 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
                 ...params.filter,
                 [params.target]: params.id
             }),
-            pagination: JSON.stringify([perPage, page])
+            currentPage,
+            perPage
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
         return httpClient(url).then(({headers, json}) => {
-            if (!headers.has("content-range")) {
-                throw new Error(
-                    "The Content-Range header is missing in the HTTP Response"
-                );
-            }
             return {
                 data: json,
-                total: parseInt(
-                    headers
-                        .get("content-range")
-                        .split("/")
-                        .pop(),
-                    10
-                )
+                total: getXTotalCountHeaderValue(headers)
             };
         });
     },

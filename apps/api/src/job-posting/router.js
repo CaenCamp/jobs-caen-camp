@@ -7,25 +7,39 @@ const {
     getJobPostingPaginatedList,
     updateJobPosting,
 } = require('./repository');
-const { parseJsonQueryParameter } = require('../toolbox/sanitizers');
+const {
+    parseJsonQueryParameter,
+    formatPaginationToLinkHeader,
+} = require('../toolbox/sanitizers');
 
 const router = new Router({
     prefix: '/api/job-postings',
 });
 
-router.get('/', async ctx => {
-    const { jobPostings, contentRange } = await getJobPostingPaginatedList({
+router.get('/', async (ctx) => {
+    const { jobPostings, pagination } = await getJobPostingPaginatedList({
         client: ctx.db,
         filters: parseJsonQueryParameter(ctx.query.filters),
         sort: parseJsonQueryParameter(ctx.query.sort),
-        pagination: parseJsonQueryParameter(ctx.query.pagination),
+        pagination: {
+            currentPage: ctx.query.currentPage,
+            perPage: ctx.query.perPage,
+        },
     });
 
-    ctx.set('Content-Range', contentRange);
+    const linkHeaderValue = formatPaginationToLinkHeader({
+        resourceURI: '/api/job-postings',
+        pagination,
+    });
+
+    ctx.set('X-Total-Count', pagination.total);
+    if (linkHeaderValue) {
+        ctx.set('Link', linkHeaderValue);
+    }
     ctx.body = jobPostings;
 });
 
-router.post('/', async ctx => {
+router.post('/', async (ctx) => {
     const newJobPosting = await createJobPosting({
         client: ctx.db,
         apiData: ctx.request.body,
@@ -41,7 +55,7 @@ router.post('/', async ctx => {
     ctx.body = newJobPosting;
 });
 
-router.get('/:jobPostingId', async ctx => {
+router.get('/:jobPostingId', async (ctx) => {
     const jobPosting = await getJobPosting({
         client: ctx.db,
         jobPostingId: ctx.params.jobPostingId,
@@ -66,7 +80,7 @@ router.get('/:jobPostingId', async ctx => {
     ctx.body = jobPosting;
 });
 
-router.delete('/:jobPostingId', async ctx => {
+router.delete('/:jobPostingId', async (ctx) => {
     const deletedJobPosting = await deleteJobPosting({
         client: ctx.db,
         jobPostingId: ctx.params.jobPostingId,
@@ -91,7 +105,7 @@ router.delete('/:jobPostingId', async ctx => {
     ctx.body = deletedJobPosting;
 });
 
-router.put('/:jobPostingId', async ctx => {
+router.put('/:jobPostingId', async (ctx) => {
     const updatedJobPosting = await updateJobPosting({
         client: ctx.db,
         jobPostingId: ctx.params.jobPostingId,

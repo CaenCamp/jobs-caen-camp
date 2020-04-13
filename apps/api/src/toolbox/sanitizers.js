@@ -1,3 +1,5 @@
+const querystring = require('querystring');
+
 /**
  * Method to clean the filters sent in query parameters
  *
@@ -11,9 +13,9 @@ const filtersSanitizer = (filters, filterableFields) => {
     }
 
     return Object.keys(filters)
-        .filter(key => filterableFields.includes(key))
-        .filter(key => filters[key] !== undefined)
-        .filter(key => {
+        .filter((key) => filterableFields.includes(key))
+        .filter((key) => filters[key] !== undefined)
+        .filter((key) => {
             if (typeof filters[key] === 'string') {
                 return filters[key].trim() !== '';
             }
@@ -55,37 +57,11 @@ const sortSanitizer = (sort, sortableFields) => {
  * Function to clean the pagination sent in query parameters
  *
  * @param {object} pagination - pagination object from query parameters
- * @returns {object} Ready-to-use filters for the sql query
+ * @returns {Array} Ready-to-use filters for the sql query
  */
-const paginationSanitizer = pagination => {
-    const sortTwoFirstParameters = [
-        pagination ? parseInt(pagination[0]) || null : null,
-        pagination ? parseInt(pagination[1]) || null : null,
-    ];
-
-    if (
-        !Number.isInteger(sortTwoFirstParameters[0]) ||
-        !Number.isInteger(sortTwoFirstParameters[1])
-    ) {
-        return [10, 1];
-    }
-
-    return sortTwoFirstParameters;
+const paginationSanitizer = ({ perPage, currentPage }) => {
+    return [parseInt(perPage) || 10, parseInt(currentPage) || 1];
 };
-
-/**
- * Transforms the Knex paging object into a string compatible with the "content-Range" header.
- * https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Range
- *
- * @param {string} objectType - type of object returned in the paginated collection
- * @param {object} pagination - Knex pagination object (https://github.com/felixmosh/knex-paginate#pagination-object)
- * @returns {string} string ready to be set has "Content-Range" http header
- * @example Content-Range: posts 0-24/319
- */
-const formatPaginationContentRange = (objectType, pagination) =>
-    `${objectType.toLowerCase()} ${pagination.from}-${pagination.to}/${
-        pagination.total
-    }`;
 
 /**
  * This method intercepts query parameters expected in JSON but incorrectly formatted.
@@ -93,7 +69,7 @@ const formatPaginationContentRange = (objectType, pagination) =>
  * @param {string} parameter - the query parameter expected in JSON
  * @returns {(object|boolean)} the parsed parameter or false if incorrectly formatted
  */
-const parseJsonQueryParameter = parameter => {
+const parseJsonQueryParameter = (parameter) => {
     if (parameter === undefined) {
         return false;
     }
@@ -104,10 +80,72 @@ const parseJsonQueryParameter = parameter => {
     }
 };
 
+/**
+ * Function to return a single pagination information
+ *
+ * @param {object}
+ * @returns {String}
+ * @example </api/job-postings?currentPage=1&perPage=10>; rel="self"
+ */
+const linkHeaderItem = ({ resourceURI, currentPage, perPage, rel }) => {
+    const params = {
+        currentPage,
+        perPage,
+    };
+    return `<${resourceURI}?${querystring.stringify(params)}>; rel="${rel}"`;
+};
+
+/**
+ * Function to return a fill pagination information with
+ * first, prev, self, next and last relations.
+ *
+ * @param {object}
+ * @returns {String}
+ */
+const formatPaginationToLinkHeader = ({ resourceURI, pagination = {} }) => {
+    const { currentPage, perPage, lastPage } = pagination;
+
+    if (!resourceURI || !currentPage || !perPage || !lastPage) {
+        return null;
+    }
+
+    const prevPage =
+        currentPage - 1 <= lastPage && currentPage - 1 > 0
+            ? currentPage - 1
+            : currentPage;
+    const nextPage =
+        currentPage + 1 <= lastPage ? currentPage + 1 : currentPage;
+
+    let items = [
+        { resourceURI, currentPage: 1, perPage, rel: 'first' },
+        {
+            resourceURI,
+            currentPage: prevPage,
+            perPage,
+            rel: 'prev',
+        },
+        { resourceURI, currentPage, perPage, rel: 'self' },
+        {
+            resourceURI,
+            currentPage: nextPage,
+            perPage,
+            rel: 'next',
+        },
+        {
+            resourceURI,
+            currentPage: lastPage,
+            perPage,
+            rel: 'last',
+        },
+    ];
+
+    return items.map((item) => linkHeaderItem(item)).join(',');
+};
+
 module.exports = {
     filtersSanitizer,
-    formatPaginationContentRange,
     paginationSanitizer,
     parseJsonQueryParameter,
     sortSanitizer,
+    formatPaginationToLinkHeader,
 };
