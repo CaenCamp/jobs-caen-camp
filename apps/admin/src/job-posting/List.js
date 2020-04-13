@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
     Datagrid,
     DateInput,
@@ -9,12 +9,12 @@ import {
     ReferenceField,
     TextField,
     TextInput,
-    SelectInput
-} from "react-admin";
+    SelectInput,
+} from 'react-admin';
 
-import {jobTypes} from "./index";
+import { jobTypes } from './index';
 
-const JobPostingFilter = props => (
+const JobPostingFilter = (props) => (
     <Filter {...props}>
         <TextInput source="title" label="Filtre par titre" alwaysOn />
         <TextInput source="skills" label="Compétences" alwaysOn />
@@ -54,20 +54,20 @@ const JobPostingFilter = props => (
     </Filter>
 );
 
-const JobPostingPagination = props => (
+const JobPostingPagination = (props) => (
     <Pagination rowsPerPageOptions={[1, 10, 25, 50]} {...props} />
 );
 
-const Organization = ({record}) => {
+const Organization = ({ record }) => {
     return `${record.name} (${record.address.postalCode} ${record.address.addressLocality})`;
 };
 
-export const JobPostingList = props => {
+export const JobPostingList = (props) => {
     return (
         <List
             {...props}
             filters={<JobPostingFilter />}
-            sort={{field: "name", order: "ASC"}}
+            sort={{ field: 'name', order: 'ASC' }}
             exporter={false}
             pagination={<JobPostingPagination />}
             bulkActionButtons={false}

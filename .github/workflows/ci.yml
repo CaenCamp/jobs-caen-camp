@@ -12,7 +12,7 @@ jobs:
       - name: Lint
         run: make lint
       - name: Format
-        run: make format:ci
+        run: make format-ci
       - name: Open Api Check
         run: make openapi-validate
 

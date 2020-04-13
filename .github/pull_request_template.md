@@ -13,5 +13,5 @@
 <!--- Vous pouvez ajouter les étapes des choses à réaliser dans votre PR. -->
 <!--- Cela rendra les choses plus facile surtout si vous avez besoin d'aide pour mener la PR à bout -->
 
-- [ ] step 1.
-- [ ] step 2.
+-   [ ] step 1.
+-   [ ] step 2.

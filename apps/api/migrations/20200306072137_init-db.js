@@ -1,7 +1,7 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
     return knex.raw(`CREATE extension IF NOT EXISTS "uuid-ossp"`);
 };
 
-exports.down = function() {
+exports.down = function () {
     return true;
 };

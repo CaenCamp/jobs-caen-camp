@@ -1,14 +1,14 @@
-import JobPostingIcon from "@material-ui/icons/EventSeat";
+import JobPostingIcon from '@material-ui/icons/EventSeat';
 
-import {JobPostingList} from "./List";
-import {JobPostingEdit} from "./Edit";
-import {JobPostingCreate} from "./Create";
+import { JobPostingList } from './List';
+import { JobPostingEdit } from './Edit';
+import { JobPostingCreate } from './Create';
 
 export const jobTypes = [
-    {id: "CDI", name: "CDI"},
-    {id: "CDD", name: "CDD"},
-    {id: "Alternance", name: "Alternace"},
-    {id: "Autre", name: "Autres"}
+    { id: 'CDI', name: 'CDI' },
+    { id: 'CDD', name: 'CDD' },
+    { id: 'Alternance', name: 'Alternace' },
+    { id: 'Autre', name: 'Autres' },
 ];
 
 export default {
@@ -16,5 +16,5 @@ export default {
     edit: JobPostingEdit,
     icon: JobPostingIcon,
     list: JobPostingList,
-    options: {label: "Offres d'emploi"}
+    options: { label: "Offres d'emploi" },
 };

@@ -51,7 +51,7 @@ describe('Organizations API Endpoints', () => {
                             '</api/organizations?currentPage=1&perPage=10>; rel="last"',
                         ].join(',')
                     );
-                    expect(resp.json.length).toStrictEqual(3);
+                    expect(resp.json).toHaveLength(3);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                     expect(resp.json[1].name).toStrictEqual('Limengo');
                     expect(resp.json[2].name).toStrictEqual('Qwarry');
@@ -84,7 +84,7 @@ describe('Organizations API Endpoints', () => {
                             '</api/organizations?currentPage=3&perPage=1>; rel="last"',
                         ].join(',')
                     );
-                    expect(resp.json.length).toStrictEqual(1);
+                    expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
             await frisby
@@ -111,7 +111,7 @@ describe('Organizations API Endpoints', () => {
                             '</api/organizations?currentPage=3&perPage=1>; rel="last"',
                         ].join(',')
                     );
-                    expect(resp.json.length).toStrictEqual(1);
+                    expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].name).toStrictEqual('Qwarry');
                 });
         });
@@ -127,7 +127,7 @@ describe('Organizations API Endpoints', () => {
                 )
                 .expect('status', 200)
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(3);
+                    expect(resp.json).toHaveLength(3);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                     expect(resp.json[1].name).toStrictEqual('Limengo');
                     expect(resp.json[2].name).toStrictEqual('Qwarry');
@@ -140,7 +140,7 @@ describe('Organizations API Endpoints', () => {
                     ])}`
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(3);
+                    expect(resp.json).toHaveLength(3);
                     expect(resp.json[0].name).toStrictEqual('Qwarry');
                     expect(resp.json[1].name).toStrictEqual('Limengo');
                     expect(resp.json[2].name).toStrictEqual('Flexcity');
@@ -172,7 +172,7 @@ describe('Organizations API Endpoints', () => {
                             '</api/organizations?currentPage=1&perPage=10>; rel="last"',
                         ].join(',')
                     );
-                    expect(resp.json.length).toStrictEqual(1);
+                    expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
         });
@@ -202,7 +202,7 @@ describe('Organizations API Endpoints', () => {
                             '</api/organizations?currentPage=1&perPage=10>; rel="last"',
                         ].join(',')
                     );
-                    expect(resp.json.length).toStrictEqual(1);
+                    expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].name).toStrictEqual('Flexcity');
                 });
             await frisby
@@ -219,7 +219,7 @@ describe('Organizations API Endpoints', () => {
                 )
                 .expect('header', 'x-total-count', '0')
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(0);
+                    expect(resp.json).toHaveLength(0);
                 });
         });
 
@@ -248,7 +248,7 @@ describe('Organizations API Endpoints', () => {
                             '</api/organizations?currentPage=1&perPage=10>; rel="last"',
                         ].join(',')
                     );
-                    expect(resp.json.length).toStrictEqual(2);
+                    expect(resp.json).toHaveLength(2);
                 });
             await frisby
                 .get(
@@ -264,7 +264,7 @@ describe('Organizations API Endpoints', () => {
                 )
                 .expect('header', 'x-total-count', '0')
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(0);
+                    expect(resp.json).toHaveLength(0);
                 });
         });
     });
@@ -370,7 +370,7 @@ describe('Organizations API Endpoints', () => {
                     'application/json; charset=utf-8'
                 )
                 .then((resp) => {
-                    expect(resp.json.contactPoints.length).toEqual(2);
+                    expect(resp.json.contactPoints).toHaveLength(2);
                     return frisby
                         .delete(
                             `http://api:3001/api/organizations/${resp.json.id}`
@@ -884,8 +884,8 @@ describe('Organizations API Endpoints', () => {
                                 .expect('status', 200)
                                 .then((resp) => {
                                     expect(
-                                        resp.json.contactPoints.length
-                                    ).toEqual(2);
+                                        resp.json.contactPoints
+                                    ).toHaveLength(2);
                                     return resp.json.contactPoints;
                                 });
                         });
@@ -920,8 +920,8 @@ describe('Organizations API Endpoints', () => {
                                 .expect('status', 200)
                                 .then((resp) => {
                                     expect(
-                                        resp.json.contactPoints.length
-                                    ).toEqual(1);
+                                        resp.json.contactPoints
+                                    ).toHaveLength(1);
                                     expect(
                                         resp.json.contactPoints[0].name
                                     ).toEqual('John C.');

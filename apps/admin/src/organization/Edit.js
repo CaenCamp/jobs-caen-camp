@@ -1,15 +1,15 @@
-import React from "react";
-import {Edit, TextInput, TabbedForm, FormTab} from "react-admin";
+import React from 'react';
+import { Edit, TextInput, TabbedForm, FormTab } from 'react-admin';
 
-const OrganizationTitle = ({record}) =>
+const OrganizationTitle = ({ record }) =>
     record ? `Entreprise ${record.name}` : null;
 
-export const OrganizationEdit = props => {
+export const OrganizationEdit = (props) => {
     const handleStringify = React.useCallback(
-        v => JSON.stringify(v, null, 2),
+        (v) => JSON.stringify(v, null, 2),
         []
     );
-    const handleParse = React.useCallback(v => JSON.parse(v), []);
+    const handleParse = React.useCallback((v) => JSON.parse(v), []);
 
     return (
         <Edit title={<OrganizationTitle />} {...props}>

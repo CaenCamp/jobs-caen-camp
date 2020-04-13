@@ -1,6 +1,6 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
     return knex.schema
-        .createTable('organization', function(table) {
+        .createTable('organization', function (table) {
             table
                 .uuid('id')
                 .primary()
@@ -10,15 +10,12 @@ exports.up = function(knex) {
             table.string('url', 400).nullable();
             table.string('email', 150).nullable();
             table.text('image', 400).nullable();
-            table
-                .string('address_country', 5)
-                .notNullable()
-                .defaultTo('FR');
+            table.string('address_country', 5).notNullable().defaultTo('FR');
             table.string('address_locality', 150).notNullable();
             table.string('postal_code', 20).notNullable();
             table.string('street_address', 300).nullable();
         })
-        .createTable('contact_point', function(table) {
+        .createTable('contact_point', function (table) {
             table
                 .uuid('id')
                 .primary()
@@ -36,6 +33,6 @@ exports.up = function(knex) {
         });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
     return knex.schema.dropTable('contact_point').dropTable('organization');
 };

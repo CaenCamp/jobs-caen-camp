@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 import {
     Edit,
     TextInput,
     SimpleForm,
     SelectInput,
     DateInput,
-    ReferenceInput
-} from "react-admin";
+    ReferenceInput,
+} from 'react-admin';
 
-import {jobTypes} from "./index";
+import { jobTypes } from './index';
 
-const JobPostingTitle = ({record}) =>
+const JobPostingTitle = ({ record }) =>
     record ? `Edition de l'offre "${record.title}"` : null;
 
-export const JobPostingEdit = props => {
+export const JobPostingEdit = (props) => {
     return (
         <Edit title={<JobPostingTitle />} {...props}>
             <SimpleForm>

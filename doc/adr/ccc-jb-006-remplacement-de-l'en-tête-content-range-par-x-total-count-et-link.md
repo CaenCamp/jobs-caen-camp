@@ -2,9 +2,9 @@
 
 Date: 2020-04-13
 
-- Décideurs: [Alexis Janvier](https://github.com/alexisjanvier)
-- Ticket.s concerné.s: [!55](https://github.com/CaenCamp/jobs-caen-camp/issues/55)
-- Pull Request: [#62](https://github.com/CaenCamp/jobs-caen-camp/pull/62)
+-   Décideurs: [Alexis Janvier](https://github.com/alexisjanvier)
+-   Ticket.s concerné.s: [!55](https://github.com/CaenCamp/jobs-caen-camp/issues/55)
+-   Pull Request: [#62](https://github.com/CaenCamp/jobs-caen-camp/pull/62)
 
 ## Statut
 
@@ -18,12 +18,12 @@ Il faut donc trouver un moyen alternif de fournir ces informations.
 
 ## Moteurs de décision
 
-* Faire une utilisation correcte des en-têtes conformément aux spécifications
+-   Faire une utilisation correcte des en-têtes conformément aux spécifications
 
 ## Options envisagées
 
-* Introduire les objets `meta` et `links` dans le corps de la réponse
-* Ajouter les en-têtes `X-Total-Count` et `Link`
+-   Introduire les objets `meta` et `links` dans le corps de la réponse
+-   Ajouter les en-têtes `X-Total-Count` et `Link`
 
 ## Résultat de la décision
 
@@ -31,5 +31,5 @@ L'ajout des en-têtes a été choisi car elle n'altère pas le corps de la répo
 
 ## Liens
 
-* [Ressources] [Content-Range - Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range)
-* [Ressources] [Link - RFC5988](http://tools.ietf.org/html/rfc5988#page-6)
+-   [Ressources][content-range - mozilla documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range)
+-   [Ressources][link - rfc5988](http://tools.ietf.org/html/rfc5988#page-6)

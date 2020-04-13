@@ -1,9 +1,6 @@
-exports.up = function(knex) {
-    return knex.schema.createTable('job_posting', function(table) {
-        table
-            .uuid('id')
-            .primary()
-            .defaultTo(knex.raw('uuid_generate_v4()'));
+exports.up = function (knex) {
+    return knex.schema.createTable('job_posting', function (table) {
+        table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
         table.string('title', 300).notNullable();
         table.string('url', 400).nullable();
         table.date('datePosted').notNullable();
@@ -23,6 +20,6 @@ exports.up = function(knex) {
     });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
     return knex.schema.dropTable('job_posting');
 };
