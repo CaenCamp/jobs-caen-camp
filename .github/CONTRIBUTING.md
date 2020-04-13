@@ -292,7 +292,7 @@ Nous vous conseillons d’utiliser [l’integration du linter avec votre ide](ht
 
 Vous pouvez exécuter vous-même les vérifications du style de code avec les commandes suivantes :
 - `make lint` pour afficher les erreurs
-- `make lint` pour corriger les erreurs
+- `make format` pour corriger les erreurs
 
 #### La convention de message de commit
 
