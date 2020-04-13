@@ -1,31 +1,31 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("path");
 
-const mode = process.env.NODE_ENV || 'development';
-const prod = mode === 'production';
+const mode = process.env.NODE_ENV || "development";
+const prod = mode === "production";
 
 module.exports = {
     entry: {
-        bundle: ['./src/main.js'],
+        bundle: ["./src/main.js"],
     },
     resolve: {
         alias: {
-            svelte: path.resolve('../../node_modules', 'svelte'),
+            svelte: path.resolve("../../node_modules", "svelte"),
         },
-        extensions: ['.mjs', '.js', '.svelte'],
-        mainFields: ['svelte', 'browser', 'module', 'main'],
+        extensions: [".mjs", ".js", ".svelte"],
+        mainFields: ["svelte", "browser", "module", "main"],
     },
     output: {
-        path: __dirname + '/public',
-        filename: '[name].js',
-        chunkFilename: '[name].[id].js',
+        path: __dirname + "/public",
+        filename: "[name].js",
+        chunkFilename: "[name].[id].js",
     },
     module: {
         rules: [
             {
                 test: /\.svelte$/,
                 use: {
-                    loader: 'svelte-loader',
+                    loader: "svelte-loader",
                     options: {
                         emitCss: true,
                         hotReload: true,
@@ -39,9 +39,9 @@ module.exports = {
                      * MiniCssExtractPlugin doesn't support HMR.
                      * For developing, use 'style-loader' instead.
                      * */
-                    prod ? MiniCssExtractPlugin.loader : 'style-loader',
-                    'css-loader',
-                    'postcss-loader',
+                    prod ? MiniCssExtractPlugin.loader : "style-loader",
+                    "css-loader",
+                    "postcss-loader",
                 ],
             },
         ],
@@ -49,15 +49,15 @@ module.exports = {
     mode,
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '[name].css',
+            filename: "[name].css",
         }),
     ],
-    devtool: prod ? false : 'source-map',
+    devtool: prod ? false : "source-map",
     devServer: {
         port: 8000,
-        host: '0.0.0.0',
+        host: "0.0.0.0",
         historyApiFallback: {
-            index: 'index.html',
+            index: "index.html",
         },
     },
 };

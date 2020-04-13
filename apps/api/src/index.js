@@ -30,7 +30,7 @@ const env = process.env.NODE_ENV;
  * @param {object} error - oas error
  * @throw {Error} reformated oas error
  */
-const errorHandler = error => {
+const errorHandler = (error) => {
     let errorDetails = false;
     if (error.meta && error.meta.rawErrors) {
         errorDetails = error.meta.rawErrors.reduce((acc, rawError) => {
@@ -51,7 +51,7 @@ const errorHandler = error => {
  * @param {object} error - the catched error
  * @return {object} the content of the json error return
  */
-const formatError = error => {
+const formatError = (error) => {
     return {
         status: error.status,
         message: error.message,
@@ -72,7 +72,7 @@ app.use(
 );
 
 if (env === 'development') {
-    router.get('/', ctx => {
+    router.get('/', (ctx) => {
         ctx.body = {
             message:
                 'Front is not serve here in dev environment. See documentation. API is available on /api endpoint',
@@ -82,7 +82,7 @@ if (env === 'development') {
     app.use(serve(`${__dirname}/../../front/public`));
 }
 
-router.get('/api', ctx => {
+router.get('/api', (ctx) => {
     ctx.body = { message: 'CaenCamp Jobboard API' };
 });
 app.use(router.routes()).use(router.allowedMethods());

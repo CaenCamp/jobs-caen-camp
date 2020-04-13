@@ -7,7 +7,7 @@ const knexConfig = require('../knexfile');
 
 const pg = knex(knexConfig);
 
-const getOrganizationFromJobPosting = jobPosting => {
+const getOrganizationFromJobPosting = (jobPosting) => {
     return omit(
         {
             ...jobPosting.hiringOrganization,
@@ -22,7 +22,7 @@ const getOrganizationFromJobPosting = jobPosting => {
     );
 };
 
-const getContactPointFromJobPosting = jobPosting =>
+const getContactPointFromJobPosting = (jobPosting) =>
     jobPosting.hiringOrganization.contactPoints[0];
 
 const importFixtures = async () => {
@@ -60,13 +60,13 @@ const importFixtures = async () => {
 };
 
 importFixtures()
-    .then(nbJobPosting => {
+    .then((nbJobPosting) => {
         signale.info(
             `Fin de l'importation des ${nbJobPosting} offres d'emploi`
         );
         process.exit(0);
     })
-    .catch(error => {
+    .catch((error) => {
         signale.error("Erreur lors de l'importation des fixtures : ", error);
         process.exit(1);
     });

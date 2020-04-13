@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import { PropTypes } from 'prop-types';
 import {
     List,
     Datagrid,
@@ -6,24 +7,30 @@ import {
     EditButton,
     Filter,
     TextInput,
-    Pagination
-} from "react-admin";
+    Pagination,
+} from 'react-admin';
 
-const OrganizationLogo = ({record}) => {
+const OrganizationLogo = ({ record }) => {
     return record && record.image ? (
         <img src={record.image} height="50" alt={record.name} />
     ) : (
         `Pas d'image pour "${record.name}"`
     );
 };
+OrganizationLogo.propTypes = {
+    record: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        image: PropTypes.string,
+    }),
+};
 
-const OrganizationAddress = ({record: {address}}) => {
+const OrganizationAddress = ({ record: { address } }) => {
     return address
         ? `${address.streetAddress} ${address.postalCode} ${address.addressLocality}`
         : "L'adresse n'est pas renseignée.";
 };
 
-const OrganizationFilter = props => (
+const OrganizationFilter = (props) => (
     <Filter {...props}>
         <TextInput source="name" label="Filtre par nom" alwaysOn />
         <TextInput
@@ -39,16 +46,16 @@ const OrganizationFilter = props => (
     </Filter>
 );
 
-const OrganizationPagination = props => (
+const OrganizationPagination = (props) => (
     <Pagination rowsPerPageOptions={[1, 10, 25, 50]} {...props} />
 );
 
-export const OrganizationList = props => {
+export const OrganizationList = (props) => {
     return (
         <List
             {...props}
             filters={<OrganizationFilter />}
-            sort={{field: "name", order: "ASC"}}
+            sort={{ field: 'name', order: 'ASC' }}
             exporter={false}
             pagination={<OrganizationPagination />}
             bulkActionButtons={false}

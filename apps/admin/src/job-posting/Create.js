@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
     Create,
     TextInput,
@@ -6,12 +6,12 @@ import {
     SelectInput,
     DateInput,
     ReferenceInput,
-    required
-} from "react-admin";
+    required,
+} from 'react-admin';
 
-import {jobTypes} from "./index";
+import { jobTypes } from './index';
 
-export const JobPostingCreate = props => {
+export const JobPostingCreate = (props) => {
     return (
         <Create title="Création d'une nouvelle offre d'emploi" {...props}>
             <SimpleForm>

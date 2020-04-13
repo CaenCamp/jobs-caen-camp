@@ -3,7 +3,7 @@ const faker = require('faker');
 faker.locale = 'fr';
 
 module.exports = {
-    fake: id => ({
+    fake: (id) => ({
         '@context': 'http://schema.org',
         '@type': 'Organization',
         '@id': '/organizations/' + id,

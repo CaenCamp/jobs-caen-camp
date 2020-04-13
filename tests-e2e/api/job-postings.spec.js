@@ -41,7 +41,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(3);
+                    expect(resp.json).toHaveLength(3);
                     expect(resp.json[0].title).toStrictEqual(
                         'Data Science Lead'
                     );
@@ -82,7 +82,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(3);
+                    expect(resp.json).toHaveLength(3);
                     expect(resp.json[0].title).toStrictEqual(
                         'R&D Software Engineer'
                     );
@@ -123,7 +123,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(3);
+                    expect(resp.json).toHaveLength(3);
                     expect(resp.json[0].title).toStrictEqual(
                         'Data Science Lead'
                     );
@@ -164,7 +164,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(3);
+                    expect(resp.json).toHaveLength(3);
                     expect(
                         resp.json[0].hiringOrganization.address.postalCode
                     ).toStrictEqual('14460');
@@ -205,7 +205,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(2);
+                    expect(resp.json).toHaveLength(2);
                 });
             await frisby
                 .get(
@@ -233,7 +233,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(1);
+                    expect(resp.json).toHaveLength(1);
                 });
         });
 
@@ -264,7 +264,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(2);
+                    expect(resp.json).toHaveLength(2);
                     expect(resp.json[0].title).toStrictEqual(
                         'Ingénieur Lead Full Stack technico-fonctionnel'
                     );
@@ -301,7 +301,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(2);
+                    expect(resp.json).toHaveLength(2);
                     expect(resp.json[0].title).toStrictEqual(
                         'Ingénieur Lead Full Stack technico-fonctionnel'
                     );
@@ -338,7 +338,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(1);
+                    expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].title).toStrictEqual(
                         'R&D Software Engineer'
                     );
@@ -372,7 +372,7 @@ describe('JobPostings API Endpoints', () => {
                     ].join(',')
                 )
                 .then((resp) => {
-                    expect(resp.json.length).toStrictEqual(1);
+                    expect(resp.json).toHaveLength(1);
                     expect(resp.json[0].title).toStrictEqual(
                         'Ingénieur Lead Full Stack technico-fonctionnel'
                     );

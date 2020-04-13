@@ -11,19 +11,22 @@
         "sourceType": "module",
         "ecmaVersion": 2019
     },
-    "plugins": [
-        "prettier",
-        "cypress",
-        "jest"
-    ],
+    "plugins": ["prettier", "cypress", "jest"],
     "extends": [
         "eslint:recommended",
         "prettier",
         "plugin:prettier/recommended",
+        "plugin:react/recommended",
+        "plugin:testing-library/recommended",
         "plugin:jest/recommended",
         "plugin:jest/style"
     ],
     "rules": {
         "prefer-expect-assertions": 0
+    },
+    "settings": {
+        "react": {
+            "version": "16.13.1"
+        }
     }
 }
