@@ -25,7 +25,7 @@ const OrganizationSortableFields = [
  *
  * @param {object} client - The Database client
  * @param {object} filters - Organization Filter
- * @param {Array} sort - Sort parameters [columnName, direction]
+ * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @returns {Promise} - Knew query for filtrated organization list
  */
 const getFilteredOrganizationsQuery = (client, filters, sort) => {
@@ -96,7 +96,7 @@ const formatOrganizationForAPI = (dbOrganization) => ({
  *
  * @param {object} client - The Database client
  * @param {object} filters - Organization Filter
- * @param {Array} sort - Sort parameters [columnName, direction]
+ * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @param {object} pagination - Pagination {perPage: 10, currentPage: 1}
  * @returns {Promise} - paginated object with paginated organization list and totalCount
  */

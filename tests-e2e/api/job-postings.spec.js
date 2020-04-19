@@ -54,14 +54,14 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait pouvoir renvoyer une liste ordonnée par title avec paramètres sort [title, DESC]', async () => {
+        it('devrait pouvoir renvoyer une liste ordonnée par title avec paramètres { sortBy: title, orderBy: DESC }', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?sort=${JSON.stringify([
-                        'title',
-                        'DESC',
-                    ])}`
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        sortBy: 'title',
+                        orderBy: 'DESC',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -95,14 +95,14 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait pouvoir renvoyer une liste ordonnée par date de dépôt avec paramètres sort [datePosted, ASC]', async () => {
+        it('devrait pouvoir renvoyer une liste ordonnée par date de dépôt avec paramètres { sortBy: "datePosted", orderBy: "ASC"', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?sort=${JSON.stringify([
-                        'datePosted',
-                        'ASC',
-                    ])}`
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        sortBy: 'datePosted',
+                        orderBy: 'ASC',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -136,14 +136,14 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it("devrait pouvoir renvoyer une liste ordonnée par code postal de l'entreprise [hiringOrganizationPostalCode, ASC]", async () => {
+        it("devrait pouvoir renvoyer une liste ordonnée par code postaux ascendant de l'entreprise hiringOrganizationPostalCode", async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?sort=${JSON.stringify([
-                        'hiringOrganizationPostalCode',
-                        'ASC',
-                    ])}`
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        sortBy: 'hiringOrganizationPostalCode',
+                        orderBy: 'ASC',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -237,7 +237,10 @@ describe('JobPostings API Endpoints', () => {
                 .get(
                     `http://api:3001/api/job-postings?filters=${JSON.stringify({
                         title: 'Lead',
-                    })}&sort=${JSON.stringify(['title', 'DESC'])}`
+                    })}&${querystring.stringify({
+                        sortBy: 'title',
+                        orderBy: 'DESC',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -272,7 +275,10 @@ describe('JobPostings API Endpoints', () => {
                 .get(
                     `http://api:3001/api/job-postings?filters=${JSON.stringify({
                         hiringOrganizationPostalCode: 14,
-                    })}&sort=${JSON.stringify(['title', 'DESC'])}`
+                    })}&${querystring.stringify({
+                        sortBy: 'title',
+                        orderBy: 'DESC',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(

@@ -20,7 +20,10 @@ router.get('/', async (ctx) => {
     const { jobPostings, pagination } = await getJobPostingPaginatedList({
         client: ctx.db,
         filters: parseJsonQueryParameter(ctx.query.filters),
-        sort: parseJsonQueryParameter(ctx.query.sort),
+        sort: {
+            sortBy: ctx.query.sortBy,
+            orderBy: ctx.query.orderBy,
+        },
         pagination: {
             currentPage: ctx.query.currentPage,
             perPage: ctx.query.perPage,
