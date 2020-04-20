@@ -105,7 +105,7 @@ paths:
         * hiringOrganizationAddressLocality
         * hiringOrganizationAddressCountry
 
-        Cette liste est triable par sort=[key, sortDirection_ASC_DESC] :
+        Cette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :
         * datePosted
         * title
         * jobStartDate
@@ -116,7 +116,8 @@ paths:
         * hiringOrganizationAddressLocality
         * hiringOrganizationAddressCountry
       parameters:
-        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SortBy'
+        - $ref: '#/components/parameters/OrderBy'
         - $ref: '#/components/parameters/Filter'
         - $ref: '#/components/parameters/PaginationCurrentPage'
         - $ref: '#/components/parameters/PaginationPerPage'
@@ -472,13 +473,14 @@ paths:
         * address_locality
         * postal_code
 
-        Cette liste est triable par sort=[key, sortDirection_ASC_DESC] :
+        Cette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :
         * name
         * address_locality
         * postal_code
       parameters:
         - $ref: '#/components/parameters/Filter'
-        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SortBy'
+        - $ref: '#/components/parameters/OrderBy'
         - $ref: '#/components/parameters/PaginationCurrentPage'
         - $ref: '#/components/parameters/PaginationPerPage'
     post:
@@ -1111,18 +1113,22 @@ components:
       explode: true
       schema:
         type: string
-    Sort:
-      name: sort
+    SortBy:
+      name: sortBy
       in: query
-      description: "Le tri applicable à la liste. C'est un tableau stringifié de la forme [sortProp, sortDirection]"
+      description: "Le paramètre de tri des résultats (ex: par titre, par date...)"
       required: false
-      explode: false
       schema:
-        type: array
-        maxItems: 2
-        minItems: 2
-        items:
-          type: string
+        type: string
+        example: 'datePosted'
+    OrderBy:
+      name: orderBy
+      in: query
+      description: "Le paramètre de tri ascendant ou descendant (ASC ou DESC)"
+      required: false
+      schema:
+        type: string
+        example: 'ASC'
     PaginationCurrentPage:
       name: currentPage
       in: query
