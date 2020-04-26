@@ -116,14 +116,14 @@ describe('Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un parametre de requête "sort" pour le tri', async () => {
+        it('devrait accepter des paramètres sortBy et orderBy pour le tri', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?sort=${JSON.stringify([
-                        'name',
-                        'ASC',
-                    ])}`
+                    `http://api:3001/api/organizations?${querystring.stringify({
+                        sortBy: 'name',
+                        orderBy: 'ASC',
+                    })}`
                 )
                 .expect('status', 200)
                 .then((resp) => {
@@ -134,10 +134,10 @@ describe('Organizations API Endpoints', () => {
                 });
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?sort=${JSON.stringify([
-                        'name',
-                        'DESC',
-                    ])}`
+                    `http://api:3001/api/organizations?${querystring.stringify({
+                        sortBy: 'name',
+                        orderBy: 'DESC',
+                    })}`
                 )
                 .then((resp) => {
                     expect(resp.json).toHaveLength(3);

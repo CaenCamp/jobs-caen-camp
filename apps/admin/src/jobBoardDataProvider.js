@@ -17,7 +17,7 @@ const getXTotalCountHeaderValue = (headers) => {
  *
  * @example
  *
- * getList     => GET http://my.api.url/posts?sort=['title','ASC']&currentPage=1&perPage=24
+ * getList     => GET http://my.api.url/posts?sortBy=title&orderBy=ASC&currentPage=1&perPage=24
  * getOne      => GET http://my.api.url/posts/123
  * getMany     => GET http://my.api.url/posts?filter={id:[123,456,789]}&currentPage=1&perPage=24
  * update      => PUT http://my.api.url/posts/123
@@ -29,7 +29,8 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
         const { currentPage, perPage } = params;
         const { field, order } = params.sort;
         const query = {
-            sort: JSON.stringify([field, order]),
+            sortBy: field,
+            orderBy: order,
             filters: JSON.stringify(params.filter),
             currentPage,
             perPage,
@@ -61,7 +62,8 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
         const { currentPage, perPage } = params;
         const { field, order } = params.sort;
         const query = {
-            sort: JSON.stringify([field, order]),
+            sortBy: field,
+            orderBy: order,
             filters: JSON.stringify({
                 ...params.filter,
                 [params.target]: params.id,
