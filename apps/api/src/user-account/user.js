@@ -57,7 +57,7 @@ const isValidPassword = (password) => {
  * @returns {Promise<string>} A promise that will return the hashed password ready for secure storage
  */
 const hashPassword = (plainTextPassword) =>
-    bcrypt.hash(plainTextPassword, config.bcryptSaltRounds);
+    bcrypt.hash(plainTextPassword, config.security.bcryptSaltRounds);
 
 module.exports = {
     hashPassword,

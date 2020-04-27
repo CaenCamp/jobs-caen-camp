@@ -19,6 +19,7 @@
     "dependencies": {
         "bcrypt": "4.0.1",
         "convict": "5.2.0",
+        "jsonwebtoken": "8.5.1",
         "knex": "0.20.13",
         "knex-paginate": "1.2.0",
         "knex-stringcase": "1.4.1",

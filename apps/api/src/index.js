@@ -9,6 +9,7 @@ const error = require('koa-json-error');
 const dbMiddleware = require('./toolbox/middleware/db');
 const organizationRouter = require('./organization/router');
 const jobPostingRouter = require('./job-posting/router');
+const authenticationRouter = require('./toolbox/authentication/router');
 
 const app = new Koa();
 
@@ -87,6 +88,9 @@ router.get('/api', (ctx) => {
 });
 app.use(router.routes()).use(router.allowedMethods());
 app.use(dbMiddleware);
+app.use(authenticationRouter.routes()).use(
+    authenticationRouter.allowedMethods()
+);
 app.use(organizationRouter.routes()).use(organizationRouter.allowedMethods());
 app.use(jobPostingRouter.routes()).use(jobPostingRouter.allowedMethods());
 

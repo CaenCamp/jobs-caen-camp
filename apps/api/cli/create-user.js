@@ -6,7 +6,7 @@ const {
     hashPassword,
     isValidPassword,
     isValidUsername,
-} = require('../src/user_account/user');
+} = require('../src/user-account/user');
 
 const pg = knex(knexConfig);
 

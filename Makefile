@@ -127,6 +127,7 @@ test-env-start: build-front
 	@${DC_TEST} up -d
 	@$(DC_TEST) run --rm api bash -ci 'yarn migrate:latest'
 	@$(DC_TEST) run --rm api bash -ci 'node cli/load-fixed-fixtures'
+	@$(DC_TEST) run --rm api bash -ci 'USERNAME=testUser PASSWORD=n33dToB3+Str0ng node cli/create-user.js'
 test-env-stop:
 	@${DC_TEST} down
 test-env-logs:

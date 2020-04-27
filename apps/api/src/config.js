@@ -39,11 +39,27 @@ const config = convict({
             env: 'POSTGRES_PASSWORD',
         },
     },
-    bcryptSaltRounds: {
-        doc: 'the cost of processing the salt used during password hashing',
-        format: 'integer',
-        default: 10,
-        env: 'PASSWORD_SALT_ROUNDS',
+    security: {
+        bcryptSaltRounds: {
+            doc: 'the cost of processing the salt used during password hashing',
+            format: 'integer',
+            default: 10,
+            env: 'PASSWORD_SALT_ROUNDS',
+        },
+        jwt: {
+            secretkey: {
+                doc: 'the key used to sign the token with HMAC SHA256',
+                format: String,
+                default: 'thisIsTheDefaultJWTSecretKey',
+                env: 'JWT_SECRET_KET',
+            },
+            expiration: {
+                doc: 'duration in seconds of the token lifetime',
+                format: 'integer',
+                default: 600, // 10 min - Token life time must be short !
+                env: 'JWT_EXPIRATION',
+            },
+        },
     },
 });
 
