@@ -53,7 +53,6 @@ describe('User methods', () => {
             '%s should not be a valid password',
             (password) => {
                 const testPassword = isValidPassword(password);
-                console.log(testPassword);
                 expect(testPassword.isValid).toBeTruthy();
             }
         );
