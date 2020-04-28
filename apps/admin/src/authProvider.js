@@ -1,3 +1,9 @@
+window.addEventListener('storage', (event) => {
+    if (event.key === 'logout') {
+        global.inMemoryToken = null;
+    }
+});
+
 export const authProvider = {
     login: ({ username, password }) => {
         const request = new Request('http://localhost:8001/authenticate', {
@@ -20,6 +26,8 @@ export const authProvider = {
     },
     logout: () => {
         global.inMemoryToken = null;
+        window.localStorage.setItem('logout', Date.now());
+
         return Promise.resolve();
     },
     checkAuth: () =>
