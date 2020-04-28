@@ -12,8 +12,8 @@ router.post('/authenticate', async (ctx) => {
 
     const user = await getOneByUsername({ client: ctx.db, username });
 
-    if (!user) {
-        ctx.throw('Invalid credentials.', 401);
+    if (!user || user.error) {
+        ctx.throw(user.error || 'Invalid credentials.', 401);
         return;
     }
 
