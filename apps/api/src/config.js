@@ -60,6 +60,41 @@ const config = convict({
                 env: 'JWT_EXPIRATION',
             },
         },
+        refreshToken: {
+            name: {
+                doc: 'the name of the refresh token',
+                format: String,
+                default: 'jobBoardRefreshToken',
+                env: 'REFRESH_TOKEN_NAME',
+            },
+            expiration: {
+                doc: 'The token lifetime duration in seconds',
+                format: 'integer',
+                default: 3600, // 1 hour
+                env: 'REFRESH_TOKEN_NAME',
+            },
+            rememberExpiration: {
+                doc:
+                    'The token lifetime if user ask to remember her/him in seconds',
+                format: 'integer',
+                default: 1296000, // 15 days
+                env: 'REFRESH_TOKEN_NAME',
+            },
+        },
+        signedCookie: {
+            key1: {
+                doc: 'First key used for signed cookies',
+                format: String,
+                default: 'The Torture Never Stops',
+                env: 'SIGNED_COOKIE_KEY_1',
+            },
+            key2: {
+                doc: 'Second key used for signed cookies',
+                format: String,
+                default: 'Watermelon in Easter Hay',
+                env: 'SIGNED_COOKIE_KEY_2',
+            },
+        },
     },
 });
 

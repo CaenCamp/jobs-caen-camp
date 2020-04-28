@@ -10,15 +10,23 @@ const dbMiddleware = require('./toolbox/middleware/db');
 const organizationRouter = require('./organization/router');
 const jobPostingRouter = require('./job-posting/router');
 const authenticationRouter = require('./toolbox/authentication/router');
+const config = require('./config');
 
 const app = new Koa();
+
+// Add keys for signed cookies
+app.keys = [
+    config.security.signedCookie.key1,
+    config.security.signedCookie.key2,
+];
 
 // See https://github.com/zadzbw/koa2-cors for configuration
 app.use(
     cors({
-        origin: '*',
+        origin: 'http://localhost:8002',
         allowHeaders: ['Origin, Content-Type, Accept, Authorization'],
         exposeHeaders: ['X-Total-Count', 'Link'],
+        credentials: true,
     })
 );
 

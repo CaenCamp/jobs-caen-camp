@@ -2,7 +2,7 @@ import frisby from 'frisby';
 
 describe('Authentication API Endpoints', () => {
     describe('POST: /authenticate', () => {
-        it("devrait retourner une erreur 400 si le username n'existe pas", async () => {
+        it("devrait retourner une erreur 401 si le username n'existe pas", async () => {
             expect.hasAssertions();
             await frisby
                 .post(
@@ -21,7 +21,7 @@ describe('Authentication API Endpoints', () => {
                 });
         });
 
-        it('devrait retourner une erreur 400 si le mot de passe est faux', async () => {
+        it('devrait retourner une erreur 401 si le mot de passe est faux', async () => {
             expect.hasAssertions();
             await frisby
                 .post(
