@@ -5,16 +5,15 @@ import jobBoardDataProvider from './jobBoardDataProvider';
 import { authProvider } from './authProvider';
 import Organization from './organization';
 import JobPosting from './job-posting';
-
-global.inMemoryToken = null;
+import inMemoryJWT from './inMemoryJWT';
 
 const httpClient = (url, options = {}) => {
     if (!options.headers) {
         options.headers = new Headers({ Accept: 'application/json' });
     }
-    const token = global.inMemoryToken;
+    const token = inMemoryJWT.getToken();
     if (token) {
-        options.headers.set('Authorization', `Bearer ${token.token}`);
+        options.headers.set('Authorization', `Bearer ${token}`);
     }
 
     return fetchUtils.fetchJson(url, options);
