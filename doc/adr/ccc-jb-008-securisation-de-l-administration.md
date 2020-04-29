@@ -63,7 +63,8 @@ Il y a un index de type `UNIQUE` sur le `username`.
 2. Le mot de passe devra être complexe suivant la norme [OWASP Guidelines for enforcing secure passwords](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/migrated_content). Pour cela, nous utiliserons le module [OWASP Password Strength Test](https://www.npmjs.com/package/owasp-password-strength-test).
 3. Le mot de passe sera stocké en base sous forme d'un [hash BCrypt](https://fr.wikipedia.org/wiki/Bcrypt). Pour effectuer le hashage et pour tester les mots de passe lors de la connexion, nous utiliserons le module [bcrypt](https://www.npmjs.com/package/bcrypt).
 
-## Liens
+### La table refresh_token
 
--   articles de référence
--   post de blog récapitulatif
+Afin de se calquer sur les bonnes pratiques, l'implementation de l'utilisation du [JSON Web Token(JWT)](https://tools.ietf.org/html/rfc7519) s'appuie sur les recommandations du post de blog [The Ultimate Guide to handling JWTs on frontend clients](https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/).
+
+Ce qu'il faut retenir de cette implementation, c'est que l'on considère que la meilleur manière de conserver le JWT côté client est de la conserver en mémoire. C'est ainsi qu'on minimisera au maximum le vol potentiel de ce jeton, jeton qui aura au demeurant une durée de vie assez courte (10 min). Mais pour pallier aux inconveniants de ne le maintenir qu'en mémoire (on perd le jeton en rafraichissant la page par exemple !), on va implémenter un mécanisme permettant de renouveller ce jeton en se basant sur un endpoint (`/refresh-token`) qui utilisera un cookie qui lui sera sécurisé. La table `refresh_token` est la table utilisée pour gérer ces jetons de rafraichissement de JWT.

@@ -19,24 +19,41 @@ router.post('/authenticate', async (ctx) => {
     const user = await getOneByUsername({ client: ctx.db, username });
 
     if (!user || user.error) {
-        ctx.throw(user ? user.error : 'Invalid credentials.', 401);
+        ctx.throw(401, user ? user.error : 'Invalid credentials.');
         return;
     }
 
     if (!bcrypt.compareSync(password, user.password)) {
-        ctx.throw('Invalid credentials.', 401);
+        ctx.throw(401, 'Invalid credentials.');
         return;
     }
 
+    // We check that there is not already a refresh token for this user.
+    // If this is the case - which can happen when the same user logs on to two tabs or two browsers
+    // we need to keep it to keep this refresh-token valid.
+    // else, we'll create a new one.
     let refreshTokenId;
     const existingRefreshToken = await getExistingRefreshToken({
         client: ctx.db,
         userId: user.id,
     });
-    if (existingRefreshToken && !existingRefreshToken.error) {
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    if (
+        existingRefreshToken &&
+        !existingRefreshToken.error &&
+        existingRefreshToken.validityTimestamp > currentTimestamp
+    ) {
         refreshTokenId = existingRefreshToken.id;
     } else {
-        const currentTimestamp = Math.floor(Date.now() / 1000);
+        // If there was already a refresh token for the user
+        // but that this one was no longer valid
+        // we erase it so we can create a new one.
+        if (existingRefreshToken && existingRefreshToken.id) {
+            await deleteRefreshToken({
+                client: ctx.db,
+                id: existingRefreshToken.id,
+            });
+        }
         const newTokenData = {
             userId: user.id,
             rememberMe,
@@ -101,26 +118,22 @@ router.get('/refresh-token', async (ctx) => {
     });
 
     if (!dbToken.id || dbToken.error) {
-        const explainedError = new Error(`The refresh token is not valid.`);
-        explainedError.status = 400;
-
-        throw explainedError;
+        ctx.throw(400, `The refresh token is not valid.`);
+        return;
     }
 
     const currentTimestamp = Math.floor(Date.now() / 1000);
     if (dbToken.validityTimestamp <= currentTimestamp) {
         await deleteRefreshToken({ client: ctx.db, id: refreshTokenId });
 
-        const explainedError = new Error(`The refresh token is expired.`);
-        explainedError.status = 400;
-
-        throw explainedError;
+        ctx.throw(400, `The refresh token is expired.`);
+        return;
     }
 
     const user = await getOne({ client: ctx.db, id: dbToken.userId });
 
     if (!user || user.error) {
-        ctx.throw(user.error || 'Invalid credentials.', 401);
+        ctx.throw(401, user.error || 'Invalid credentials.');
         return;
     }
 
