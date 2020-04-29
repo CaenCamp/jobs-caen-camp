@@ -7,6 +7,7 @@ const { oas } = require('koa-oas3');
 const error = require('koa-json-error');
 
 const dbMiddleware = require('./toolbox/middleware/db');
+const jwtMiddleware = require('./toolbox/authentication/jwtMiddleware');
 const organizationRouter = require('./organization/router');
 const jobPostingRouter = require('./job-posting/router');
 const authenticationRouter = require('./toolbox/authentication/router');
@@ -67,6 +68,7 @@ const formatError = (error) => {
     };
 };
 
+app.use(jwtMiddleware);
 app.use(bodyParser());
 app.use(error(formatError));
 app.use(

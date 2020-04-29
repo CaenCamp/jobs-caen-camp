@@ -85,7 +85,7 @@ router.post('/authenticate', async (ctx) => {
 
     ctx.body = {
         token: token,
-        tokenExpiry: 15, // config.security.jwt.expiration,
+        tokenExpiry: config.security.jwt.expiration,
         username: user.username,
     };
 });
@@ -134,7 +134,7 @@ router.get('/refresh-token', async (ctx) => {
 
     ctx.body = {
         token: token,
-        tokenExpiry: 15, //config.security.jwt.expiration,
+        tokenExpiry: config.security.jwt.expiration,
         username: user.username,
     };
 });
