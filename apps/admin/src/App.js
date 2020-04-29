@@ -6,6 +6,7 @@ import { authProvider } from './authProvider';
 import Organization from './organization';
 import JobPosting from './job-posting';
 import inMemoryJWT from './inMemoryJWT';
+import LoginPage from './LoginPage';
 
 const httpClient = (url, options = {}) => {
     if (!options.headers) {
@@ -25,7 +26,11 @@ const dataProvider = jobBoardDataProvider(
 );
 
 const App = () => (
-    <Admin authProvider={authProvider} dataProvider={dataProvider}>
+    <Admin
+        authProvider={authProvider}
+        dataProvider={dataProvider}
+        loginPage={LoginPage}
+    >
         <Resource name="organizations" {...Organization} />
         <Resource name="job-postings" {...JobPosting} />
     </Admin>
