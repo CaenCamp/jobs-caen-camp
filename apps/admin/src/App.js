@@ -31,8 +31,22 @@ const App = () => (
         dataProvider={dataProvider}
         loginPage={LoginPage}
     >
-        <Resource name="organizations" {...Organization} />
-        <Resource name="job-postings" {...JobPosting} />
+        {(permissions) => [
+            <Resource
+                key="organisation"
+                name="organizations"
+                list={Organization.list}
+                edit={
+                    permissions === 'authenticated' ? Organization.edit : null
+                }
+                create={
+                    permissions === 'authenticated' ? Organization.create : null
+                }
+                icon={Organization.icon}
+                option={Organization.option}
+            />,
+            <Resource key="job-posting" name="job-postings" {...JobPosting} />,
+        ]}
     </Admin>
 );
 

@@ -29,7 +29,7 @@ export const authProvider = {
         inMemoryJWT.ereaseToken();
         localStorage.setItem('permissions', 'anonymous');
 
-        return fetch(request).then(() => '/login');
+        return fetch(request).then(() => '/');
     },
     checkAuth: () => {
         const role = localStorage.getItem('permissions');
