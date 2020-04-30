@@ -59,9 +59,9 @@ paths:
                           postalCode: '14000'
           headers:
             X-Total-Count:
-                $ref: '#/components/headers/X-Total-Count'
+              $ref: '#/components/headers/X-Total-Count'
             Link:
-                $ref: '#/components/headers/Link'
+              $ref: '#/components/headers/Link'
         '400':
           description: Bad Request
           content:
@@ -201,6 +201,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       parameters: []
+      security:
+        - bearerAuth: []
     parameters: []
   '/api/job-postings/{identifier}':
     get:
@@ -354,6 +356,8 @@ paths:
                   validThrough: '2010-05-05'
                   hiringOrganizationId: a122edec-5580-4a93-aff7-fc18b41e4c57
         description: "Données permettant de mettre à jour une offre d'emploi"
+      security:
+        - bearerAuth: []
     delete:
       tags:
         - "Offres d'emploi"
@@ -404,6 +408,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       description: "Supprimer une offre d'emploi"
+      security:
+        - bearerAuth: []
   /api/organizations:
     get:
       summary: Liste des entreprises
@@ -439,9 +445,9 @@ paths:
                           contactType: "Offres d'emploi"
           headers:
             X-Total-Count:
-                $ref: '#/components/headers/X-Total-Count'
+              $ref: '#/components/headers/X-Total-Count'
             Link:
-                $ref: '#/components/headers/Link'
+              $ref: '#/components/headers/Link'
         '400':
           description: Bad Request
           content:
@@ -467,16 +473,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getOrganizations
-      description: |
-        Obtenir la liste des entreprises.\n\nCette liste est filtrable par filters={ key: value, key2: value ...} :
-        * name
-        * address_locality
-        * postal_code
-
-        Cette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :
-        * name
-        * address_locality
-        * postal_code
+      description: "Obtenir la liste des entreprises.\\n\\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* name\n* address_locality\n* postal_code\n\nCette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :\n* name\n* address_locality\n* postal_code\n"
       parameters:
         - $ref: '#/components/parameters/Filter'
         - $ref: '#/components/parameters/SortBy'
@@ -561,6 +558,8 @@ paths:
                       contactType: 'Offres d"emploi'
       tags:
         - Entreprises
+      security:
+        - bearerAuth: []
     parameters: []
   '/api/organizations/{identifier}':
     parameters:
@@ -695,6 +694,8 @@ paths:
         description: "Les données de l'entreprise mises à jour"
       tags:
         - Entreprises
+      security:
+        - bearerAuth: []
     delete:
       summary: "Suppression d'une entreprise"
       operationId: deleteOrganization
@@ -749,26 +750,32 @@ paths:
       description: Supprimer une entreprise existante
       tags:
         - Entreprises
+      security:
+        - bearerAuth: []
 components:
-  securitySchemes: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   headers:
     X-Total-Count:
-        description: "Return information about total items to paginate"
-        schema:
-            type: integer
-        example: 42
-        required: false
+      description: Return information about total items to paginate
+      schema:
+        type: integer
+      example: 42
+      required: false
     Link:
-        description: "Return information about pagination actions"
-        schema:
-            type: string
-        example: |
-            </resources?currentPage=3&perPage=10>; rel="self",
-            </resources?currentPage=1&perPage=10>; rel="first",
-            </resources?currentPage=2&perPage=10>; rel="prev",
-            </resources?currentPage=4&perPage=10>; rel="next",
-            </resources?currentPage=5&perPage=10>; rel="last",
-        required: false
+      description: Return information about pagination actions
+      schema:
+        type: string
+      example: |
+        </resources?currentPage=3&perPage=10>; rel="self",
+        </resources?currentPage=1&perPage=10>; rel="first",
+        </resources?currentPage=2&perPage=10>; rel="prev",
+        </resources?currentPage=4&perPage=10>; rel="next",
+        </resources?currentPage=5&perPage=10>; rel="last",
+      required: false
   schemas:
     JobPosting:
       description: "Une offre d'emploi"
@@ -1116,23 +1123,23 @@ components:
     SortBy:
       name: sortBy
       in: query
-      description: "Le paramètre de tri des résultats (ex: par titre, par date...)"
+      description: 'Le paramètre de tri des résultats (ex: par titre, par date...)'
       required: false
       schema:
         type: string
-        example: 'datePosted'
+        example: datePosted
     OrderBy:
       name: orderBy
       in: query
-      description: "Le paramètre de tri ascendant ou descendant (ASC ou DESC)"
+      description: Le paramètre de tri ascendant ou descendant (ASC ou DESC)
       required: false
       schema:
         type: string
-        example: 'ASC'
+        example: ASC
     PaginationCurrentPage:
       name: currentPage
       in: query
-      description: "Le paramètre de pagination pour définir la page courrante."
+      description: Le paramètre de pagination pour définir la page courrante.
       required: false
       schema:
         type: integer
@@ -1154,3 +1161,6 @@ components:
         type: string
         format: uuid
       example: 9a6c8995-df54-446c-a5b8-71532c304751
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid

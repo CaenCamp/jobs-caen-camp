@@ -16,7 +16,6 @@ Comme le précise l'[issue 55](https://github.com/CaenCamp/jobs-caen-camp/issues
 une mise à jour de React-admin a mis en question le format des paramètres
 de pagination et de tri.
 
-
 Le paramètre de tri actuel est alors un tableau stringifié de la forme `['title', 'ASC']`,
 ce qui donne des requêtes de la forme :
 
@@ -27,11 +26,6 @@ ce qui donne des requêtes de la forme :
 Comment parser un tableau stringifié sans aller à l'encontre des
 [bonnes pratiques](https://www.moesif.com/blog/technical/api-design/REST-API-Design-Filtering-Sorting-and-Pagination/) ?
 
-
-
-
-
-
 Le tri est traité comme le paramètre `sort`, c'est un tableau stringifié,
 ici `["title", "DESC"]`.
 Pour simplifier la syntaxe des requêtes depuis le front-end, nous avons scindé ce paramètres en deux paramètres, sortBy et orderBy.
@@ -39,7 +33,6 @@ Pour simplifier la syntaxe des requêtes depuis le front-end, nous avons scindé
 Ce parti-pris améliore la lisibilité du contrat OpenAPI et simplifie la rédaction de la requête pour le front-end.
 
 [Décrivez le contexte et l'énoncé du problème, par exemple, sous forme libre en deux ou trois phrases. Vous pouvez vouloir articuler le problème sous forme de question].
-
 
 ## Options envisagées
 
@@ -50,16 +43,14 @@ La requête sera de la forme :
 api/organizations?sortBy=title&orderBy=DESC
 ```
 
-
 ## Résultat de la décision
 
 Cette scission des paramètres est retenue.
 
 ### Conséquences positives
 
-* Contrat OpenAPI plus lisible => interface swagger améliorée
-* Simplification du code (pas besoin de parser un tableau)
-
+-   Contrat OpenAPI plus lisible => interface swagger améliorée
+-   Simplification du code (pas besoin de parser un tableau)
 
 ### Conséquences négatives
 
@@ -67,7 +58,6 @@ Après la [refonte des paramètres de pagination](https://github.com/CaenCamp/jo
 et cette refonte du tri, la
 [refonte des filtres de l'API](https://github.com/CaenCamp/jobs-caen-camp/issues/57)
 est désormais quasi-nécessaire, par souci d'harmonisation.
-
 
 ## Liens
 

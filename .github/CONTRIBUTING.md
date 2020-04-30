@@ -17,6 +17,7 @@
     -   [La base de données](#la-base-de-donn%c3%a9es)
         -   [Initialisation](#initialisation)
         -   [Les migrations](#les-migrations)
+        -   [Guide de style pour les tables](#guide-de-style-pour-les-tables)
     -   [La documentation](#la-documentation)
         -   [Les ADR.s](#les-adrs)
     -   [OpenAPI](#openapi)
@@ -212,6 +213,11 @@ Enfin, vous pouvez lister toutes les migrations déjà écrites, ainsi que leur 
 ```bash
 make migrate-list
 ```
+
+### Guide de style pour les tables
+
+1. Tout doit être nommé en `snake_case`. Knex est configuré pour faire la transformation `camelCase` <=> `snake_case` aussi bien en entrée qu'en sortie de requêtes.
+   2 ) Le nom des tables doit être au singulier ! Par exemple, `job_posting` plutôt que `job_postings`.
 
 ## La documentation
 
