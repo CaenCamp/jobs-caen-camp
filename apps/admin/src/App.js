@@ -47,7 +47,17 @@ const App = () => (
                 icon={Organization.icon}
                 option={Organization.option}
             />,
-            <Resource key="job-posting" name="job-postings" {...JobPosting} />,
+            <Resource
+                key="job-posting"
+                name="job-postings"
+                list={JobPosting.list}
+                edit={permissions === 'authenticated' ? JobPosting.edit : null}
+                create={
+                    permissions === 'authenticated' ? JobPosting.create : null
+                }
+                icon={JobPosting.icon}
+                option={JobPosting.option}
+            />,
         ]}
     </Admin>
 );
