@@ -54,6 +54,11 @@ export const authProvider = {
     },
     getPermissions: () => {
         const role = localStorage.getItem('permissions');
-        return role ? Promise.resolve(role) : Promise.resolve('anonymous');
+        const finalRole =
+            role === 'authenticated' && inMemoryJWT.getToken
+                ? 'authenticated'
+                : 'anonymous';
+
+        return Promise.resolve(finalRole);
     },
 };

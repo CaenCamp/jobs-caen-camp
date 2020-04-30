@@ -6,6 +6,7 @@ import { PropTypes } from 'prop-types';
 const LoginPage = ({ theme }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
     const login = useLogin();
     const notify = useNotify();
     const submit = (e) => {
@@ -31,6 +32,13 @@ const LoginPage = ({ theme }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="password"
                 />
+                <input
+                    name="rememberMe"
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={() => setRememberMe(!rememberMe)}
+                />
+                <label htmlFor="rememberMe">Rester connecter 15 jours</label>
                 <input name="login" type="submit" value="Login" />
             </form>
             <Notification />
