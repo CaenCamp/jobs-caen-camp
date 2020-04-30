@@ -17,6 +17,7 @@ export const authProvider = {
             })
             .then(({ token, tokenExpiry }) => {
                 inMemoryJWT.setToken(token, tokenExpiry);
+                return localStorage.setItem('permissions', 'authenticated');
             });
     },
     logout: () => {
@@ -26,15 +27,18 @@ export const authProvider = {
             credentials: 'include',
         });
         inMemoryJWT.ereaseToken();
+        localStorage.setItem('permissions', 'anonymous');
 
-        return fetch(request).then(() => '/login');
+        return fetch(request).then(() => '/');
     },
     checkAuth: () => {
-        if (!inMemoryJWT.getToken()) {
-            // We check that the user was not already logged thanks to the refreshToken cookie.
-            // If it was, and the cookie's still valid, we'd get a new jwt.
+        const role = localStorage.getItem('permissions');
+        if (!inMemoryJWT.getToken() && role === 'authenticated') {
             return inMemoryJWT.getRefreshedJWT().then((gotIt) => {
-                return gotIt ? Promise.resolve() : Promise.reject();
+                if (!gotIt) {
+                    localStorage.setItem('permissions', 'anonymous');
+                }
+                return Promise.resolve();
             });
         } else {
             return Promise.resolve();
@@ -44,11 +48,17 @@ export const authProvider = {
         const status = error.status;
         if (status === 401 || status === 403) {
             inMemoryJWT.ereaseToken();
-            return Promise.reject();
+            localStorage.setItem('permissions', 'anonymous');
         }
         return Promise.resolve();
     },
     getPermissions: () => {
-        return Promise.resolve();
+        const role = localStorage.getItem('permissions');
+        const finalRole =
+            role === 'authenticated' && inMemoryJWT.getToken
+                ? 'authenticated'
+                : 'anonymous';
+
+        return Promise.resolve(finalRole);
     },
 };

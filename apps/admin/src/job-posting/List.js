@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import {
     Datagrid,
     DateInput,
@@ -62,7 +63,7 @@ const Organization = ({ record }) => {
     return `${record.name} (${record.address.postalCode} ${record.address.addressLocality})`;
 };
 
-export const JobPostingList = (props) => {
+export const JobPostingList = ({ permissions, ...props }) => {
     return (
         <List
             {...props}
@@ -95,8 +96,12 @@ export const JobPostingList = (props) => {
                     label="Date de prise de poste"
                 />
                 <TextField source="validThrough" label="Valable jusqu'au" />
-                <EditButton />
+                {permissions === 'authenticated' && <EditButton />}
             </Datagrid>
         </List>
     );
+};
+
+JobPostingList.propTypes = {
+    permissions: PropTypes.string.isRequired,
 };
