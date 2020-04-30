@@ -7,6 +7,7 @@ import Organization from './organization';
 import JobPosting from './job-posting';
 import inMemoryJWT from './inMemoryJWT';
 import LoginPage from './LoginPage';
+import LogoutButton from './LogoutButton';
 
 const httpClient = (url, options = {}) => {
     if (!options.headers) {
@@ -30,6 +31,7 @@ const App = () => (
         authProvider={authProvider}
         dataProvider={dataProvider}
         loginPage={LoginPage}
+        logoutButton={LogoutButton}
     >
         {(permissions) => [
             <Resource
