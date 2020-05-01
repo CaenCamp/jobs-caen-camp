@@ -9,9 +9,9 @@
         "jsonwebtoken": "8.5.1",
         "lodash.omit": "4.5.0",
         "prop-type": "0.0.1",
-        "query-string": "6.12.0",
+        "query-string": "6.12.1",
         "react": "16.13.1",
-        "react-admin": "3.4.0",
+        "react-admin": "3.4.3",
         "react-dom": "16.13.1",
         "react-scripts": "3.4.1"
     },
