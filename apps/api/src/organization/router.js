@@ -17,6 +17,19 @@ const router = new Router({
     prefix: '/api/organizations',
 });
 
+router.use(async (ctx, next) => {
+    if (
+        !ctx.state.jwt &&
+        ['POST', 'PUT', 'DELETE'].includes(ctx.request.method)
+    ) {
+        ctx.throw(401, "You don't have the rights to make this query");
+
+        return;
+    }
+
+    await next();
+});
+
 router.get('/', async (ctx) => {
     global.console.log('this is the ctx.query:\n', ctx.query);
 

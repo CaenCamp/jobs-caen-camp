@@ -50,7 +50,7 @@ const OrganizationPagination = (props) => (
     <Pagination rowsPerPageOptions={[1, 10, 25, 50]} {...props} />
 );
 
-export const OrganizationList = (props) => {
+export const OrganizationList = ({ permissions, ...props }) => {
     return (
         <List
             {...props}
@@ -65,8 +65,12 @@ export const OrganizationList = (props) => {
                 <OrganizationLogo label="Logo" />
                 <TextField source="name" label="Nom de l'entreprise" />
                 <OrganizationAddress label="Adresse" />
-                <EditButton />
+                {permissions === 'authenticated' && <EditButton />}
             </Datagrid>
         </List>
     );
+};
+
+OrganizationList.propTypes = {
+    permissions: PropTypes.string.isRequired,
 };

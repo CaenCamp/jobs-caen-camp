@@ -1,5 +1,4 @@
 import { stringify } from 'query-string';
-import { fetchUtils } from 'ra-core';
 import omit from 'lodash.omit';
 
 const getXTotalCountHeaderValue = (headers) => {
@@ -24,7 +23,7 @@ const getXTotalCountHeaderValue = (headers) => {
  * create      => POST http://my.api.url/posts
  * delete      => DELETE http://my.api.url/posts/123
  */
-export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
+export default (apiUrl, httpClient) => ({
     getList: (resource, params) => {
         const { currentPage, perPage } = params;
         const { field, order } = params.sort;

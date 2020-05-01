@@ -7,17 +7,27 @@ const { oas } = require('koa-oas3');
 const error = require('koa-json-error');
 
 const dbMiddleware = require('./toolbox/middleware/db');
+const jwtMiddleware = require('./toolbox/authentication/jwtMiddleware');
 const organizationRouter = require('./organization/router');
 const jobPostingRouter = require('./job-posting/router');
+const authenticationRouter = require('./toolbox/authentication/router');
+const config = require('./config');
 
 const app = new Koa();
+
+// Add keys for signed cookies
+app.keys = [
+    config.security.signedCookie.key1,
+    config.security.signedCookie.key2,
+];
 
 // See https://github.com/zadzbw/koa2-cors for configuration
 app.use(
     cors({
-        origin: '*',
-        allowHeaders: ['Origin, Content-Type, Accept'],
+        origin: 'http://localhost:8002',
+        allowHeaders: ['Origin, Content-Type, Accept, Authorization'],
         exposeHeaders: ['X-Total-Count', 'Link'],
+        credentials: true,
     })
 );
 
@@ -58,6 +68,7 @@ const formatError = (error) => {
     };
 };
 
+app.use(jwtMiddleware);
 app.use(bodyParser());
 app.use(error(formatError));
 app.use(
@@ -87,6 +98,9 @@ router.get('/api', (ctx) => {
 });
 app.use(router.routes()).use(router.allowedMethods());
 app.use(dbMiddleware);
+app.use(authenticationRouter.routes()).use(
+    authenticationRouter.allowedMethods()
+);
 app.use(organizationRouter.routes()).use(organizationRouter.allowedMethods());
 app.use(jobPostingRouter.routes()).use(jobPostingRouter.allowedMethods());
 
