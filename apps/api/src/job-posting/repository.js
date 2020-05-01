@@ -36,25 +36,37 @@ const jobPostingFilterableFields = [
     'hiringOrganizationAddressCountry',
 ];
 
+const {
+    FILTER_OPERATOR_EQ,
+    FILTER_OPERATOR_GT,
+    FILTER_OPERATOR_GTE,
+    FILTER_OPERATOR_LT,
+    FILTER_OPERATOR_LTE,
+    FILTER_OPERATOR_IN,
+    FILTER_OPERATOR_LP,
+    FILTER_OPERATOR_PL,
+    FILTER_OPERATOR_PLP,
+} = require('../toolbox/sanitizers');
+
 /**
  * Knex query for filtrated jobPosting list
  *
  * @param {object} client - The Database client
- * @param {object} filters - jobPosting Filter
+ * @param {Array} filters - array of jobPosting Filters {name: 'foo', value: 'bar', operator: 'eq' }
  * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @returns {Promise} - Knew query for filtrated jobPosting list
  */
 const getFilteredJobPostingsQuery = (client, filters, sort) => {
-    const {
-        title,
-        skills,
-        employmentType,
-        hiringOrganizationName,
-        hiringOrganizationPostalCode,
-        hiringOrganizationAddressLocality,
-        hiringOrganizationAddressCountry,
-        ...restFiltersThatMustBeDates
-    } = filters;
+    // const {
+    //     title,
+    //     skills,
+    //     employmentType,
+    //     hiringOrganizationName,
+    //     hiringOrganizationPostalCode,
+    //     hiringOrganizationAddressLocality,
+    //     hiringOrganizationAddressCountry,
+    //     ...restFiltersThatMustBeDates
+    // } = filters;
     const query = client
         .select(
             'job_posting.*',
@@ -70,57 +82,39 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
             'organization.id': 'job_posting.hiring_organization_id',
         });
 
-    if (title) {
-        query.andWhere('title', 'LIKE', `%${title}%`);
-    }
-    if (skills) {
-        query.andWhere('skills', 'LIKE', `%${skills}%`);
-    }
-    if (employmentType) {
-        query.andWhere('employmentType', employmentType);
-    }
-    if (hiringOrganizationPostalCode) {
-        query.andWhere(
-            'organization.postal_code',
-            'LIKE',
-            `${hiringOrganizationPostalCode}%`
-        );
-    }
-    if (hiringOrganizationName) {
-        query.andWhere(
-            'organization.name',
-            'LIKE',
-            `%${hiringOrganizationName}%`
-        );
-    }
-    if (hiringOrganizationAddressLocality) {
-        query.andWhere(
-            'organization.address_locality',
-            'LIKE',
-            `${hiringOrganizationAddressLocality}%`
-        );
-    }
-    if (hiringOrganizationAddressCountry) {
-        query.andWhere(
-            'organization.address_country',
-            'LIKE',
-            `${hiringOrganizationAddressCountry}%`
-        );
-    }
-
-    Object.keys(restFiltersThatMustBeDates).map((key) => {
-        try {
-            const queryDate = new Date(restFiltersThatMustBeDates[key]);
-            const [what, when] = key.split('_');
-            if (when && ['after', 'before'].includes(when)) {
-                query.andWhere(
-                    what,
-                    when === 'after' ? '>' : '<',
-                    queryDate.toISOString()
+    filters.map((filter) => {
+        switch (filter.operator) {
+            case FILTER_OPERATOR_EQ:
+                query.andWhere(filter.name, '=', filter.value);
+                break;
+            case FILTER_OPERATOR_LT:
+                query.andWhere(filter.name, '<', filter.value);
+                break;
+            case FILTER_OPERATOR_LTE:
+                query.andWhere(filter.name, '<=', filter.value);
+                break;
+            case FILTER_OPERATOR_GT:
+                query.andWhere(filter.name, '>', filter.value);
+                break;
+            case FILTER_OPERATOR_GTE:
+                query.andWhere(filter.name, '>=', filter.value);
+                break;
+            case FILTER_OPERATOR_IN:
+                query.whereIn(filter.name, JSON.parse(filter.value));
+                break;
+            case FILTER_OPERATOR_PLP:
+                query.andWhere(filter.name, 'LIKE', `%${filter.value}%`);
+                break;
+            case FILTER_OPERATOR_PL:
+                query.andWhere(filter.name, 'LIKE', `%${filter.value}`);
+                break;
+            case FILTER_OPERATOR_LP:
+                query.andWhere(filter.name, 'LIKE', `${filter.value}%`);
+                break;
+            default:
+                signale.log(
+                    `The filter operator ${filter.operator} is not managed`
                 );
-            }
-        } catch (error) {
-            signale.debug('the date in filter is not well formated');
         }
     });
 
@@ -186,16 +180,26 @@ const formatJobPostingForAPI = (dbJobPosting) => {
  */
 const getJobPostingPaginatedList = async ({
     client,
-    filters,
-    sort,
-    pagination,
+    // sort, filters and pagination were grouped by prepareQueryParameters()
+    preparedParameters,
 }) => {
+    // let's debug
+    global.console.log(
+        'this are the prepared parameters:\n',
+        preparedParameters
+    );
+
     const query = getFilteredJobPostingsQuery(
         client,
-        filtersSanitizer(filters, jobPostingFilterableFields),
-        sortSanitizer(sort, jobPostingSortableFields)
+        filtersSanitizer(
+            preparedParameters.filters,
+            jobPostingFilterableFields
+        ),
+        sortSanitizer(preparedParameters.sort, jobPostingSortableFields)
     );
-    const [perPage, currentPage] = paginationSanitizer(pagination);
+    const [perPage, currentPage] = paginationSanitizer(
+        preparedParameters.pagination
+    );
 
     return query
         .paginate({ perPage, currentPage, isLengthAware: true })

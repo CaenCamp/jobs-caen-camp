@@ -8,7 +8,8 @@ const {
     updateOrganization,
 } = require('./repository');
 const {
-    parseJsonQueryParameter,
+    // parseJsonQueryParameter,
+    prepareQueryParameters,
     formatPaginationToLinkHeader,
 } = require('../toolbox/sanitizers');
 
@@ -17,17 +18,21 @@ const router = new Router({
 });
 
 router.get('/', async (ctx) => {
+    global.console.log('this is the ctx.query:\n', ctx.query);
+
     const { organizations, pagination } = await getOrganizationPaginatedList({
         client: ctx.db,
-        filters: parseJsonQueryParameter(ctx.query.filters),
-        sort: {
-            sortBy: ctx.query.sortBy,
-            orderBy: ctx.query.orderBy,
-        },
-        pagination: {
-            currentPage: ctx.query.currentPage,
-            perPage: ctx.query.perPage,
-        },
+        preparedParameters: prepareQueryParameters(ctx.query),
+
+        // filters: parseJsonQueryParameter(ctx.query.filters),
+        // sort: {
+        //     sortBy: ctx.query.sortBy,
+        //     orderBy: ctx.query.orderBy,
+        // },
+        // pagination: {
+        //     currentPage: ctx.query.currentPage,
+        //     perPage: ctx.query.perPage,
+        // },
     });
 
     const linkHeaderValue = formatPaginationToLinkHeader({

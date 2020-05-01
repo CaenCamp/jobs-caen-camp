@@ -235,9 +235,8 @@ describe('JobPostings API Endpoints', () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?filters=${JSON.stringify({
+                    `http://api:3001/api/job-postings?${querystring.stringify({
                         title: 'Lead',
-                    })}&${querystring.stringify({
                         sortBy: 'title',
                         orderBy: 'DESC',
                     })}`

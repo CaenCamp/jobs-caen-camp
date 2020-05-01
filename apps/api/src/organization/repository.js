@@ -1,5 +1,6 @@
 const omit = require('lodash.omit');
 const pick = require('lodash.pick');
+const signale = require('signale');
 
 const {
     filtersSanitizer,
@@ -20,16 +21,28 @@ const OrganizationSortableFields = [
     'postal_code',
 ];
 
+const {
+    FILTER_OPERATOR_EQ,
+    FILTER_OPERATOR_GT,
+    FILTER_OPERATOR_GTE,
+    FILTER_OPERATOR_LT,
+    FILTER_OPERATOR_LTE,
+    FILTER_OPERATOR_IN,
+    FILTER_OPERATOR_LP,
+    FILTER_OPERATOR_PL,
+    FILTER_OPERATOR_PLP,
+} = require('../toolbox/sanitizers');
+
 /**
  * Knex query for filtrated organization list
  *
  * @param {object} client - The Database client
- * @param {object} filters - Organization Filter
+ * @param {Array} filters - Organization Filter {name: 'foo', value: 'bar', operator: 'eq' }
  * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @returns {Promise} - Knew query for filtrated organization list
  */
 const getFilteredOrganizationsQuery = (client, filters, sort) => {
-    const { name, address_locality, postal_code, ...restFilters } = filters;
+    // const { name, address_locality, postal_code, ...restFilters } = filters;
     const query = client
         .select(
             'organization.*',
@@ -47,19 +60,44 @@ const getFilteredOrganizationsQuery = (client, filters, sort) => {
             ) ORDER BY contact_point.contact_type))
             FROM contact_point WHERE contact_point.organization_id = organization.id) as contact_points`)
         )
-        .from('organization')
-        .where(restFilters);
+        .from('organization');
+    // .where(restFilters);
 
-    if (name) {
-        query.andWhere('name', 'LIKE', `%${name}%`);
-    }
-    if (address_locality) {
-        query.andWhere('address_locality', 'LIKE', `${address_locality}%`);
-    }
-
-    if (postal_code) {
-        query.andWhere('postal_code', 'LIKE', `${postal_code}%`);
-    }
+    filters.map((filter) => {
+        switch (filter.operator) {
+            case FILTER_OPERATOR_EQ:
+                query.andWhere(filter.name, '=', filter.value);
+                break;
+            case FILTER_OPERATOR_LT:
+                query.andWhere(filter.name, '<', filter.value);
+                break;
+            case FILTER_OPERATOR_LTE:
+                query.andWhere(filter.name, '<=', filter.value);
+                break;
+            case FILTER_OPERATOR_GT:
+                query.andWhere(filter.name, '>', filter.value);
+                break;
+            case FILTER_OPERATOR_GTE:
+                query.andWhere(filter.name, '>=', filter.value);
+                break;
+            case FILTER_OPERATOR_IN:
+                query.whereIn(filter.name, JSON.parse(filter.value));
+                break;
+            case FILTER_OPERATOR_PLP:
+                query.andWhere(filter.name, 'LIKE', `%${filter.value}%`);
+                break;
+            case FILTER_OPERATOR_PL:
+                query.andWhere(filter.name, 'LIKE', `%${filter.value}`);
+                break;
+            case FILTER_OPERATOR_LP:
+                query.andWhere(filter.name, 'LIKE', `${filter.value}%`);
+                break;
+            default:
+                signale.log(
+                    `The filter operator ${filter.operator} is not managed`
+                );
+        }
+    });
 
     if (sort && sort.length) {
         query.orderBy(...sort);
@@ -102,16 +140,26 @@ const formatOrganizationForAPI = (dbOrganization) => ({
  */
 const getOrganizationPaginatedList = async ({
     client,
-    filters,
-    sort,
-    pagination,
+    // sort, filters and pagination were grouped by prepareQueryParameters()
+    preparedParameters,
 }) => {
+    // let's debug
+    global.console.log(
+        'this are the prepared parameters:\n',
+        preparedParameters
+    );
+
     const query = getFilteredOrganizationsQuery(
         client,
-        filtersSanitizer(filters, OrganizationFilterableFields),
-        sortSanitizer(sort, OrganizationSortableFields)
+        filtersSanitizer(
+            preparedParameters.filters,
+            OrganizationFilterableFields
+        ),
+        sortSanitizer(preparedParameters.sort, OrganizationSortableFields)
     );
-    const [perPage, currentPage] = paginationSanitizer(pagination);
+    const [perPage, currentPage] = paginationSanitizer(
+        preparedParameters.pagination
+    );
 
     return query
         .paginate({ perPage, currentPage, isLengthAware: true })
