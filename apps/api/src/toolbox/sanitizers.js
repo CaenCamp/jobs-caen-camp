@@ -38,40 +38,51 @@ const filterOperators = [
  * @returns {Array} Ready-to-use array of filter objects
  * possible returned value: [{ name: 'foo', value: 'bar', operator: 'eq' }, {...} ]
  */
-const filtersSanitizer = (filters, filterableFields) => {
+function filtersSanitizer(filters, filterableFields) {
     if (!filters || typeof filters !== 'object') {
         return [];
     }
-
+    // console.log(filters);
     let sanitizedFilters = Object.keys(filters)
         .map((filterKey) => {
-            const [filterName, filterOperator] = filterKey.split(':');
-            global.console.log(
-                'this are [filterName, filterOperator]: ',
-                filterName,
-                filterOperator
-            );
+            let receivedValue = filters[filterKey];
 
-            if (!filterableFields.includes(filterName)) {
+            if (receivedValue === undefined) {
                 return null;
             }
 
-            const filterValue = filters[filterKey];
-            let value;
-            try {
-                switch (filterOperator) {
-                    case FILTER_OPERATOR_IN:
-                        JSON.parse(filterValue);
-                        break;
-                    default:
-                        value = filterValue;
-                }
-            } catch (error) {
+            if (receivedValue === null) {
+                return { name: filterKey, value: null, operator: 'eq' };
+            }
+
+            if (receivedValue.trim().length == 0) {
                 return null;
             }
+
+            if (!filterableFields.includes(filterKey)) {
+                return null;
+            }
+
+            // eliminates values with only spaces, or null values
+
+            // console.log("filter value:", receivedValue);
+            const [value, filterOperator] = receivedValue.split(':');
+
+            // what does this do?
+            // try {
+            //     switch (filterOperator) {
+            //         case FILTER_OPERATOR_IN:
+            //             JSON.parse(receivedValue);
+            //             break;
+            //         default:
+            //             value = receivedValue;
+            //     }
+            // } catch (error) {
+            //     return null;
+            // }
 
             return {
-                name: filterName,
+                name: filterKey,
                 value,
                 operator:
                     !filterOperator || !filterOperators.includes(filterOperator)
@@ -80,9 +91,8 @@ const filtersSanitizer = (filters, filterableFields) => {
             };
         })
         .filter((filter) => filter !== null);
-    global.console.log('this are the sanitized filters:\n', sanitizedFilters);
     return sanitizedFilters;
-};
+}
 
 /**
  * Method to clean the sort sent in query parameters

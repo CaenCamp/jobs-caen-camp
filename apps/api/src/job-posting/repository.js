@@ -24,6 +24,7 @@ const jobPostingFilterableFields = [
     'title',
     'skills',
     'employmentType',
+    'datePosted',
     'datePosted_before',
     'datePosted_after',
     'jobStartDate_before',
