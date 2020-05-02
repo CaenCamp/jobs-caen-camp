@@ -90,22 +90,27 @@ paths:
       description: |
         Obtenir une liste paginée d'offres d'emploi
 
-        Cette liste est filtrable par filters={ key: value, key2: value ...} :
+        Cette liste est filtrable par ces paramètres:
         * title
         * skills
         * employmentType
-        * datePosted_before
-        * datePosted_after
-        * jobStartDate_before
-        * jobStartDate_after
-        * validThrough_before
-        * validThrough_after
+        * datePosted
+        * jobStartDate
+        * validThrough
         * hiringOrganizationName
         * hiringOrganizationPostalCode
         * hiringOrganizationAddressLocality
         * hiringOrganizationAddressCountry
 
-        Cette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :
+        Qui acceptent eux-mêmes ces opérateurs:
+        * :eq       | string, number, date | Is equal to
+        * :gt       | number, date         | Is greater than
+        * :lt       | number, date         | Is less than
+        * :gte      | number, date         | Is greater than or equal to
+        * :lte      | number, date         | Is less than or equal to
+
+
+        La liste est triable avec sortBy=key, orderBy=ASC (ou DESC) :
         * datePosted
         * title
         * jobStartDate
@@ -118,7 +123,16 @@ paths:
       parameters:
         - $ref: '#/components/parameters/SortBy'
         - $ref: '#/components/parameters/OrderBy'
-        - $ref: '#/components/parameters/Filter'
+        - $ref: '#/components/parameters/Title'
+        - $ref: '#/components/parameters/Skills'
+        - $ref: '#/components/parameters/EmploymentType'
+        - $ref: '#/components/parameters/DatePosted'
+        - $ref: '#/components/parameters/JobStartDate'
+        - $ref: '#/components/parameters/ValidThrough'
+        - $ref: '#/components/parameters/HiringOrganizationName'
+        - $ref: '#/components/parameters/HiringOrganizationPostalCode'
+        - $ref: '#/components/parameters/HiringOrganizationAddressLocality'
+        - $ref: '#/components/parameters/HiringOrganizationAddressCountry'
         - $ref: '#/components/parameters/PaginationCurrentPage'
         - $ref: '#/components/parameters/PaginationPerPage'
     post:
@@ -473,9 +487,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getOrganizations
-      description: "Obtenir la liste des entreprises.\\n\\nCette liste est filtrable par filters={ key: value, key2: value ...} :\n* name\n* address_locality\n* postal_code\n\nCette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :\n* name\n* address_locality\n* postal_code\n"
+      description: |
+        Obtenir la liste des entreprises. Cette liste est filtrable par filters={ key: value, key2: value ...} :
+            * name
+            * address_locality
+            * postal_code
+        Cette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :
+            * name
+            * address_locality
+            * postal_code"
       parameters:
         - $ref: '#/components/parameters/Filter'
+        - $ref: '#/components/parameters/Name'
+        - $ref: '#/components/parameters/Address_Locality'
+        - $ref: '#/components/parameters/Postal_code'
         - $ref: '#/components/parameters/SortBy'
         - $ref: '#/components/parameters/OrderBy'
         - $ref: '#/components/parameters/PaginationCurrentPage'
@@ -1117,7 +1142,6 @@ components:
       in: query
       description: "Filtres appliquables à la requête. C'est un objet json stringifié, avec les filtres en clé/valeur séparé par des virgules."
       required: false
-      explode: true
       schema:
         type: string
     SortBy:
@@ -1152,6 +1176,111 @@ components:
       schema:
         type: integer
         example: 10
+    Title:
+      name: title
+      in: query
+      description: "Filtre: Le titre de l'offre d'emploi. Opérateur applicable: eq"
+      required: false
+      schema:
+        type: string
+        example: 'Lead'
+    Skills:
+      name: skills
+      in: query
+      description: "Filtre: Les compétences demandées dans l'offre d'emploi. Opérateur applicable: eq"
+      required: false
+      schema:
+        type: string
+        example: 'JavaScript, Devops, Php, ...'
+    EmploymentType:
+      name: employmentType
+      in: query
+      description: "Filtre: Le type de contrat proposé par l'offre d'emploi. Opérateur applicable: eq"
+      required: false
+      schema:
+        type: string
+        example: 'CDI'
+    DatePosted:
+      name: datePosted
+      in: query
+      description: |
+        "Filtre: La date d'ajout de l'offre d'emploi, au format ISO 8601 (2020-04-02).
+        Opérateurs applicables: eq, gt, lt, gte, lte"
+      required: false
+      schema:
+        type: string
+        example: '2020-04-02:gte'
+    JobStartDate:
+      name: datePosted
+      in: query
+      description: |
+        "Filtre: La date de début du contrat proposé par l'offre d'emploi,
+        au format ISO 8601 (2020-05-02). Opérateurs applicables: eq, gt, lt, gte, lte"
+      required: false
+      schema:
+        type: string
+        example: '2020-05-02:gte'
+    ValidThrough:
+      name: validThrough
+      in: query
+      description: |
+        "Filtre: La date jusqu'à laquelle l'offre d'emploi est valide,
+        au format ISO 8601 (2020-05-02). Opérateurs applicables: eq, gt, lt, gte, lte"
+      required: false
+      schema:
+        type: string
+        example: '2020-06-24:lte'
+    HiringOrganizationName:
+      name: hiringOrganizationName
+      in: query
+      description: "Filtre: Le nom de l'entreprise qui offre l'emploi. Opérateur applicable: eq"
+      required: false
+      schema:
+        type: string
+    HiringOrganizationPostalCode:
+      name: hiringOrganizationPostalCode
+      in: query
+      description: |
+        "Filtre: Le code postal de l'entreprise qui offre l'emploi.
+        Opérateurs applicables: eq, gt, lt, gte, lte"
+      required: false
+      schema:
+        type: string
+    HiringOrganizationAddressLocality:
+      name: hiringOrganizationAddressLocality
+      in: query
+      description: "Filtre: La commune de l'entreprise qui offre l'emploi. Opérateur applicable: eq"
+      required: false
+      schema:
+        type: string
+    HiringOrganizationAddressCountry:
+      name: hiringOrganizationAddressCountry
+      in: query
+      description: "Filtre: Le pays de l'entreprise qui offre l'emploi. Opérateur applicable: eq"
+      required: false
+      schema:
+        type: string
+    Name:
+      name: name
+      in: query
+      description: "Filtre: Le nom de l'entreprise. Opérateur applicable: eq"
+      required: false
+      schema:
+        type: string
+    Address_Locality:
+      name: name
+      in: query
+      description: "Filtre: La commune de l'entreprise. Opérateur applicable: eq"
+      required: false
+      schema:
+        type: string
+    Postal_code:
+      name: postal_code
+      in: query
+      description: "Filtre: Le code postal de l'entreprise. Opérateurs applicables: eq, gt, lt, gte, lte"
+      required: false
+      schema:
+        type: string
     UUID:
       name: identifier
       in: path
