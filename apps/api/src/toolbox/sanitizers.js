@@ -63,9 +63,6 @@ function filtersSanitizer(filters, filterableFields) {
                 return null;
             }
 
-            // eliminates values with only spaces, or null values
-
-            // console.log("filter value:", receivedValue);
             const [value, filterOperator] = receivedValue.split(':');
 
             // what does this do?

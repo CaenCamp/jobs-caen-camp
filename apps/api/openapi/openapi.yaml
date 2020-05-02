@@ -109,6 +109,7 @@ paths:
         * :gte      | number, date         | Is greater than or equal to
         * :lte      | number, date         | Is less than or equal to
 
+        Si aucun opérateur n'est pourvu, l'opérateur par défaut est ":eq".
 
         La liste est triable avec sortBy=key, orderBy=ASC (ou DESC) :
         * datePosted
@@ -123,6 +124,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/SortBy'
         - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/PaginationCurrentPage'
+        - $ref: '#/components/parameters/PaginationPerPage'
+        - $ref: '#/components/parameters/Q'
         - $ref: '#/components/parameters/Title'
         - $ref: '#/components/parameters/Skills'
         - $ref: '#/components/parameters/EmploymentType'
@@ -133,8 +137,6 @@ paths:
         - $ref: '#/components/parameters/HiringOrganizationPostalCode'
         - $ref: '#/components/parameters/HiringOrganizationAddressLocality'
         - $ref: '#/components/parameters/HiringOrganizationAddressCountry'
-        - $ref: '#/components/parameters/PaginationCurrentPage'
-        - $ref: '#/components/parameters/PaginationPerPage'
     post:
       tags:
         - "Offres d'emploi"
@@ -492,19 +494,29 @@ paths:
             * name
             * address_locality
             * postal_code
+
+        Qui acceptent eux-mêmes ces opérateurs:
+        * :eq       | string, number, date | Is equal to
+        * :gt       | number, date         | Is greater than
+        * :lt       | number, date         | Is less than
+        * :gte      | number, date         | Is greater than or equal to
+        * :lte      | number, date         | Is less than or equal to
+
+        Si aucun opérateur n'est pourvu, l'opérateur par défaut est ":eq".
+
         Cette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :
             * name
             * address_locality
             * postal_code"
       parameters:
-        - $ref: '#/components/parameters/Filter'
-        - $ref: '#/components/parameters/Name'
-        - $ref: '#/components/parameters/Address_Locality'
-        - $ref: '#/components/parameters/Postal_code'
         - $ref: '#/components/parameters/SortBy'
         - $ref: '#/components/parameters/OrderBy'
         - $ref: '#/components/parameters/PaginationCurrentPage'
         - $ref: '#/components/parameters/PaginationPerPage'
+        - $ref: '#/components/parameters/Q'
+        - $ref: '#/components/parameters/Name'
+        - $ref: '#/components/parameters/Address_Locality'
+        - $ref: '#/components/parameters/Postal_code'
     post:
       summary: "Création d'une entreprise"
       operationId: createOrganization
@@ -1137,13 +1149,6 @@ components:
         - url
         - name
   parameters:
-    Filter:
-      name: filters
-      in: query
-      description: "Filtres appliquables à la requête. C'est un objet json stringifié, avec les filtres en clé/valeur séparé par des virgules."
-      required: false
-      schema:
-        type: string
     SortBy:
       name: sortBy
       in: query
@@ -1204,7 +1209,7 @@ components:
       name: datePosted
       in: query
       description: |
-        "Filtre: La date d'ajout de l'offre d'emploi, au format ISO 8601 (2020-04-02).
+        "Filtre: La date d'ajout de l'offre d'emploi, au format ISO 8601 (YYYY-MM-DD).
         Opérateurs applicables: eq, gt, lt, gte, lte"
       required: false
       schema:
@@ -1215,7 +1220,7 @@ components:
       in: query
       description: |
         "Filtre: La date de début du contrat proposé par l'offre d'emploi,
-        au format ISO 8601 (2020-05-02). Opérateurs applicables: eq, gt, lt, gte, lte"
+        au format ISO 8601 (YYYY-MM-DD). Opérateurs applicables: eq, gt, lt, gte, lte"
       required: false
       schema:
         type: string
@@ -1225,7 +1230,7 @@ components:
       in: query
       description: |
         "Filtre: La date jusqu'à laquelle l'offre d'emploi est valide,
-        au format ISO 8601 (2020-05-02). Opérateurs applicables: eq, gt, lt, gte, lte"
+        au format ISO 8601 (YYYY-MM-DD). Opérateurs applicables: eq, gt, lt, gte, lte"
       required: false
       schema:
         type: string
@@ -1278,6 +1283,13 @@ components:
       name: postal_code
       in: query
       description: "Filtre: Le code postal de l'entreprise. Opérateurs applicables: eq, gt, lt, gte, lte"
+      required: false
+      schema:
+        type: string
+    Q:
+      name: q
+      in: query
+      description: "Paramètre unique pour filtrer en %LIKE"
       required: false
       schema:
         type: string
