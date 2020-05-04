@@ -13,6 +13,7 @@ const OrganizationFilterableFields = [
     'name',
     'address_locality',
     'postal_code',
+    'q',
 ];
 const OrganizationSortableFields = [
     'name',

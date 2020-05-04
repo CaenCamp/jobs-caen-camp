@@ -63,7 +63,7 @@ function filtersSanitizer(filters, filterableFields) {
                 return null;
             }
 
-            const [value, filterOperator] = receivedValue.split(':');
+            let [value, filterOperator] = receivedValue.split(':');
 
             // what does this do?
             // try {
@@ -77,6 +77,10 @@ function filtersSanitizer(filters, filterableFields) {
             // } catch (error) {
             //     return null;
             // }
+
+            if (filterKey === 'q') {
+                filterOperator = FILTER_OPERATOR_PLP;
+            }
 
             return {
                 name: filterKey,

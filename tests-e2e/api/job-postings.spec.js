@@ -306,7 +306,7 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par datePosted_after', async () => {
+        it("devrait accepter un filtre par datePosted avec l'opérateur lte", async () => {
             expect.hasAssertions();
             await frisby
                 .get(
@@ -340,12 +340,12 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par jobStartDate_before', async () => {
+        it("devrait accepter un filtre par jobStartDate avec l'opérateur lte", async () => {
             expect.hasAssertions();
             await frisby
                 .get(
                     `http://api:3001/api/job-postings?filters=${JSON.stringify({
-                        jobStartDate_before: '2020-05-02',
+                        jobStartDate: '2020-05-02:lte',
                     })}`
                 )
                 .expect('status', 200)

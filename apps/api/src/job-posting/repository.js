@@ -25,16 +25,13 @@ const jobPostingFilterableFields = [
     'skills',
     'employmentType',
     'datePosted',
-    'datePosted_before',
-    'datePosted_after',
-    'jobStartDate_before',
-    'jobStartDate_after',
-    'validThrough_before',
-    'validThrough_after',
+    'jobStartDate',
+    'validThrough',
     'hiringOrganizationName',
     'hiringOrganizationPostalCode',
     'hiringOrganizationAddressLocality',
     'hiringOrganizationAddressCountry',
+    'q',
 ];
 
 const {
@@ -58,16 +55,6 @@ const {
  * @returns {Promise} - Knew query for filtrated jobPosting list
  */
 const getFilteredJobPostingsQuery = (client, filters, sort) => {
-    // const {
-    //     title,
-    //     skills,
-    //     employmentType,
-    //     hiringOrganizationName,
-    //     hiringOrganizationPostalCode,
-    //     hiringOrganizationAddressLocality,
-    //     hiringOrganizationAddressCountry,
-    //     ...restFiltersThatMustBeDates
-    // } = filters;
     const query = client
         .select(
             'job_posting.*',
