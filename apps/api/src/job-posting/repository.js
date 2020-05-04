@@ -193,6 +193,65 @@ const getOne = async (id) => {
         .catch((error) => ({ error }));
 };
 
+const jobLocationTypes = [
+    'office',
+    'remote',
+    'remote and office',
+    'remote or office',
+];
+
+/**
+ * format baseSalary data in a well formated way.
+ *
+ * @param {object} apiBaseSalary - data about baseSalary from API
+ * @returns {object} baseSalary well formated for db save
+ */
+const formatBaseSalary = (apiBaseSalary) => {
+    if (
+        !apiBaseSalary ||
+        (!apiBaseSalary.value &&
+            (!apiBaseSalary.minValue || !apiBaseSalary.maxValue))
+    ) {
+        return null;
+    }
+    const {
+        currency = 'EUR brut annuel',
+        minValue = null,
+        maxValue = null,
+        value = null,
+    } = apiBaseSalary;
+
+    return {
+        currency,
+        minValue,
+        maxValue,
+        value: value
+            ? value
+            : minValue && maxValue
+            ? Math.round((parseInt(minValue, 10) + parseInt(maxValue, 10)) / 2)
+            : null,
+    };
+};
+
+/**
+ * Prepare data from API for create or update a jobPosting in db.
+ *
+ * @param {object} apiData - data from API
+ * @returns {object} data well formated for db save
+ */
+const prepareDataForDb = (apiData) => {
+    const formatedBaseSalary = formatBaseSalary(apiData.baseSalary);
+    return {
+        ...apiData,
+        jobLocationType: jobLocationTypes.includes(apiData.jobLocationType)
+            ? apiData.jobLocationType
+            : 'office',
+        baseSalary: formatedBaseSalary
+            ? JSON.stringify(formatedBaseSalary)
+            : null,
+    };
+};
+
 /**
  * Return the created jobPosting
  *
@@ -212,7 +271,7 @@ const createOne = async (apiData) => {
 
     return client(tableName)
         .returning('id')
-        .insert(apiData)
+        .insert(prepareDataForDb(apiData))
         .then(([newJobPostingId]) => {
             return getOneByIdQuery(client, newJobPostingId).then(
                 formatJobPostingForAPI
@@ -290,9 +349,11 @@ const updateOne = async (id, apiData) => {
 module.exports = {
     createOne,
     deleteOne,
+    formatBaseSalary,
     formatJobPostingForAPI,
     getOne,
     getPaginatedList,
+    prepareDataForDb,
     renameFiltersFromAPI,
     updateOne,
 };

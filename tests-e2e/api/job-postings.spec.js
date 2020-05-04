@@ -647,6 +647,9 @@ describe('JobPostings API Endpoints', () => {
                     jobStartDate: '2020-05-02',
                     skills: 'JavaScript, Devops, Php, ...',
                     validThrough: null,
+                    baseSalary: null,
+                    jobImmediateStart: false,
+                    jobLocationType: 'office',
                     hiringOrganization: {
                         name: 'Flexcity',
                         image:

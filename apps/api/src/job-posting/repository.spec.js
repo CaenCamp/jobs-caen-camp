@@ -1,4 +1,6 @@
 const {
+    formatBaseSalary,
+    prepareDataForDb,
     formatJobPostingForAPI,
     renameFiltersFromAPI,
 } = require('./repository');
@@ -35,6 +37,82 @@ describe('jobPosting repository', () => {
                 sortBy: 'organization.name',
                 bar: 'foo:l%',
             });
+        });
+    });
+
+    describe('prepareDataForDb', () => {
+        it('should set default job location type if it is not set', () => {
+            const formatedData = prepareDataForDb({});
+            expect(formatedData.jobLocationType).toEqual('office');
+        });
+
+        it('should set default job location type if ray data is not valid', () => {
+            const formatedData = prepareDataForDb({
+                jobLocationType: 'maison',
+            });
+            expect(formatedData.jobLocationType).toEqual('office');
+        });
+
+        it('should stringify base salary if it is not null', () => {
+            const formatedData = prepareDataForDb({
+                jobLocationType: 'maison',
+                baseSalary: { value: 10 },
+            });
+            expect(formatedData.baseSalary).toEqual(
+                JSON.stringify({
+                    currency: 'EUR brut annuel',
+                    minValue: null,
+                    maxValue: null,
+                    value: 10,
+                })
+            );
+        });
+    });
+    describe('formatBaseSalary', () => {
+        it('should return null if base salary is null', () => {
+            expect(formatBaseSalary(null)).toBeNull();
+        });
+
+        it('should return null if base salary neither value neither minValue AND maxValue', () => {
+            expect(formatBaseSalary({})).toBeNull();
+            expect(formatBaseSalary({ minValue: 10 })).toBeNull();
+            expect(formatBaseSalary({ maxValue: 20 })).toBeNull();
+            expect(
+                formatBaseSalary({ minValue: 10, maxValue: 20 })
+            ).not.toBeNull();
+            expect(formatBaseSalary({ value: 20 })).not.toBeNull();
+        });
+
+        it('should compute value from minValue and maxValue if value is not set', () => {
+            const baseSalary = formatBaseSalary({
+                minValue: 10,
+                maxValue: 20,
+            });
+            expect(baseSalary.value).toEqual(15);
+        });
+
+        it('should not compute value from minValue and maxValue if value is not set', () => {
+            const baseSalary = formatBaseSalary({
+                minValue: 10,
+                maxValue: 20,
+                value: 12,
+            });
+            expect(baseSalary.value).toEqual(12);
+        });
+
+        it('should set default currency if currency is not set', () => {
+            const baseSalary = formatBaseSalary({
+                value: 12,
+            });
+            expect(baseSalary.currency).toEqual('EUR brut annuel');
+        });
+
+        it('should not set default currency if currency is set', () => {
+            const baseSalary = formatBaseSalary({
+                currency: 'USD',
+                value: 12,
+            });
+            expect(baseSalary.currency).toEqual('USD');
         });
     });
 

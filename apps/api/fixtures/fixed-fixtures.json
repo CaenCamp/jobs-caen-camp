@@ -29,7 +29,12 @@
         "experienceRequirements": "* Vous êtes Bac+4 / 5 issu(e) d’une formation supérieure (Ecole d’ingénieurs, Master, DESS…), avec une forte dominante mathématique * Vous avez déjà 4 ans d’expérience en Data Science * Vous avez des bases solides requises en algorithmes de Machine Learning * Vous maitrisez le langage python * Vous présentez un intérêt pour le NLP ou souhaitez approfondir vos connaissances en traitement de données non structurées * Vous êtes intéressé(e) par d’autres technos (Spark, SQL, …) et pouvez vous adapter à un contexte technologique qui évolue * Vous avez une très bonne communication orale * Autonome, passionné(e) par la data et le travail dans une start up * Une connaissance de l’adtech est un plus * Mais surtout : vous avez une passion pour un projet startup qui a de grandes ambitions et une volonté à toute épreuve !",
         "jobStartDate": "2020-05-02",
         "skills": "Machine learning, Python, Spark, SQL ",
-        "validThrough": "2020-04-15"
+        "validThrough": "2020-04-15",
+        "jobLocationType": "office",
+        "jobImmediateStart": false,
+        "baseSalary": {
+            "value": 45
+        }
     },
     {
         "title": "Ingénieur Lead Full Stack technico-fonctionnel",
@@ -61,7 +66,13 @@
         "experienceRequirements": "* Expert en développement web. Maîtrise des langages de programmation web * back/front (php, go, bash, js, etc ..), des frameworks (laravel, vue, react, etc ..) * Maîtrise en développement mobile * Connaissance et maitrise des ops: server, monitoring, backup, sécurité * Connaissance du métier de la BU",
         "jobStartDate": "2020-05-01",
         "skills": "Php, Go, Bash, Js, Laravel, Vue, React, admin sys",
-        "validThrough": "2020-02-02"
+        "validThrough": "2020-02-02",
+        "jobLocationType": "office",
+        "jobImmediateStart": true,
+        "baseSalary": {
+            "minValue": 45,
+            "maxValue": 55
+        }
     },
     {
         "title": "R&D Software Engineer",
@@ -93,6 +104,8 @@
         "experienceRequirements": "★ Master in software engineering ★ You can translate real-world problems into automated real-time decision solutions. ★ You can build decision algorithms that work efficiently in regimes with high uncertainty. ★ You have experience in object-oriented and/or functional programming ★ You are deliverable-focused with a pragmatic and business-oriented attitude. ★ You are a team player, yet able to work independently. ★ You are eager to look for creative solutions using state of the art techniques. ★ You have an interest in Energy and IoT applications",
         "jobStartDate": "2020-06-01",
         "skills": "Java, Kotlin, Docker, Sql, Mongo, Devops",
-        "validThrough": ""
+        "validThrough": "",
+        "jobLocationType": "office",
+        "jobImmediateStart": false
     }
 ]
