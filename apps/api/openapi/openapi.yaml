@@ -104,9 +104,9 @@ paths:
 
         Rappel sur les opérateurs:
         * :eq       | string, number, date | Is equal to
-        * :%l%      | string
-        * :l%       | string
-        * :%l       | string
+        * :%l%      | string               | %LIKE%
+        * :l%       | string               | LIKE%
+        * :%l       | string               | %LIKE
         * :gt       | number, date         | Is greater than
         * :lt       | number, date         | Is less than
         * :gte      | number, date         | Is greater than or equal to
