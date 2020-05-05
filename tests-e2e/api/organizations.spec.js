@@ -147,13 +147,13 @@ describe('Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par nom en "%LIKE%"', async () => {
+        it('devrait accepter un filtre par nom en "%LIKE%" par défaut', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?filters=${JSON.stringify(
-                        { name: 'lex' }
-                    )}`
+                    `http://api:3001/api/organizations?${querystring.stringify({
+                        name: 'lex',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -177,13 +177,13 @@ describe('Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par ville en "%LIKE"', async () => {
+        it('devrait accepter un filtre par ville en "LIKE%" par défaut', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?filters=${JSON.stringify(
-                        { address_locality: 'Auber' }
-                    )}`
+                    `http://api:3001/api/organizations?${querystring.stringify({
+                        address_locality: 'Auber',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -207,9 +207,9 @@ describe('Organizations API Endpoints', () => {
                 });
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?filters=${JSON.stringify(
-                        { address_locality: 'villier' }
-                    )}`
+                    `http://api:3001/api/organizations?${querystring.stringify({
+                        address_locality: 'villier',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -223,13 +223,13 @@ describe('Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par code postal en "%LIKE"', async () => {
+        it('devrait accepter un filtre par code postal en "LIKE%" par défaut', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?filters=${JSON.stringify(
-                        { postal_code: 14 }
-                    )}`
+                    `http://api:3001/api/organizations?${querystring.stringify({
+                        postal_code: '14',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -252,9 +252,9 @@ describe('Organizations API Endpoints', () => {
                 });
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?filters=${JSON.stringify(
-                        { postal_code: 460 }
-                    )}`
+                    `http://api:3001/api/organizations?${querystring.stringify({
+                        postal_code: '460',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(

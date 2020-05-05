@@ -30,6 +30,18 @@ const filterOperators = [
     FILTER_OPERATOR_PLP,
 ];
 
+// todo: find a better name
+const PLPbyDefaultparameters = ['title', 'skills', 'q', 'name'];
+
+const LPbyDefaultparameters = [
+    'hiringOrganizationName',
+    'hiringOrganizationPostalCode',
+    'hiringOrganizationAddressLocality',
+    'hiringOrganizationAddressCountry',
+    'address_locality',
+    'postal_code',
+];
+
 /**
  * Method to clean the filters sent in query parameters
  *
@@ -42,7 +54,7 @@ function filtersSanitizer(filters, filterableFields) {
     if (!filters || typeof filters !== 'object') {
         return [];
     }
-    // console.log(filters);
+    console.log('unsanitized filters:', filters);
     let sanitizedFilters = Object.keys(filters)
         .map((filterKey) => {
             let receivedValue = filters[filterKey];
@@ -65,21 +77,14 @@ function filtersSanitizer(filters, filterableFields) {
 
             let [value, filterOperator] = receivedValue.split(':');
 
-            // what does this do?
-            // try {
-            //     switch (filterOperator) {
-            //         case FILTER_OPERATOR_IN:
-            //             JSON.parse(receivedValue);
-            //             break;
-            //         default:
-            //             value = receivedValue;
-            //     }
-            // } catch (error) {
-            //     return null;
-            // }
+            if (!filterOperator) {
+                if (PLPbyDefaultparameters.includes(filterKey)) {
+                    filterOperator = FILTER_OPERATOR_PLP;
+                }
 
-            if (filterKey === 'q') {
-                filterOperator = FILTER_OPERATOR_PLP;
+                if (LPbyDefaultparameters.includes(filterKey)) {
+                    filterOperator = FILTER_OPERATOR_LP;
+                }
             }
 
             return {
@@ -92,6 +97,7 @@ function filtersSanitizer(filters, filterableFields) {
             };
         })
         .filter((filter) => filter !== null);
+    global.console.log('sanitized filters:\n', sanitizedFilters);
     return sanitizedFilters;
 }
 

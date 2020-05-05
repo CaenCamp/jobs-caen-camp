@@ -22,18 +22,6 @@ const OrganizationSortableFields = [
     'postal_code',
 ];
 
-const {
-    FILTER_OPERATOR_EQ,
-    FILTER_OPERATOR_GT,
-    FILTER_OPERATOR_GTE,
-    FILTER_OPERATOR_LT,
-    FILTER_OPERATOR_LTE,
-    FILTER_OPERATOR_IN,
-    FILTER_OPERATOR_LP,
-    FILTER_OPERATOR_PL,
-    FILTER_OPERATOR_PLP,
-} = require('../toolbox/sanitizers');
-
 /**
  * Knex query for filtrated organization list
  *
@@ -66,31 +54,28 @@ const getFilteredOrganizationsQuery = (client, filters, sort) => {
 
     filters.map((filter) => {
         switch (filter.operator) {
-            case FILTER_OPERATOR_EQ:
+            case 'eq':
                 query.andWhere(filter.name, '=', filter.value);
                 break;
-            case FILTER_OPERATOR_LT:
+            case 'lt':
                 query.andWhere(filter.name, '<', filter.value);
                 break;
-            case FILTER_OPERATOR_LTE:
+            case 'lte':
                 query.andWhere(filter.name, '<=', filter.value);
                 break;
-            case FILTER_OPERATOR_GT:
+            case 'gt':
                 query.andWhere(filter.name, '>', filter.value);
                 break;
-            case FILTER_OPERATOR_GTE:
+            case 'gte':
                 query.andWhere(filter.name, '>=', filter.value);
                 break;
-            case FILTER_OPERATOR_IN:
-                query.whereIn(filter.name, JSON.parse(filter.value));
-                break;
-            case FILTER_OPERATOR_PLP:
+            case '%l%':
                 query.andWhere(filter.name, 'LIKE', `%${filter.value}%`);
                 break;
-            case FILTER_OPERATOR_PL:
+            case '%l':
                 query.andWhere(filter.name, 'LIKE', `%${filter.value}`);
                 break;
-            case FILTER_OPERATOR_LP:
+            case 'l%':
                 query.andWhere(filter.name, 'LIKE', `${filter.value}%`);
                 break;
             default:
@@ -145,10 +130,10 @@ const getOrganizationPaginatedList = async ({
     preparedParameters,
 }) => {
     // let's debug
-    global.console.log(
-        'this are the prepared parameters:\n',
-        preparedParameters
-    );
+    //global.console.log(
+    //    'this are the prepared parameters:\n',
+    //      preparedParameters
+    //    );
 
     const query = getFilteredOrganizationsQuery(
         client,

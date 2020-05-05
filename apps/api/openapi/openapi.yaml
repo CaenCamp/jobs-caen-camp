@@ -90,26 +90,27 @@ paths:
       description: |
         Obtenir une liste paginée d'offres d'emploi
 
-        Cette liste est filtrable par ces paramètres:
-        * title
-        * skills
-        * employmentType
-        * datePosted
-        * jobStartDate
-        * validThrough
-        * hiringOrganizationName
-        * hiringOrganizationPostalCode
-        * hiringOrganizationAddressLocality
-        * hiringOrganizationAddressCountry
+        Cette liste est filtrable par ces paramètres. Entre parenthèses, l'opérateur par défaut.
+        * title (%l%)
+        * skills (%l%)
+        * employmentType (eq)
+        * datePosted (eq)
+        * jobStartDate (eq)
+        * validThrough (eq)
+        * hiringOrganizationName (%l%)
+        * hiringOrganizationPostalCode (l%)
+        * hiringOrganizationAddressLocality (l%)
+        * hiringOrganizationAddressCountry (l%)
 
-        Qui acceptent eux-mêmes ces opérateurs:
+        Rappel sur les opérateurs:
         * :eq       | string, number, date | Is equal to
+        * :%l%      | string
+        * :l%       | string
+        * :%l       | string
         * :gt       | number, date         | Is greater than
         * :lt       | number, date         | Is less than
         * :gte      | number, date         | Is greater than or equal to
         * :lte      | number, date         | Is less than or equal to
-
-        Si aucun opérateur n'est pourvu, l'opérateur par défaut est ":eq".
 
         La liste est triable avec sortBy=key, orderBy=ASC (ou DESC) :
         * datePosted
@@ -490,19 +491,20 @@ paths:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getOrganizations
       description: |
-        Obtenir la liste des entreprises. Cette liste est filtrable par filters={ key: value, key2: value ...} :
-            * name
-            * address_locality
-            * postal_code
+        Obtenir la liste des entreprises. Cette liste est filtrable par ces paramètres. Entre parenthèses, l'opérateur par défaut.
+            * name (%l%)
+            * address_locality (l%)
+            * postal_code (l%)
 
-        Qui acceptent eux-mêmes ces opérateurs:
+        Si aucun opérateur n'est pourvu, l'opérateur par défaut est ":eq".
+
+        Rappel sur les opérateurs:
         * :eq       | string, number, date | Is equal to
         * :gt       | number, date         | Is greater than
         * :lt       | number, date         | Is less than
         * :gte      | number, date         | Is greater than or equal to
         * :lte      | number, date         | Is less than or equal to
 
-        Si aucun opérateur n'est pourvu, l'opérateur par défaut est ":eq".
 
         Cette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :
             * name
@@ -1184,7 +1186,7 @@ components:
     Title:
       name: title
       in: query
-      description: "Filtre: Le titre de l'offre d'emploi. Opérateur applicable: eq"
+      description: "Filtre: Le titre de l'offre d'emploi. Opérateur par défaut: %l%"
       required: false
       schema:
         type: string
@@ -1192,7 +1194,7 @@ components:
     Skills:
       name: skills
       in: query
-      description: "Filtre: Les compétences demandées dans l'offre d'emploi. Opérateur applicable: eq"
+      description: "Filtre: Les compétences demandées dans l'offre d'emploi. Opérateur par défaut: %l%"
       required: false
       schema:
         type: string
@@ -1200,7 +1202,7 @@ components:
     EmploymentType:
       name: employmentType
       in: query
-      description: "Filtre: Le type de contrat proposé par l'offre d'emploi. Opérateur applicable: eq"
+      description: "Filtre: Le type de contrat proposé par l'offre d'emploi. Opérateur par défaut: eq"
       required: false
       schema:
         type: string
@@ -1216,7 +1218,7 @@ components:
         type: string
         example: '2020-04-02:gte'
     JobStartDate:
-      name: datePosted
+      name: jobStartDate
       in: query
       description: |
         "Filtre: La date de début du contrat proposé par l'offre d'emploi,
@@ -1238,7 +1240,7 @@ components:
     HiringOrganizationName:
       name: hiringOrganizationName
       in: query
-      description: "Filtre: Le nom de l'entreprise qui offre l'emploi. Opérateur applicable: eq"
+      description: "Filtre: Le nom de l'entreprise qui offre l'emploi. Opérateur par défaut: %l%"
       required: false
       schema:
         type: string
@@ -1247,49 +1249,49 @@ components:
       in: query
       description: |
         "Filtre: Le code postal de l'entreprise qui offre l'emploi.
-        Opérateurs applicables: eq, gt, lt, gte, lte"
+        Opérateur par défaut: l%"
       required: false
       schema:
         type: string
     HiringOrganizationAddressLocality:
       name: hiringOrganizationAddressLocality
       in: query
-      description: "Filtre: La commune de l'entreprise qui offre l'emploi. Opérateur applicable: eq"
+      description: "Filtre: La commune de l'entreprise qui offre l'emploi. Opérateur par défaut: l%"
       required: false
       schema:
         type: string
     HiringOrganizationAddressCountry:
       name: hiringOrganizationAddressCountry
       in: query
-      description: "Filtre: Le pays de l'entreprise qui offre l'emploi. Opérateur applicable: eq"
+      description: "Filtre: Le pays de l'entreprise qui offre l'emploi. Opérateur par défaut: l%"
       required: false
       schema:
         type: string
     Name:
       name: name
       in: query
-      description: "Filtre: Le nom de l'entreprise. Opérateur applicable: eq"
+      description: "Filtre: Le nom de l'entreprise. Opérateur par défaut: %l%"
       required: false
       schema:
         type: string
     Address_Locality:
-      name: name
+      name: address_locality
       in: query
-      description: "Filtre: La commune de l'entreprise. Opérateur applicable: eq"
+      description: "Filtre: La commune de l'entreprise. Opérateur par défaut: l%"
       required: false
       schema:
         type: string
     Postal_code:
       name: postal_code
       in: query
-      description: "Filtre: Le code postal de l'entreprise. Opérateurs applicables: eq, gt, lt, gte, lte"
+      description: "Filtre: Le code postal de l'entreprise. Opérateur par défaut: l%"
       required: false
       schema:
         type: string
     Q:
       name: q
       in: query
-      description: "Paramètre unique pour filtrer en %LIKE"
+      description: 'Paramètre unique pour filtrer en %LIKE%'
       required: false
       schema:
         type: string

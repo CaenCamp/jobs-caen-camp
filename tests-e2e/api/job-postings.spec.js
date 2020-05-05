@@ -231,12 +231,12 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par title en "%LIKE%"', async () => {
+        it('devrait accepter un filtre par title en "%LIKE%" par défaut', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
                     `http://api:3001/api/job-postings?${querystring.stringify({
-                        q: 'Lead',
+                        title: 'Lead',
                         sortBy: 'title',
                         orderBy: 'DESC',
                     })}`
@@ -268,13 +268,12 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par hiringOrganizationPostalCode en "LIKE%"', async () => {
+        it('devrait accepter un filtre par hiringOrganizationPostalCode en "LIKE%" par défaut', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?filters=${JSON.stringify({
-                        hiringOrganizationPostalCode: 14,
-                    })}&${querystring.stringify({
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        hiringOrganizationPostalCode: '14',
                         sortBy: 'title',
                         orderBy: 'DESC',
                     })}`
@@ -306,15 +305,13 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it("devrait accepter un filtre par datePosted avec l'opérateur lte", async () => {
+        it("devrait accepter un filtre par datePosted avec l'opérateur 'gt' (greater than)'", async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?filters=${querystring.stringify(
-                        {
-                            datePosted: '2019-12-02:gte',
-                        }
-                    )}`
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        datePosted: '2019-12-02:gt',
+                    })}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -340,12 +337,12 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it("devrait accepter un filtre par jobStartDate avec l'opérateur lte", async () => {
+        it("devrait accepter un filtre par jobStartDate avec l'opérateur 'lt' (less than) ", async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?filters=${JSON.stringify({
-                        jobStartDate: '2020-05-02:lte',
+                    `http://api:3001/api/job-postings?${querystring.stringify({
+                        jobStartDate: '2020-05-02:lt',
                     })}`
                 )
                 .expect('status', 200)
