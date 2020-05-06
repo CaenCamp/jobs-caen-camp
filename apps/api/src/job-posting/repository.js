@@ -24,8 +24,10 @@ const jobPostingFilterableFields = [
     'title',
     'skills',
     'employmentType',
-    'datePosted',
-    'jobStartDate',
+    'datePosted_after',
+    'datePosted_before',
+    'jobStartDate_after',
+    'jobStartDate_before',
     'validThrough',
     'hiringOrganizationName',
     'hiringOrganizationPostalCode',
@@ -59,6 +61,25 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
         });
 
     //global.console.log('unfiltered query:', query);
+
+    filters.map((filter) => {
+        switch (filter.name) {
+            case 'hiringOrganizationPostalCode':
+                filter = 'organization.postal_code';
+                break;
+            case 'hiringOrganizationName':
+                filter.name = 'organization.name';
+                break;
+            case 'hiringOrganizationAddressLocality':
+                filter.name = 'organization.address_locality';
+                break;
+            case 'hiringOrganizationAddressCountry':
+                filter.name = 'organization.address_country';
+                break;
+            default:
+                break;
+        }
+    });
 
     filters.map((filter) => {
         switch (filter.operator) {

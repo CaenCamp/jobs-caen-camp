@@ -305,12 +305,12 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it("devrait accepter un filtre par datePosted avec l'opérateur 'gt' (greater than)'", async () => {
+        it('devrait accepter un filtre par datePosted_after', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
                     `http://api:3001/api/job-postings?${querystring.stringify({
-                        datePosted: '2019-12-02:gt',
+                        datePosted_after: '2019-12-02',
                     })}`
                 )
                 .expect('status', 200)
@@ -337,12 +337,12 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it("devrait accepter un filtre par jobStartDate avec l'opérateur 'lt' (less than) ", async () => {
+        it('devrait accepter un filtre par jobStartDate_before', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
                     `http://api:3001/api/job-postings?${querystring.stringify({
-                        jobStartDate: '2020-05-02:lt',
+                        jobStartDate_before: '2020-05-02',
                     })}`
                 )
                 .expect('status', 200)

@@ -30,10 +30,9 @@ const filterOperators = [
     FILTER_OPERATOR_PLP,
 ];
 
-// todo: find a better name
-const PLPbyDefaultparameters = ['title', 'skills', 'q', 'name'];
+const parametersThatDefaultToPLP = ['title', 'skills', 'name'];
 
-const LPbyDefaultparameters = [
+const parametersThatDefaultToLP = [
     'hiringOrganizationName',
     'hiringOrganizationPostalCode',
     'hiringOrganizationAddressLocality',
@@ -41,6 +40,14 @@ const LPbyDefaultparameters = [
     'address_locality',
     'postal_code',
 ];
+
+const parametersThatDefaultToLT = [
+    'validThrough',
+    'datePosted_before',
+    'jobStartDate_before',
+];
+
+const parametersThatDefaultToGT = ['datePosted_after', 'jobStartDate_after'];
 
 /**
  * Method to clean the filters sent in query parameters
@@ -54,7 +61,9 @@ function filtersSanitizer(filters, filterableFields) {
     if (!filters || typeof filters !== 'object') {
         return [];
     }
+
     console.log('unsanitized filters:', filters);
+
     let sanitizedFilters = Object.keys(filters)
         .map((filterKey) => {
             let receivedValue = filters[filterKey];
@@ -78,17 +87,29 @@ function filtersSanitizer(filters, filterableFields) {
             let [value, filterOperator] = receivedValue.split(':');
 
             if (!filterOperator) {
-                if (PLPbyDefaultparameters.includes(filterKey)) {
+                if (parametersThatDefaultToPLP.includes(filterKey)) {
                     filterOperator = FILTER_OPERATOR_PLP;
                 }
-
-                if (LPbyDefaultparameters.includes(filterKey)) {
+                if (parametersThatDefaultToLP.includes(filterKey)) {
                     filterOperator = FILTER_OPERATOR_LP;
+                }
+                if (parametersThatDefaultToLT.includes(filterKey)) {
+                    filterOperator = FILTER_OPERATOR_LT;
+                }
+                if (parametersThatDefaultToGT.includes(filterKey)) {
+                    filterOperator = FILTER_OPERATOR_GT;
                 }
             }
 
+            let filterName;
+
+            const [dateParameter, beforeOfAfter] = filterKey.split('_');
+            if (beforeOfAfter && ['after', 'before'].includes(beforeOfAfter)) {
+                filterName = dateParameter;
+            }
+
             return {
-                name: filterKey,
+                name: !filterName ? filterKey : filterName,
                 value,
                 operator:
                     !filterOperator || !filterOperators.includes(filterOperator)

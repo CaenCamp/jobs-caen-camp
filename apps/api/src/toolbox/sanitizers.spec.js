@@ -41,16 +41,56 @@ describe('Sanitizers', () => {
             ).toEqual([{ name: 'foo', value: '2020/05/02', operator: 'gte' }]);
         });
 
-        it('should return each filter with its default operator.', () => {
-            const defaultFilterableFields = ['title', 'postal_code'];
+        it('should trim _before and _after from query parameters', () => {
+            const defaultFilterableFields = [
+                'foo_after',
+                'bar_with_underscore',
+            ];
             expect(
                 filtersSanitizer(
-                    { title: 'foo', postal_code: '50' },
+                    {
+                        foo_after: 'yes',
+                        bar_with_underscore: 'no',
+                    },
+                    defaultFilterableFields
+                )
+            ).toEqual([
+                {
+                    name: 'foo',
+                    value: 'yes',
+                    operator: 'eq',
+                },
+                {
+                    name: 'bar_with_underscore',
+                    value: 'no',
+                    operator: 'eq',
+                },
+            ]);
+        });
+
+        it('should return each filter with its default operator.', () => {
+            const defaultFilterableFields = [
+                'title',
+                'postal_code',
+                'datePosted_after',
+            ];
+            expect(
+                filtersSanitizer(
+                    {
+                        title: 'foo',
+                        postal_code: '50',
+                        datePosted_after: '2020-05-06',
+                    },
                     defaultFilterableFields
                 )
             ).toEqual([
                 { name: 'title', value: 'foo', operator: '%l%' },
                 { name: 'postal_code', value: '50', operator: 'l%' },
+                {
+                    name: 'datePosted',
+                    value: '2020-05-06',
+                    operator: 'gt',
+                },
             ]);
         });
 

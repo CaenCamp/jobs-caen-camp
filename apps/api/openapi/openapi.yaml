@@ -94,9 +94,11 @@ paths:
         * title (%l%)
         * skills (%l%)
         * employmentType (eq)
-        * datePosted (eq)
-        * jobStartDate (eq)
-        * validThrough (eq)
+        * datePosted_before (lt)
+        * datePosted_after (gt)
+        * jobStartDate_before (lt)
+        * jobStartDate_after (gt)
+        * validThrough (lt)
         * hiringOrganizationName (%l%)
         * hiringOrganizationPostalCode (l%)
         * hiringOrganizationAddressLocality (l%)
@@ -127,12 +129,13 @@ paths:
         - $ref: '#/components/parameters/OrderBy'
         - $ref: '#/components/parameters/PaginationCurrentPage'
         - $ref: '#/components/parameters/PaginationPerPage'
-        - $ref: '#/components/parameters/Q'
         - $ref: '#/components/parameters/Title'
         - $ref: '#/components/parameters/Skills'
         - $ref: '#/components/parameters/EmploymentType'
-        - $ref: '#/components/parameters/DatePosted'
-        - $ref: '#/components/parameters/JobStartDate'
+        - $ref: '#/components/parameters/DatePosted_before'
+        - $ref: '#/components/parameters/DatePosted_after'
+        - $ref: '#/components/parameters/JobStartDate_before'
+        - $ref: '#/components/parameters/JobStartDate_after'
         - $ref: '#/components/parameters/ValidThrough'
         - $ref: '#/components/parameters/HiringOrganizationName'
         - $ref: '#/components/parameters/HiringOrganizationPostalCode'
@@ -500,11 +503,9 @@ paths:
 
         Rappel sur les opérateurs:
         * :eq       | string, number, date | Is equal to
-        * :gt       | number, date         | Is greater than
-        * :lt       | number, date         | Is less than
-        * :gte      | number, date         | Is greater than or equal to
-        * :lte      | number, date         | Is less than or equal to
-
+        * :%l%      | string               | %LIKE%
+        * :l%       | string               | LIKE%
+        * :%l       | string               | %LIKE
 
         Cette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :
             * name
@@ -515,7 +516,6 @@ paths:
         - $ref: '#/components/parameters/OrderBy'
         - $ref: '#/components/parameters/PaginationCurrentPage'
         - $ref: '#/components/parameters/PaginationPerPage'
-        - $ref: '#/components/parameters/Q'
         - $ref: '#/components/parameters/Name'
         - $ref: '#/components/parameters/Address_Locality'
         - $ref: '#/components/parameters/Postal_code'
@@ -1207,36 +1207,51 @@ components:
       schema:
         type: string
         example: 'CDI'
-    DatePosted:
-      name: datePosted
+    DatePosted_before:
+      name: datePosted_before
       in: query
       description: |
-        "Filtre: La date d'ajout de l'offre d'emploi, au format ISO 8601 (YYYY-MM-DD).
-        Opérateurs applicables: eq, gt, lt, gte, lte"
+        "Filtre les offres d'emploi ajoutées avant cette date, au format ISO 8601 (YYYY-MM-DD). Opérateur par défaut: lt"
       required: false
       schema:
         type: string
-        example: '2020-04-02:gte'
-    JobStartDate:
+        example: '2020-04-02'
+    DatePosted_after:
+      name: datePosted_after
+      in: query
+      description: |
+        "Filtre les offres d'emploi ajoutées après cette date, au format ISO 8601 (YYYY-MM-DD). Opérateur par défaut: gt"
+      required: false
+      schema:
+        type: string
+        example: '2020-04-02'
+    JobStartDate_before:
       name: jobStartDate
       in: query
       description: |
-        "Filtre: La date de début du contrat proposé par l'offre d'emploi,
-        au format ISO 8601 (YYYY-MM-DD). Opérateurs applicables: eq, gt, lt, gte, lte"
+        "Filtre les offres d'emploi dont le contrat débute avant cette date,
+        au format ISO 8601 (YYYY-MM-DD). Opérateur par défaut: lt"
       required: false
       schema:
         type: string
-        example: '2020-05-02:gte'
+    JobStartDate_after:
+      name: jobStartDate
+      in: query
+      description: |
+        "Filtre les offres d'emploi dont le contrat débute après cette date,
+        au format ISO 8601 (YYYY-MM-DD). Opérateur par défaut: gt"
+      required: false
+      schema:
+        type: string
     ValidThrough:
       name: validThrough
       in: query
       description: |
         "Filtre: La date jusqu'à laquelle l'offre d'emploi est valide,
-        au format ISO 8601 (YYYY-MM-DD). Opérateurs applicables: eq, gt, lt, gte, lte"
+        au format ISO 8601 (YYYY-MM-DD). Opérateur par féfaut: lt"
       required: false
       schema:
         type: string
-        example: '2020-06-24:lte'
     HiringOrganizationName:
       name: hiringOrganizationName
       in: query
@@ -1285,13 +1300,6 @@ components:
       name: postal_code
       in: query
       description: "Filtre: Le code postal de l'entreprise. Opérateur par défaut: l%"
-      required: false
-      schema:
-        type: string
-    Q:
-      name: q
-      in: query
-      description: 'Paramètre unique pour filtrer en %LIKE%'
       required: false
       schema:
         type: string
