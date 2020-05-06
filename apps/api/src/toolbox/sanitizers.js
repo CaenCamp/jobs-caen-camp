@@ -62,8 +62,6 @@ function filtersSanitizer(filters, filterableFields) {
         return [];
     }
 
-    console.log('unsanitized filters:', filters);
-
     let sanitizedFilters = Object.keys(filters)
         .map((filterKey) => {
             let receivedValue = filters[filterKey];
@@ -118,7 +116,7 @@ function filtersSanitizer(filters, filterableFields) {
             };
         })
         .filter((filter) => filter !== null);
-    global.console.log('sanitized filters:\n', sanitizedFilters);
+
     return sanitizedFilters;
 }
 
@@ -159,6 +157,7 @@ const paginationSanitizer = ({ perPage, currentPage }) => {
     return [parseInt(perPage) || 10, parseInt(currentPage) || 1];
 };
 
+// TO BE DELETED - OBSOLETE
 /**
  * This method intercepts query parameters expected in JSON but incorrectly formatted.
  *
@@ -238,10 +237,13 @@ const formatPaginationToLinkHeader = ({ resourceURI, pagination = {} }) => {
     return items.map((item) => linkHeaderItem(item)).join(',');
 };
 
-// const prepareQueryParameters = (ctxQuery) => {
-//     global.console.log('This is the query:', ctxQuery);
-//     return;
-const prepareQueryParameters = ({
+/**
+ * Extract the parameters from the query
+ *
+ * @param {object} query - The query received as ctx.query
+ * @returns {object} The extracted parameters, ready for sanitizing
+ */
+const extractQueryParameters = ({
     sortBy,
     orderBy,
     currentPage,
@@ -262,5 +264,5 @@ module.exports = {
     parseJsonQueryParameter,
     sortSanitizer,
     formatPaginationToLinkHeader,
-    prepareQueryParameters,
+    extractQueryParameters,
 };

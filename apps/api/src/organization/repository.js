@@ -13,7 +13,6 @@ const OrganizationFilterableFields = [
     'name',
     'address_locality',
     'postal_code',
-    'q',
 ];
 const OrganizationSortableFields = [
     'name',
@@ -31,7 +30,6 @@ const OrganizationSortableFields = [
  * @returns {Promise} - Knew query for filtrated organization list
  */
 const getFilteredOrganizationsQuery = (client, filters, sort) => {
-    // const { name, address_locality, postal_code, ...restFilters } = filters;
     const query = client
         .select(
             'organization.*',
@@ -50,7 +48,6 @@ const getFilteredOrganizationsQuery = (client, filters, sort) => {
             FROM contact_point WHERE contact_point.organization_id = organization.id) as contact_points`)
         )
         .from('organization');
-    // .where(restFilters);
 
     filters.map((filter) => {
         switch (filter.operator) {
@@ -119,32 +116,26 @@ const formatOrganizationForAPI = (dbOrganization) => ({
  * Return paginated and filtered list of organization
  *
  * @param {object} client - The Database client
- * @param {object} filters - Organization Filter
- * @param {object} sort - Sort parameters { sortBy, orderBy }
- * @param {object} pagination - Pagination {perPage: 10, currentPage: 1}
+ * @param {object} extractedParameters - Contains:
+ *  Sort parameters {sortBy: 'title', orderBy: 'ASC'}
+ *  Pagination parameters {perPage: 10, currentPage: 1}
+ *  filter parameters {name: 'lex:%l%', address_locality: 'Hérouvil:l%' }
  * @returns {Promise} - paginated object with paginated organization list and totalCount
  */
 const getOrganizationPaginatedList = async ({
     client,
-    // sort, filters and pagination were grouped by prepareQueryParameters()
-    preparedParameters,
+    extractedParameters,
 }) => {
-    // let's debug
-    //global.console.log(
-    //    'this are the prepared parameters:\n',
-    //      preparedParameters
-    //    );
-
     const query = getFilteredOrganizationsQuery(
         client,
         filtersSanitizer(
-            preparedParameters.filters,
+            extractedParameters.filters,
             OrganizationFilterableFields
         ),
-        sortSanitizer(preparedParameters.sort, OrganizationSortableFields)
+        sortSanitizer(extractedParameters.sort, OrganizationSortableFields)
     );
     const [perPage, currentPage] = paginationSanitizer(
-        preparedParameters.pagination
+        extractedParameters.pagination
     );
 
     return query

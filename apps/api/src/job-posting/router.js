@@ -8,9 +8,8 @@ const {
     updateJobPosting,
 } = require('./repository');
 const {
-    // parseJsonQueryParameter,
     formatPaginationToLinkHeader,
-    prepareQueryParameters,
+    extractQueryParameters,
 } = require('../toolbox/sanitizers');
 
 const router = new Router({
@@ -31,11 +30,9 @@ router.use(async (ctx, next) => {
 });
 
 router.get('/', async (ctx) => {
-    global.console.log('this is the ctx.query:\n', ctx.query);
-
     const { jobPostings, pagination } = await getJobPostingPaginatedList({
         client: ctx.db,
-        preparedParameters: prepareQueryParameters(ctx.query),
+        extractedParameters: extractQueryParameters(ctx.query),
     });
 
     const linkHeaderValue = formatPaginationToLinkHeader({

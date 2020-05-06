@@ -33,7 +33,6 @@ const jobPostingFilterableFields = [
     'hiringOrganizationPostalCode',
     'hiringOrganizationAddressLocality',
     'hiringOrganizationAddressCountry',
-    'q',
 ];
 
 /**
@@ -60,12 +59,10 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
             'organization.id': 'job_posting.hiring_organization_id',
         });
 
-    //global.console.log('unfiltered query:', query);
-
     filters.map((filter) => {
         switch (filter.name) {
             case 'hiringOrganizationPostalCode':
-                filter = 'organization.postal_code';
+                filter.name = 'organization.postal_code';
                 break;
             case 'hiringOrganizationName':
                 filter.name = 'organization.name';
@@ -117,8 +114,6 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
     if (sort && sort.length) {
         query.orderBy(...sort);
     }
-    global.console.log('filtered query:', query._statements);
-
     return query;
 };
 
@@ -170,30 +165,24 @@ const formatJobPostingForAPI = (dbJobPosting) => {
  * Return paginated and filtered list of jobPosting
  *
  * @param {object} client - The Database client
- * @param {object} filters - JobPosting Filters
- * @param {object} sort - Sort parameters {sortBy: title, orderBy: ASC}
- * @param {object} pagination - Pagination {perPage: 10, currentPage: 1}
+ * @param {object} extractedParameters - Contains:
+ *  Sort parameters {sortBy: 'title', orderBy: 'ASC'}
+ *  Pagination parameters {perPage: 10, currentPage: 1}
+ *  filter parameters {title: 'Lead:%l%', datePosted_before: '2020-05-02' }
  * @returns {Promise} - paginated object with paginated jobPosting list and totalCount
  */
-const getJobPostingPaginatedList = async ({
-    client,
-    // sort, filters and pagination were grouped by prepareQueryParameters()
-    preparedParameters,
-}) => {
-    // let's debug
-    global.console.log('the prepared parameters:\n', preparedParameters);
-
+const getJobPostingPaginatedList = async ({ client, extractedParameters }) => {
     const query = getFilteredJobPostingsQuery(
         client,
         filtersSanitizer(
-            preparedParameters.filters,
+            extractedParameters.filters,
             jobPostingFilterableFields
         ),
-        sortSanitizer(preparedParameters.sort, jobPostingSortableFields)
+        sortSanitizer(extractedParameters.sort, jobPostingSortableFields)
     );
 
     const [perPage, currentPage] = paginationSanitizer(
-        preparedParameters.pagination
+        extractedParameters.pagination
     );
 
     return query

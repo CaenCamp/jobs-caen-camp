@@ -494,12 +494,10 @@ paths:
                 $ref: '#/components/schemas/ExtendedErrorModel'
       operationId: getOrganizations
       description: |
-        Obtenir la liste des entreprises. Cette liste est filtrable par ces paramètres. Entre parenthèses, l'opérateur par défaut.
+        Obtenir la liste des entreprises. Cette liste est filtrable par ces paramètres. Entre parenthèses, l'opérateur pourvu par défaut.
             * name (%l%)
             * address_locality (l%)
             * postal_code (l%)
-
-        Si aucun opérateur n'est pourvu, l'opérateur par défaut est ":eq".
 
         Rappel sur les opérateurs:
         * :eq       | string, number, date | Is equal to
