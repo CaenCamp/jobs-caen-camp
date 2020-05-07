@@ -12,7 +12,7 @@ Date: 2020-04-09
 
 ## Contexte et énoncé du problème
 
-Pour la première mise en ligne du site JobBoard, l'application publique se contentera d'afficher la liste des offres d'emploi disponible en base de données. Mais pour pouvoir ajouter et mettre à jours ces offres, nous avons dû mettre en place une administration (en react-admin). Pour le moment, c'est interfcae d'administration est tout aussi publique que la liste publique ... Il faut donc mettre en place une authentification permettant de sécuriser l'administration.
+Pour la première mise en ligne du site JobBoard, l'application publique se contentera d'afficher la liste des offres d'emploi disponible en base de données. Mais pour pouvoir ajouter et mettre à jours ces offres, nous avons dû mettre en place une administration (en react-admin). Pour le moment, cette interface d'administration est tout aussi publique que la liste publique ... Il faut donc mettre en place une authentification permettant de sécuriser l'administration.
 
 ## Moteurs de décision
 
