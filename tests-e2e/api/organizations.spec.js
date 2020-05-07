@@ -182,7 +182,7 @@ describe('Organizations API Endpoints', () => {
             await frisby
                 .get(
                     `http://api:3001/api/organizations?${querystring.stringify({
-                        address_locality: 'Auber',
+                        addressLocality: 'Auber',
                     })}`
                 )
                 .expect('status', 200)
@@ -208,7 +208,7 @@ describe('Organizations API Endpoints', () => {
             await frisby
                 .get(
                     `http://api:3001/api/organizations?${querystring.stringify({
-                        address_locality: 'villier',
+                        addressLocality: 'villier',
                     })}`
                 )
                 .expect('status', 200)
@@ -228,7 +228,7 @@ describe('Organizations API Endpoints', () => {
             await frisby
                 .get(
                     `http://api:3001/api/organizations?${querystring.stringify({
-                        postal_code: '14',
+                        postalCode: '14',
                     })}`
                 )
                 .expect('status', 200)
@@ -253,7 +253,7 @@ describe('Organizations API Endpoints', () => {
             await frisby
                 .get(
                     `http://api:3001/api/organizations?${querystring.stringify({
-                        postal_code: '460',
+                        postalCode: '460',
                     })}`
                 )
                 .expect('status', 200)

@@ -494,10 +494,10 @@ paths:
       description: |
         Obtenir la liste des entreprises. Cette liste est filtrable par ces paramètres. Entre parenthèses, l'opérateur pourvu par défaut.
             * name (%l%)
-            * address_locality (l%)
-            * postal_code (l%)
+            * addressLocality (l%)
+            * postalCode (l%)
 
-        L'opérateur est acollé au paramètre avec deux points. Ex: `address_locality:eq=Caen`
+        L'opérateur est acollé au paramètre avec deux points. Ex: `addressLocality:eq=Caen`
 
         Rappel sur les opérateurs:
         * :eq       | string, number, date | Is equal to
@@ -507,16 +507,16 @@ paths:
 
         Cette liste est triable par sortBy=key, orderBy=ASC (ou DESC) :
             * name
-            * address_locality
-            * postal_code"
+            * addressLocality
+            * postalCode"
       parameters:
         - $ref: '#/components/parameters/SortBy'
         - $ref: '#/components/parameters/OrderBy'
         - $ref: '#/components/parameters/PaginationCurrentPage'
         - $ref: '#/components/parameters/PaginationPerPage'
         - $ref: '#/components/parameters/Name'
-        - $ref: '#/components/parameters/Address_Locality'
-        - $ref: '#/components/parameters/Postal_code'
+        - $ref: '#/components/parameters/AddressLocality'
+        - $ref: '#/components/parameters/PostalCode'
     post:
       summary: "Création d'une entreprise"
       operationId: createOrganization
@@ -1271,15 +1271,15 @@ components:
       required: false
       schema:
         type: string
-    Address_Locality:
-      name: address_locality
+    AddressLocality:
+      name: addressLocality
       in: query
       description: "Filtre: La commune de l'entreprise. Opérateur par défaut: l%"
       required: false
       schema:
         type: string
-    Postal_code:
-      name: postal_code
+    PostalCode:
+      name: postalCode
       in: query
       description: "Filtre: Le code postal de l'entreprise. Opérateur par défaut: l%"
       required: false

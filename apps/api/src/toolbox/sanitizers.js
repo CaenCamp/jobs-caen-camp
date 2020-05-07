@@ -37,8 +37,8 @@ const parametersThatDefaultToLP = [
     'hiringOrganizationPostalCode',
     'hiringOrganizationAddressLocality',
     'hiringOrganizationAddressCountry',
-    'address_locality',
-    'postal_code',
+    'addressLocality',
+    'postalCode',
 ];
 
 const parametersThatDefaultToLT = ['validThrough'];

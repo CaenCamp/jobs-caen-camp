@@ -42,18 +42,18 @@ describe('Sanitizers', () => {
         });
 
         it('should return each filter with its default operator.', () => {
-            const defaultFilterableFields = ['title', 'postal_code'];
+            const defaultFilterableFields = ['title', 'postalCode'];
             expect(
                 filtersSanitizer(
                     {
                         title: 'foo',
-                        postal_code: '50',
+                        postalCode: '50',
                     },
                     defaultFilterableFields
                 )
             ).toEqual([
                 { name: 'title', value: 'foo', operator: '%l%' },
-                { name: 'postal_code', value: '50', operator: 'l%' },
+                { name: 'postalCode', value: '50', operator: 'l%' },
             ]);
         });
 

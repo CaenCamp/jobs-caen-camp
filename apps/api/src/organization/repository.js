@@ -9,16 +9,12 @@ const {
     sortSanitizer,
 } = require('../toolbox/sanitizers');
 
-const OrganizationFilterableFields = [
-    'name',
-    'address_locality',
-    'postal_code',
-];
+const OrganizationFilterableFields = ['name', 'addressLocality', 'postalCode'];
 const OrganizationSortableFields = [
     'name',
     'id',
-    'address_locality',
-    'postal_code',
+    'addressLocality',
+    'postalCode',
 ];
 
 /**
@@ -119,7 +115,7 @@ const formatOrganizationForAPI = (dbOrganization) => ({
  * @param {object} extractedParameters - Contains:
  *  Sort parameters {sortBy: 'title', orderBy: 'ASC'}
  *  Pagination parameters {perPage: 10, currentPage: 1}
- *  filter parameters {name: 'lex:%l%', address_locality: 'Hérouvil:l%' }
+ *  filter parameters {name: 'lex:%l%', addressLocality: 'Hérouvil:l%' }
  * @returns {Promise} - paginated object with paginated organization list and totalCount
  */
 const getOrganizationPaginatedList = async ({
