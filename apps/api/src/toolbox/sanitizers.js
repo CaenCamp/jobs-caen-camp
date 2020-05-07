@@ -41,13 +41,7 @@ const parametersThatDefaultToLP = [
     'postal_code',
 ];
 
-const parametersThatDefaultToLT = [
-    'validThrough',
-    'datePosted_before',
-    'jobStartDate_before',
-];
-
-const parametersThatDefaultToGT = ['datePosted_after', 'jobStartDate_after'];
+const parametersThatDefaultToLT = ['validThrough'];
 
 /**
  * Method to clean the filters sent in query parameters
@@ -62,60 +56,53 @@ function filtersSanitizer(filters, filterableFields) {
         return [];
     }
 
+    console.log(filters);
+
     let sanitizedFilters = Object.keys(filters)
         .map((filterKey) => {
-            let receivedValue = filters[filterKey];
+            let value = filters[filterKey];
 
-            if (receivedValue === undefined) {
+            let [key, operator] = filterKey.split(':');
+
+            if (value === undefined) {
                 return null;
             }
 
-            if (receivedValue === null) {
-                return { name: filterKey, value: null, operator: 'eq' };
+            if (value === null) {
+                return { name: key, value: null, operator: 'eq' };
             }
 
-            if (receivedValue.trim().length == 0) {
+            if (value.trim().length == 0) {
                 return null;
             }
 
-            if (!filterableFields.includes(filterKey)) {
+            if (!filterableFields.includes(key)) {
                 return null;
             }
 
-            let [value, filterOperator] = receivedValue.split(':');
-
-            if (!filterOperator) {
-                if (parametersThatDefaultToPLP.includes(filterKey)) {
-                    filterOperator = FILTER_OPERATOR_PLP;
+            if (!operator) {
+                if (parametersThatDefaultToPLP.includes(key)) {
+                    operator = FILTER_OPERATOR_PLP;
                 }
-                if (parametersThatDefaultToLP.includes(filterKey)) {
-                    filterOperator = FILTER_OPERATOR_LP;
+                if (parametersThatDefaultToLP.includes(key)) {
+                    operator = FILTER_OPERATOR_LP;
                 }
-                if (parametersThatDefaultToLT.includes(filterKey)) {
-                    filterOperator = FILTER_OPERATOR_LT;
+                if (parametersThatDefaultToLT.includes(key)) {
+                    operator = FILTER_OPERATOR_LT;
                 }
-                if (parametersThatDefaultToGT.includes(filterKey)) {
-                    filterOperator = FILTER_OPERATOR_GT;
-                }
-            }
-
-            let filterName;
-
-            const [dateParameter, beforeOfAfter] = filterKey.split('_');
-            if (beforeOfAfter && ['after', 'before'].includes(beforeOfAfter)) {
-                filterName = dateParameter;
             }
 
             return {
-                name: !filterName ? filterKey : filterName,
+                name: key,
                 value,
                 operator:
-                    !filterOperator || !filterOperators.includes(filterOperator)
+                    !operator || !filterOperators.includes(operator)
                         ? FILTER_OPERATOR_EQ
-                        : filterOperator,
+                        : operator,
             };
         })
         .filter((filter) => filter !== null);
+    console.log(sanitizedFilters);
 
     return sanitizedFilters;
 }
