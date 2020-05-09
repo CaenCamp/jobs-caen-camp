@@ -51,12 +51,10 @@ const parametersThatDefaultToLT = ['validThrough'];
  * @returns {Array} Ready-to-use array of filter objects
  * possible returned value: [{ name: 'foo', value: 'bar', operator: 'eq' }, {...} ]
  */
-function filtersSanitizer(filters, filterableFields) {
+const filtersSanitizer = (filters, filterableFields) => {
     if (!filters || typeof filters !== 'object') {
         return [];
     }
-
-    console.log(filters);
 
     let sanitizedFilters = Object.keys(filters)
         .map((filterKey) => {
@@ -64,19 +62,15 @@ function filtersSanitizer(filters, filterableFields) {
 
             let [key, operator] = filterKey.split(':');
 
-            if (value === undefined) {
-                return null;
-            }
-
             if (value === null) {
                 return { name: key, value: null, operator: 'eq' };
             }
 
-            if (value.trim().length == 0) {
-                return null;
-            }
-
-            if (!filterableFields.includes(key)) {
+            if (
+                value === undefined ||
+                value.trim().length == 0 ||
+                !filterableFields.includes(key)
+            ) {
                 return null;
             }
 
@@ -102,10 +96,9 @@ function filtersSanitizer(filters, filterableFields) {
             };
         })
         .filter((filter) => filter !== null);
-    console.log(sanitizedFilters);
 
     return sanitizedFilters;
-}
+};
 
 /**
  * Method to clean the sort sent in query parameters
@@ -142,24 +135,6 @@ const sortSanitizer = (sort, sortableFields) => {
  */
 const paginationSanitizer = ({ perPage, currentPage }) => {
     return [parseInt(perPage) || 10, parseInt(currentPage) || 1];
-};
-
-// TO BE DELETED - OBSOLETE
-/**
- * This method intercepts query parameters expected in JSON but incorrectly formatted.
- *
- * @param {string} parameter - the query parameter expected in JSON
- * @returns {(object|boolean)} the parsed parameter or false if incorrectly formatted
- */
-const parseJsonQueryParameter = (parameter) => {
-    if (parameter === undefined) {
-        return false;
-    }
-    try {
-        return JSON.parse(parameter);
-    } catch (e) {
-        return false;
-    }
 };
 
 /**
@@ -248,7 +223,6 @@ const extractQueryParameters = ({
 module.exports = {
     filtersSanitizer,
     paginationSanitizer,
-    parseJsonQueryParameter,
     sortSanitizer,
     formatPaginationToLinkHeader,
     extractQueryParameters,

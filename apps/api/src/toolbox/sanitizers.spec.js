@@ -103,20 +103,6 @@ describe('Sanitizers', () => {
             ]);
         });
 
-        // this looks unnecessary
-        // it("should not remove false valid filters from query parameters", () => {
-        //     const defaultFilterableFields = ["foo", "bar"];
-        //     expect(
-        //         filtersSanitizer(
-        //             { foo: "yes", bar: false },
-        //             defaultFilterableFields
-        //         )
-        //     ).toEqual([
-        //         { name: "foo", value: "yes", operator: "eq" },
-        //         { name: "bar", value: false, operator: "eq" },
-        //     ]);
-        // });
-
         it('should remove undefined valid filters from query parameters', () => {
             const defaultFilterableFields = ['foo', 'bar'];
             expect(

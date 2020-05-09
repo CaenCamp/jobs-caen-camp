@@ -27,11 +27,10 @@ export default (apiUrl, httpClient) => ({
     getList: (resource, params) => {
         const { currentPage, perPage } = params;
         const { field, order } = params.sort;
-        const filters = params.filter; // this is just an educated guess
+        const filters = params.filter;
         const query = {
             sortBy: field,
             orderBy: order,
-            // filters: JSON.stringify(params.filter),
             filters,
             currentPage,
             perPage,
