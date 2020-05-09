@@ -102,7 +102,7 @@ paths:
         * hiringOrganizationAddressLocality (l%)
         * hiringOrganizationAddressCountry (l%)
 
-        L'opérateur est acollé au paramètre avec deux points. Ex: `datePosted:gt=2020-05-10`
+        L'opérateur est acollé à la valeur avec deux points. Ex: `datePosted=2020-05-10:gt`
 
         Les opérateurs existants:
         * :eq       | string, number, date | Is equal to
@@ -497,7 +497,7 @@ paths:
             * addressLocality (l%)
             * postalCode (l%)
 
-        L'opérateur est acollé au paramètre avec deux points. Ex: `addressLocality:eq=Caen`
+        L'opérateur est acollé à la valeur avec deux points. Ex: `addressLocality=Caen:eq`
 
         Rappel sur les opérateurs:
         * :eq       | string, number, date | Is equal to
@@ -1213,7 +1213,6 @@ components:
       required: false
       schema:
         type: string
-        format: date
     JobStartDate:
       name: jobStartDate
       in: query
@@ -1223,7 +1222,6 @@ components:
       required: false
       schema:
         type: string
-        format: date
     ValidThrough:
       name: validThrough
       in: query
@@ -1232,7 +1230,6 @@ components:
         au format ISO 8601 (YYYY-MM-DD). Opérateur par défaut: lt"
       required: false
       schema:
-        format: date
         type: string
     HiringOrganizationName:
       name: hiringOrganizationName

@@ -35,7 +35,7 @@ describe('Sanitizers', () => {
             const defaultFilterableFields = ['foo', 'bar'];
             expect(
                 filtersSanitizer(
-                    { 'foo:gte': '2020-05-02' },
+                    { foo: '2020-05-02:gte' },
                     defaultFilterableFields
                 )
             ).toEqual([{ name: 'foo', value: '2020-05-02', operator: 'gte' }]);

@@ -58,36 +58,36 @@ const filtersSanitizer = (filters, filterableFields) => {
 
     let sanitizedFilters = Object.keys(filters)
         .map((filterKey) => {
-            let value = filters[filterKey];
+            let unparsedValue = filters[filterKey];
 
-            let [key, operator] = filterKey.split(':');
-
-            if (value === null) {
-                return { name: key, value: null, operator: 'eq' };
+            if (unparsedValue === null) {
+                return { name: filterKey, value: null, operator: 'eq' };
             }
 
             if (
-                value === undefined ||
-                value.trim().length == 0 ||
-                !filterableFields.includes(key)
+                unparsedValue === undefined ||
+                unparsedValue.trim().length == 0 ||
+                !filterableFields.includes(filterKey)
             ) {
                 return null;
             }
 
+            let [value, operator] = unparsedValue.split(':');
+
             if (!operator) {
-                if (parametersThatDefaultToPLP.includes(key)) {
+                if (parametersThatDefaultToPLP.includes(filterKey)) {
                     operator = FILTER_OPERATOR_PLP;
                 }
-                if (parametersThatDefaultToLP.includes(key)) {
+                if (parametersThatDefaultToLP.includes(filterKey)) {
                     operator = FILTER_OPERATOR_LP;
                 }
-                if (parametersThatDefaultToLT.includes(key)) {
+                if (parametersThatDefaultToLT.includes(filterKey)) {
                     operator = FILTER_OPERATOR_LT;
                 }
             }
 
             return {
-                name: key,
+                name: filterKey,
                 value,
                 operator:
                     !operator || !filterOperators.includes(operator)

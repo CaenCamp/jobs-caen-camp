@@ -309,7 +309,7 @@ describe('JobPostings API Endpoints', () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?datePosted:gt=2019-12-02`
+                    `http://api:3001/api/job-postings?datePosted=2019-12-02:gt`
                 )
                 .expect('status', 200)
                 .expect(
@@ -339,7 +339,7 @@ describe('JobPostings API Endpoints', () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?jobStartDate:lt=2020-05-02`
+                    `http://api:3001/api/job-postings?jobStartDate=2020-05-02:lt`
                 )
                 .expect('status', 200)
                 .expect(

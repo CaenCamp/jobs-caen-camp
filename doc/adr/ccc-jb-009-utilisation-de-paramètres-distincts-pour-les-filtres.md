@@ -25,28 +25,26 @@ Dans la continuité de la refonte de la [pagination](https://github.com/CaenCamp
 
 ## Options envisagées
 
-* Adopter des *RHS Colons* avec le format `key=value(:operator)`
-* Adopter des *RHS Colons* avec le format `key(:operator)=value`
+* Adopter des *RHS Colons* avec le format `key(:operator)=value` rendrait l'opérateur `:in` plus facilement implémentable à l'avenir
+* Adopter des *RHS Colons* avec le format `key=value(:operator)` permet une validation stricte du contrat openAPI
 * Employer un filtre générique `q` pour appliquer une recherche de type `%LIKE%` sur plusieurs champs à la fois
+* Appliquer des opérateurs par défaut, par exemple `%LIKE%` pour le filtre `title`
 
 
 ## Résultat de la décision
 
-1. Les *RHS Colons* de format `key(:operator)=value` rendront l'opérateur `:in` plus facilement implémentable à l'avenir
+1. Les *RHS Colons* de format `key=value(:operator)`
 2. Le traitement des filtres séparément et avec ces opérateurs permet de définir des **opérateurs par défaut** qui rendent un filtre générique en `%LIKE%`  moins crucial.
+3. Pas de filtre générique `q`
+4. OPérateurs par défaut: décision à prendre
 
 ### Conséquences positives
 
-- Clarté du cod
+- Clarté du code
 - Documentabilité des filtres et des opérateurs
 - Possibilité d'implémenter l'opérateur `:in` à l'avenir
 
 ### Conséquences négatives
 
-- L'interface de swagger ne permet pas d'acoller les opérateurs aux paramètres de la requête (mais faisable avec postman)
+- Il faut mettre à jour React-admin ([issue 71](https://github.com/CaenCamp/jobs-caen-camp/issues/71))
 
-
-## Liens <!-- facultatif -->
-
-* [Type de lien] [Lien vers l'ADR] <!-- exemple : Raffiné par [ADR-0005](0005-exemple.md) -->
-* ... <!-- le nombre de liens peut varier -->
