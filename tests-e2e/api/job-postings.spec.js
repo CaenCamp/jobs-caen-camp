@@ -231,15 +231,16 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par title en "%LIKE%" par défaut', async () => {
+        it('devrait accepter un filtre par title en "%LIKE%"', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?${querystring.stringify({
-                        title: 'Lead',
-                        sortBy: 'title',
-                        orderBy: 'DESC',
-                    })}`
+                    `http://api:3001/api/job-postings?title=Lead:%l%&${querystring.stringify(
+                        {
+                            sortBy: 'title',
+                            orderBy: 'DESC',
+                        }
+                    )}`
                 )
                 .expect('status', 200)
                 .expect(
@@ -268,15 +269,16 @@ describe('JobPostings API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par hiringOrganizationPostalCode en "LIKE%" par défaut', async () => {
+        it('devrait accepter un filtre par hiringOrganizationPostalCode en "LIKE%"', async () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/job-postings?${querystring.stringify({
-                        hiringOrganizationPostalCode: '14',
-                        sortBy: 'title',
-                        orderBy: 'DESC',
-                    })}`
+                    `http://api:3001/api/job-postings?hiringOrganizationPostalCode=14:l%&${querystring.stringify(
+                        {
+                            sortBy: 'title',
+                            orderBy: 'DESC',
+                        }
+                    )}`
                 )
                 .expect('status', 200)
                 .expect(

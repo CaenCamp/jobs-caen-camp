@@ -36,13 +36,12 @@ Dans la continuité de la refonte de la [pagination](https://github.com/CaenCamp
 1. Les *RHS Colons* de format `key=value(:operator)`
 2. Le traitement des filtres séparément et avec ces opérateurs permet de définir des **opérateurs par défaut** qui rendent un filtre générique en `%LIKE%`  moins crucial.
 3. Pas de filtre générique `q`
-4. OPérateurs par défaut: décision à prendre
+4. Pas d'opérateurs par défaut.
 
 ### Conséquences positives
 
 - Clarté du code
 - Documentabilité des filtres et des opérateurs
-- Possibilité d'implémenter l'opérateur `:in` à l'avenir
 
 ### Conséquences négatives
 

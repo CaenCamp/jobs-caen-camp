@@ -147,14 +147,10 @@ describe('Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par nom en "%LIKE%" par défaut', async () => {
+        it('devrait accepter un filtre par nom en "%LIKE%"', async () => {
             expect.hasAssertions();
             await frisby
-                .get(
-                    `http://api:3001/api/organizations?${querystring.stringify({
-                        name: 'lex',
-                    })}`
-                )
+                .get(`http://api:3001/api/organizations?name=lex:%l%`)
                 .expect('status', 200)
                 .expect(
                     'header',
@@ -181,9 +177,7 @@ describe('Organizations API Endpoints', () => {
             expect.hasAssertions();
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?${querystring.stringify({
-                        addressLocality: 'Auber',
-                    })}`
+                    `http://api:3001/api/organizations?addressLocality=Auber:l%`
                 )
                 .expect('status', 200)
                 .expect(
@@ -207,9 +201,7 @@ describe('Organizations API Endpoints', () => {
                 });
             await frisby
                 .get(
-                    `http://api:3001/api/organizations?${querystring.stringify({
-                        addressLocality: 'villier',
-                    })}`
+                    `http://api:3001/api/organizations?addressLocality=villier:l%`
                 )
                 .expect('status', 200)
                 .expect(
@@ -223,14 +215,10 @@ describe('Organizations API Endpoints', () => {
                 });
         });
 
-        it('devrait accepter un filtre par code postal en "LIKE%" par défaut', async () => {
+        it('devrait accepter un filtre par code postal en "LIKE%"', async () => {
             expect.hasAssertions();
             await frisby
-                .get(
-                    `http://api:3001/api/organizations?${querystring.stringify({
-                        postalCode: '14',
-                    })}`
-                )
+                .get(`http://api:3001/api/organizations?postalCode=14:l%`)
                 .expect('status', 200)
                 .expect(
                     'header',
@@ -251,11 +239,7 @@ describe('Organizations API Endpoints', () => {
                     expect(resp.json).toHaveLength(2);
                 });
             await frisby
-                .get(
-                    `http://api:3001/api/organizations?${querystring.stringify({
-                        postalCode: '460',
-                    })}`
-                )
+                .get(`http://api:3001/api/organizations?postalCode=460:l%`)
                 .expect('status', 200)
                 .expect(
                     'header',

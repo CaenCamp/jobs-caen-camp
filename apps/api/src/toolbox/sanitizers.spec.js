@@ -41,22 +41,6 @@ describe('Sanitizers', () => {
             ).toEqual([{ name: 'foo', value: '2020-05-02', operator: 'gte' }]);
         });
 
-        it('should return each filter with its default operator.', () => {
-            const defaultFilterableFields = ['title', 'postalCode'];
-            expect(
-                filtersSanitizer(
-                    {
-                        title: 'foo',
-                        postalCode: '50',
-                    },
-                    defaultFilterableFields
-                )
-            ).toEqual([
-                { name: 'title', value: 'foo', operator: '%l%' },
-                { name: 'postalCode', value: '50', operator: 'l%' },
-            ]);
-        });
-
         it('should take several query parameters', () => {
             const defaultFilterableFields = ['foo', 'bar'];
             expect(

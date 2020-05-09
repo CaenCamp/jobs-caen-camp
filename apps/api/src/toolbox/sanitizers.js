@@ -8,13 +8,15 @@ const querystring = require('querystring');
 | :lt       | number, date         | Is less than                |
 | :gte      | number, date         | Is greater than or equal to |
 | :lte      | number, date         | Is less than or equal to    |
+| :l%       | string               | LIKE%                       |
+| :%l       | string               | %LIKE                       |
+| :%l%      | string               | %LIKE%                      |
 */
 const FILTER_OPERATOR_EQ = 'eq';
 const FILTER_OPERATOR_GT = 'gt';
 const FILTER_OPERATOR_LT = 'lt';
 const FILTER_OPERATOR_GTE = 'gte';
 const FILTER_OPERATOR_LTE = 'lte';
-const FILTER_OPERATOR_IN = 'in';
 const FILTER_OPERATOR_PLP = '%l%';
 const FILTER_OPERATOR_PL = '%l';
 const FILTER_OPERATOR_LP = 'l%';
@@ -24,24 +26,10 @@ const filterOperators = [
     FILTER_OPERATOR_GTE,
     FILTER_OPERATOR_LT,
     FILTER_OPERATOR_LTE,
-    FILTER_OPERATOR_IN,
     FILTER_OPERATOR_LP,
     FILTER_OPERATOR_PL,
     FILTER_OPERATOR_PLP,
 ];
-
-const parametersThatDefaultToPLP = ['title', 'skills', 'name'];
-
-const parametersThatDefaultToLP = [
-    'hiringOrganizationName',
-    'hiringOrganizationPostalCode',
-    'hiringOrganizationAddressLocality',
-    'hiringOrganizationAddressCountry',
-    'addressLocality',
-    'postalCode',
-];
-
-const parametersThatDefaultToLT = ['validThrough'];
 
 /**
  * Method to clean the filters sent in query parameters
@@ -73,18 +61,6 @@ const filtersSanitizer = (filters, filterableFields) => {
             }
 
             let [value, operator] = unparsedValue.split(':');
-
-            if (!operator) {
-                if (parametersThatDefaultToPLP.includes(filterKey)) {
-                    operator = FILTER_OPERATOR_PLP;
-                }
-                if (parametersThatDefaultToLP.includes(filterKey)) {
-                    operator = FILTER_OPERATOR_LP;
-                }
-                if (parametersThatDefaultToLT.includes(filterKey)) {
-                    operator = FILTER_OPERATOR_LT;
-                }
-            }
 
             return {
                 name: filterKey,
