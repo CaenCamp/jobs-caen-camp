@@ -1,21 +1,8 @@
 const omit = require('lodash.omit');
 const pick = require('lodash.pick');
-const signale = require('signale');
 
-const {
-    filtersSanitizer,
-    formatPaginationContentRange,
-    paginationSanitizer,
-    sortSanitizer,
-} = require('../toolbox/sanitizers');
-
-const OrganizationFilterableFields = ['name', 'addressLocality', 'postalCode'];
-const OrganizationSortableFields = [
-    'name',
-    'id',
-    'addressLocality',
-    'postalCode',
-];
+const authorizedFilters = ['name', 'addressLocality', 'postalCode'];
+const authorizedSort = ['name', 'id', 'addressLocality', 'postalCode'];
 
 /**
  * Knex query for filtrated organization list
@@ -25,8 +12,8 @@ const OrganizationSortableFields = [
  * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @returns {Promise} - Knew query for filtrated organization list
  */
-const getFilteredOrganizationsQuery = (client, filters, sort) => {
-    const query = client
+const getFilteredOrganizationsQuery = (client) => {
+    return client
         .select(
             'organization.*',
             client.raw(`(SELECT array_to_json(array_agg(jsonb_build_object(
@@ -44,45 +31,6 @@ const getFilteredOrganizationsQuery = (client, filters, sort) => {
             FROM contact_point WHERE contact_point.organization_id = organization.id) as contact_points`)
         )
         .from('organization');
-
-    filters.map((filter) => {
-        switch (filter.operator) {
-            case 'eq':
-                query.andWhere(filter.name, '=', filter.value);
-                break;
-            case 'lt':
-                query.andWhere(filter.name, '<', filter.value);
-                break;
-            case 'lte':
-                query.andWhere(filter.name, '<=', filter.value);
-                break;
-            case 'gt':
-                query.andWhere(filter.name, '>', filter.value);
-                break;
-            case 'gte':
-                query.andWhere(filter.name, '>=', filter.value);
-                break;
-            case '%l%':
-                query.andWhere(filter.name, 'LIKE', `%${filter.value}%`);
-                break;
-            case '%l':
-                query.andWhere(filter.name, 'LIKE', `%${filter.value}`);
-                break;
-            case 'l%':
-                query.andWhere(filter.name, 'LIKE', `${filter.value}%`);
-                break;
-            default:
-                signale.log(
-                    `The filter operator ${filter.operator} is not managed`
-                );
-        }
-    });
-
-    if (sort && sort.length) {
-        query.orderBy(...sort);
-    }
-
-    return query;
 };
 
 /**
@@ -112,33 +60,19 @@ const formatOrganizationForAPI = (dbOrganization) => ({
  * Return paginated and filtered list of organization
  *
  * @param {object} client - The Database client
- * @param {object} extractedParameters - Contains:
- *  Sort parameters {sortBy: 'title', orderBy: 'ASC'}
- *  Pagination parameters {perPage: 10, currentPage: 1}
- *  filter parameters {name: 'lex:%l%', addressLocality: 'Hérouvil:l%' }
- * @returns {Promise} - paginated object with paginated organization list and totalCount
+ * @param {object} queryParameters - An object og query parameters from Koa
+ * @returns {Promise} - paginated object with paginated organization list and pagination
  */
-const getOrganizationPaginatedList = async ({
-    client,
-    extractedParameters,
-}) => {
-    const query = getFilteredOrganizationsQuery(
-        client,
-        filtersSanitizer(
-            extractedParameters.filters,
-            OrganizationFilterableFields
-        ),
-        sortSanitizer(extractedParameters.sort, OrganizationSortableFields)
-    );
-    const [perPage, currentPage] = paginationSanitizer(
-        extractedParameters.pagination
-    );
-
-    return query
-        .paginate({ perPage, currentPage, isLengthAware: true })
-        .then((result) => ({
-            organizations: result.data.map(formatOrganizationForAPI),
-            pagination: result.pagination,
+const getOrganizationPaginatedList = async ({ client, queryParameters }) => {
+    return getFilteredOrganizationsQuery(client)
+        .paginateRestList({
+            queryParameters,
+            authorizedFilters,
+            authorizedSort,
+        })
+        .then(({ data, pagination }) => ({
+            organizations: data.map(formatOrganizationForAPI),
+            pagination,
         }));
 };
 
@@ -371,14 +305,10 @@ const updateOrganization = async ({ client, organizationId, apiData }) => {
 module.exports = {
     createOrganization,
     deleteOrganization,
-    filtersSanitizer,
     formatOrganizationForAPI,
-    formatPaginationContentRange,
     getIdsToDelete,
     getOrganization,
     getOrganizationPaginatedList,
-    paginationSanitizer,
     prepareOrganizationDataForSave,
-    sortSanitizer,
     updateOrganization,
 };

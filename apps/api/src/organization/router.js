@@ -7,10 +7,7 @@ const {
     getOrganizationPaginatedList,
     updateOrganization,
 } = require('./repository');
-const {
-    extractQueryParameters,
-    formatPaginationToLinkHeader,
-} = require('../toolbox/sanitizers');
+const { formatPaginationToLinkHeader } = require('../toolbox/sanitizers');
 
 const router = new Router({
     prefix: '/api/organizations',
@@ -32,7 +29,7 @@ router.use(async (ctx, next) => {
 router.get('/', async (ctx) => {
     const { organizations, pagination } = await getOrganizationPaginatedList({
         client: ctx.db,
-        extractedParameters: extractQueryParameters(ctx.query),
+        queryParameters: ctx.query,
     });
 
     const linkHeaderValue = formatPaginationToLinkHeader({

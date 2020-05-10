@@ -6,7 +6,7 @@ describe('Query Parameters Helpers', () => {
             expect(formatQueryParameters()).toEqual({
                 filters: {},
                 sort: null,
-                pagination: { currentPage: 1, perPage: 20 },
+                pagination: { currentPage: 1, perPage: 10 },
             });
         });
 

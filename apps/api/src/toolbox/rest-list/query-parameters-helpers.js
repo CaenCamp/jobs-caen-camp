@@ -35,7 +35,7 @@ const formatQueryParameters = ({
         sort: sortBy ? { sortBy, orderBy: orderBy || 'ASC' } : null,
         pagination: {
             currentPage: currentPage || 1,
-            perPage: perPage || 20,
+            perPage: perPage || 10,
         },
         filters,
     };

@@ -22,7 +22,7 @@ const {
 const { formatQueryParameters } = require('./query-parameters-helpers');
 const { sortSanitizer } = require('./sort-helpers');
 
-module.exports.attachPaginate = function attachPaginateRestList() {
+module.exports.attachPaginateRestList = function attachPaginateRestList() {
     Knex.QueryBuilder.extend('paginateRestList', function paginate({
         queryParameters = '',
         authorizedFilters = ['id'],
@@ -41,6 +41,11 @@ module.exports.attachPaginate = function attachPaginateRestList() {
         const { sortBy, orderBy } = sortSanitizer(sort, authorizedSort);
         const filtersParameters = filtersSanitizer(filters, authorizedFilters);
         if (debug) {
+            signale.debug('queryParameters', queryParameters);
+            signale.debug(
+                'Formated query parameters',
+                formatQueryParameters(queryParameters)
+            );
             signale.debug('perPage', perPage);
             signale.debug('currentPage', currentPage);
             signale.debug('sortBy', sortBy);
@@ -71,13 +76,17 @@ module.exports.attachPaginate = function attachPaginateRestList() {
                         this.andWhere(filter.name, '>=', filter.value);
                         break;
                     case FILTER_OPERATOR_PLP:
-                        this.andWhere(filter.name, 'LIKE', `%${filter.value}%`);
+                        this.andWhere(
+                            filter.name,
+                            'ILIKE',
+                            `%${filter.value}%`
+                        );
                         break;
                     case FILTER_OPERATOR_PL:
-                        this.andWhere(filter.name, 'LIKE', `%${filter.value}`);
+                        this.andWhere(filter.name, 'ILIKE', `%${filter.value}`);
                         break;
                     case FILTER_OPERATOR_LP:
-                        this.andWhere(filter.name, 'LIKE', `${filter.value}%`);
+                        this.andWhere(filter.name, 'ILIKE', `${filter.value}%`);
                         break;
                     case FILTER_OPERATOR_IN:
                         this.whereIn(filter.name, filter.value);
