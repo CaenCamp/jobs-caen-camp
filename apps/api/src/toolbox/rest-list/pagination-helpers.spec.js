@@ -8,26 +8,29 @@ describe('Pagination Helpers', () => {
         it('should return string pagination params as integer if it possible', () => {
             expect(
                 paginationSanitizer({ perPage: '12', currentPage: '2' })
-            ).toEqual([12, 2]);
+            ).toEqual({ perPage: 12, currentPage: 2 });
         });
 
         it('should return default pagination if pagination array is empty', () => {
-            expect(paginationSanitizer({})).toEqual([10, 1]);
+            expect(paginationSanitizer({})).toEqual({
+                perPage: 10,
+                currentPage: 1,
+            });
         });
 
         it('should return default pagination if one of pagination params could not be cast as integer', () => {
             expect(
                 paginationSanitizer({ perPage: 'douze', currentPage: '2' })
-            ).toEqual([10, 2]);
+            ).toEqual({ perPage: 10, currentPage: 2 });
             expect(
                 paginationSanitizer({ perPage: '12', currentPage: 'deux' })
-            ).toEqual([12, 1]);
+            ).toEqual({ perPage: 12, currentPage: 1 });
             expect(
                 paginationSanitizer({ perPage: {}, currentPage: '2' })
-            ).toEqual([10, 2]);
+            ).toEqual({ perPage: 10, currentPage: 2 });
             expect(
                 paginationSanitizer({ perPage: null, currentPage: '2' })
-            ).toEqual([10, 2]);
+            ).toEqual({ perPage: 10, currentPage: 2 });
         });
 
         it('should remove the supernumerary parameters of the pagination array', () => {
@@ -38,7 +41,25 @@ describe('Pagination Helpers', () => {
                     notPage: 'foo',
                     isPage: 'bar',
                 })
-            ).toEqual([22, 3]);
+            ).toEqual({ perPage: 22, currentPage: 3 });
+        });
+
+        it('should not accept negative value for perPage params', () => {
+            expect(
+                paginationSanitizer({
+                    perPage: -6,
+                    currentPage: 3,
+                })
+            ).toEqual({ perPage: 10, currentPage: 3 });
+        });
+
+        it('should not accept negative value for currentPage params', () => {
+            expect(
+                paginationSanitizer({
+                    perPage: 6,
+                    currentPage: -2,
+                })
+            ).toEqual({ perPage: 6, currentPage: 1 });
         });
     });
     describe('formatPaginationToLinkHeader', () => {

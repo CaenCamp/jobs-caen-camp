@@ -9,7 +9,7 @@ describe('Sort Helpers', () => {
                     { sortBy: undefined, orderBy: 'DESC' },
                     defaultSortableFields
                 )
-            ).toEqual(['foo', 'ASC']);
+            ).toEqual({ sortBy: 'foo', orderBy: 'ASC' });
         });
 
         it('should return the first sortable field ASC if orderBy is not set', () => {
@@ -19,7 +19,7 @@ describe('Sort Helpers', () => {
                     { sortBy: 'bar', orderBy: undefined },
                     defaultSortableFields
                 )
-            ).toEqual(['foo', 'ASC']);
+            ).toEqual({ sortBy: 'foo', orderBy: 'ASC' });
         });
 
         it('should return the first sortable field ASC if query sort is not a sortable field', () => {
@@ -29,7 +29,7 @@ describe('Sort Helpers', () => {
                     { sortBy: 'notSortable', orderBy: 'DESC' },
                     defaultSortableFields
                 )
-            ).toEqual(['foo', 'ASC']);
+            ).toEqual({ sortBy: 'foo', orderBy: 'ASC' });
         });
 
         it('should replace the sort order with ASC if the query param sort order is not valid', () => {
@@ -39,7 +39,7 @@ describe('Sort Helpers', () => {
                     { sortBy: 'bar', orderBy: 'horizontal' },
                     defaultSortableFields
                 )
-            ).toEqual(['bar', 'ASC']);
+            ).toEqual({ sortBy: 'bar', orderBy: 'ASC' });
         });
 
         it('should remove the supernumerary parameters of the sort object', () => {
@@ -49,7 +49,7 @@ describe('Sort Helpers', () => {
                     { sortBy: 'bar', orderBy: 'DESC', nonsense: 'this' },
                     defaultSortableFields
                 )
-            ).toEqual(['bar', 'DESC']);
+            ).toEqual({ sortBy: 'bar', orderBy: 'DESC' });
         });
 
         it('should return a well formated sort from query parameter', () => {
@@ -59,7 +59,7 @@ describe('Sort Helpers', () => {
                     { sortBy: 'bar', orderBy: 'DESC' },
                     defaultSortableFields
                 )
-            ).toEqual(['bar', 'DESC']);
+            ).toEqual({ sortBy: 'bar', orderBy: 'DESC' });
         });
     });
 });

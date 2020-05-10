@@ -13,7 +13,7 @@
  */
 const sortSanitizer = (sort, sortableFields) => {
     if (!sort) {
-        return [sortableFields[0], 'ASC'];
+        return { sortBy: sortableFields[0], orderBy: 'ASC' };
     }
     const { sortBy, orderBy } = sort;
     if (
@@ -21,14 +21,14 @@ const sortSanitizer = (sort, sortableFields) => {
         sortBy === undefined ||
         !sortableFields.includes(sortBy)
     ) {
-        return [sortableFields[0], 'ASC'];
+        return { sortBy: sortableFields[0], orderBy: 'ASC' };
     }
 
     if (!['ASC', 'DESC'].includes(orderBy)) {
-        return [sortBy, 'ASC'];
+        return { sortBy, orderBy: 'ASC' };
     }
 
-    return [sortBy, orderBy];
+    return { sortBy, orderBy };
 };
 
 module.exports = {

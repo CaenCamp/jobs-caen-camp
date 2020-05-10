@@ -10,10 +10,22 @@ const querystring = require('querystring');
  * Function to clean the pagination sent in query parameters
  *
  * @param {PaginationParameters} pagination - pagination object from query parameters
- * @returns {Array} Ready-to-use filters for the sql query
+ * @returns {PaginationParameters} Ready-to-use filters for the sql query
  */
 const paginationSanitizer = ({ perPage, currentPage }) => {
-    return [parseInt(perPage, 10) || 10, parseInt(currentPage, 10) || 1];
+    const convertedPagination = {
+        perPage: parseInt(perPage, 10) || 10,
+        currentPage: parseInt(currentPage, 10) || 1,
+    };
+
+    return {
+        perPage:
+            convertedPagination.perPage < 1 ? 10 : convertedPagination.perPage,
+        currentPage:
+            convertedPagination.currentPage < 1
+                ? 1
+                : convertedPagination.currentPage,
+    };
 };
 
 /**
