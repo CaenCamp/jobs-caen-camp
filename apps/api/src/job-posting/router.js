@@ -7,10 +7,7 @@ const {
     getJobPostingPaginatedList,
     updateJobPosting,
 } = require('./repository');
-const {
-    formatPaginationToLinkHeader,
-    extractQueryParameters,
-} = require('../toolbox/sanitizers');
+const { formatPaginationToLinkHeader } = require('../toolbox/sanitizers');
 
 const router = new Router({
     prefix: '/api/job-postings',
@@ -32,7 +29,7 @@ router.use(async (ctx, next) => {
 router.get('/', async (ctx) => {
     const { jobPostings, pagination } = await getJobPostingPaginatedList({
         client: ctx.db,
-        extractedParameters: extractQueryParameters(ctx.query),
+        queryParameters: ctx.query,
     });
 
     const linkHeaderValue = formatPaginationToLinkHeader({

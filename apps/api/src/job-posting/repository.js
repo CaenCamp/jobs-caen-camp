@@ -1,36 +1,23 @@
 const omit = require('lodash.omit');
-const signale = require('signale');
 
-const {
-    filtersSanitizer,
-    paginationSanitizer,
-    sortSanitizer,
-} = require('../toolbox/sanitizers');
-
-const jobPostingSortableFields = [
+const authorizedSort = [
     'datePosted',
     'title',
     'jobStartDate',
     'validThrough',
     'employmentType',
-    'hiringOrganizationName',
-    'hiringOrganizationIdentifier',
-    'hiringOrganizationPostalCode',
-    'hiringOrganizationAddressLocality',
-    'hiringOrganizationAddressCountry',
 ];
 
-const jobPostingFilterableFields = [
+const authorizedFilters = [
     'title',
     'skills',
     'employmentType',
     'datePosted',
     'jobStartDate',
     'validThrough',
-    'hiringOrganizationName',
-    'hiringOrganizationPostalCode',
-    'hiringOrganizationAddressLocality',
-    'hiringOrganizationAddressCountry',
+    'organization.name',
+    'organization.address_locality',
+    'organization.postal_code',
 ];
 
 /**
@@ -41,8 +28,8 @@ const jobPostingFilterableFields = [
  * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @returns {Promise} - Knew query for filtrated jobPosting list
  */
-const getFilteredJobPostingsQuery = (client, filters, sort) => {
-    const query = client
+const getFilteredJobPostingsQuery = (client) => {
+    return client
         .select(
             'job_posting.*',
             'organization.name as hiringOrganizationName',
@@ -56,63 +43,6 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
         .join('organization', {
             'organization.id': 'job_posting.hiring_organization_id',
         });
-
-    filters.map((filter) => {
-        switch (filter.name) {
-            case 'hiringOrganizationPostalCode':
-                filter.name = 'organization.postal_code';
-                break;
-            case 'hiringOrganizationName':
-                filter.name = 'organization.name';
-                break;
-            case 'hiringOrganizationAddressLocality':
-                filter.name = 'organization.address_locality';
-                break;
-            case 'hiringOrganizationAddressCountry':
-                filter.name = 'organization.address_country';
-                break;
-            default:
-                break;
-        }
-    });
-
-    filters.map((filter) => {
-        switch (filter.operator) {
-            case 'eq':
-                query.andWhere(filter.name, '=', filter.value);
-                break;
-            case 'lt':
-                query.andWhere(filter.name, '<', filter.value);
-                break;
-            case 'lte':
-                query.andWhere(filter.name, '<=', filter.value);
-                break;
-            case 'gt':
-                query.andWhere(filter.name, '>', filter.value);
-                break;
-            case 'gte':
-                query.andWhere(filter.name, '>=', filter.value);
-                break;
-            case '%l%':
-                query.andWhere(filter.name, 'LIKE', `%${filter.value}%`);
-                break;
-            case '%l':
-                query.andWhere(filter.name, 'LIKE', `%${filter.value}`);
-                break;
-            case 'l%':
-                query.andWhere(filter.name, 'LIKE', `${filter.value}%`);
-                break;
-            default:
-                signale.log(
-                    `The filter operator ${filter.operator} is not managed`
-                );
-        }
-    });
-
-    if (sort && sort.length) {
-        query.orderBy(...sort);
-    }
-    return query;
 };
 
 /**
@@ -160,34 +90,52 @@ const formatJobPostingForAPI = (dbJobPosting) => {
 };
 
 /**
+ * Return queryParameters with name as real row db name
+ * As it's difficult to have a name for filter used on join table
+ * query parameters name from API are not necessary the sames
+ * than table row names
+ *
+ * @param {Object} queryParameters
+ * @return {Object} Query parameters renamed as db row name
+ */
+const renameFiltersFromAPI = (queryParameters) => {
+    const filterNamesToChange = {
+        hiringOrganizationPostalCode: 'organization.postal_code',
+        hiringOrganizationName: 'organization.name',
+        hiringOrganizationAddressLocality: 'organization.address_locality',
+    };
+
+    return Object.keys(queryParameters).reduce((acc, filter) => {
+        const filterName = Object.prototype.hasOwnProperty.call(
+            filterNamesToChange,
+            filter
+        )
+            ? filterNamesToChange[filter]
+            : filter;
+        return {
+            ...acc,
+            [filterName]: queryParameters[filter],
+        };
+    }, {});
+};
+
+/**
  * Return paginated and filtered list of jobPosting
  *
  * @param {object} client - The Database client
- * @param {object} extractedParameters - Contains:
- *  Sort parameters {sortBy: 'title', orderBy: 'ASC'}
- *  Pagination parameters {perPage: 10, currentPage: 1}
- *  filter parameters {title: 'Lead:%l%', datePosted_before: '2020-05-02' }
- * @returns {Promise} - paginated object with paginated jobPosting list and totalCount
+ * @param {object} queryParameters - An object og query parameters from Koa
+ * @returns {Promise} - paginated object with paginated jobPosting list and pagination
  */
-const getJobPostingPaginatedList = async ({ client, extractedParameters }) => {
-    const query = getFilteredJobPostingsQuery(
-        client,
-        filtersSanitizer(
-            extractedParameters.filters,
-            jobPostingFilterableFields
-        ),
-        sortSanitizer(extractedParameters.sort, jobPostingSortableFields)
-    );
-
-    const [perPage, currentPage] = paginationSanitizer(
-        extractedParameters.pagination
-    );
-
-    return query
-        .paginate({ perPage, currentPage, isLengthAware: true })
-        .then((result) => ({
-            jobPostings: result.data.map(formatJobPostingForAPI),
-            pagination: result.pagination,
+const getJobPostingPaginatedList = async ({ client, queryParameters }) => {
+    return getFilteredJobPostingsQuery(client)
+        .paginateRestList({
+            queryParameters: renameFiltersFromAPI(queryParameters),
+            authorizedFilters,
+            authorizedSort,
+        })
+        .then(({ data, pagination }) => ({
+            jobPostings: data.map(formatJobPostingForAPI),
+            pagination,
         }));
 };
 

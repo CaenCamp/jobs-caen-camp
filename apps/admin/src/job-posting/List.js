@@ -17,8 +17,8 @@ import { jobTypes } from './index';
 
 const JobPostingFilter = (props) => (
     <Filter {...props}>
-        <TextInput source="title" label="Filtre par titre" alwaysOn />
-        <TextInput source="skills" label="Compétences" alwaysOn />
+        <TextInput source="title:%l%" label="Filtre par titre" alwaysOn />
+        <TextInput source="skills:%l%" label="Compétences" alwaysOn />
         <SelectInput
             source="employmentType"
             label="Type de contrat"
@@ -26,32 +26,28 @@ const JobPostingFilter = (props) => (
             alwaysOn
         />
         <TextInput
-            source="hiringOrganizationName"
+            source="hiringOrganizationName:%l%"
             label="Nom d'entreprise"
             alwaysOn
         />
         <TextInput
-            source="hiringOrganizationAddressLocality"
+            source="hiringOrganizationAddressLocality:l%"
             label="Ville de l'entreprise"
         />
         <TextInput
-            source="hiringOrganizationPostalCode"
+            source="hiringOrganizationPostalCode:l%"
             label="Code postal de l'entreprise"
         />
-        <DateInput source="datePosted_before" label="Postée avant le" />
-        <DateInput source="datePosted_after" label="Postée après le" />
-        <DateInput
-            source="jobStartDate_before"
-            label="Commence avant"
-            alwaysOn
-        />
-        <DateInput source="jobStartDate_after" label="Commence après" />
+        <DateInput source="datePosted:lte" label="Postée avant le" />
+        <DateInput source="datePosted:gte" label="Postée après le" />
+        <DateInput source="jobStartDate:lte" label="Commence avant" alwaysOn />
+        <DateInput source="jobStartDate:gte" label="Commence après" />
         <DateInput
             source="validThrough_before"
             label="Valide jusqu'au"
             alwaysOn
         />
-        <DateInput source="validThrough_after" label="Valide après le" />
+        <DateInput source="validThrough:gte" label="Valide après le" />
     </Filter>
 );
 
