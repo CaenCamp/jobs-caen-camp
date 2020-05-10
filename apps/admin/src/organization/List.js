@@ -32,14 +32,14 @@ const OrganizationAddress = ({ record: { address } }) => {
 
 const OrganizationFilter = (props) => (
     <Filter {...props}>
-        <TextInput source="name" label="Filtre par nom" alwaysOn />
+        <TextInput source="name:%l%" label="Filtre par nom" alwaysOn />
         <TextInput
-            source="address_locality"
+            source="addressLocality:l%"
             label="Filtre par ville"
             alwaysOn
         />
         <TextInput
-            source="postal_code"
+            source="postalCode:l%"
             label="Filtre par code postal"
             alwaysOn
         />
