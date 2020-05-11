@@ -1,30 +1,79 @@
 const querystring = require('querystring');
 
 /**
+| operateur | applicable à         | explication                 |
+| --------- | -------------------- | --------------------------- |
+| :eq       | string, number, date | Is equal to                 |
+| :gt       | number, date         | Is greater than             |
+| :lt       | number, date         | Is less than                |
+| :gte      | number, date         | Is greater than or equal to |
+| :lte      | number, date         | Is less than or equal to    |
+| :l%       | string               | LIKE%                       |
+| :%l       | string               | %LIKE                       |
+| :%l%      | string               | %LIKE%                      |
+*/
+const FILTER_OPERATOR_EQ = 'eq';
+const FILTER_OPERATOR_GT = 'gt';
+const FILTER_OPERATOR_LT = 'lt';
+const FILTER_OPERATOR_GTE = 'gte';
+const FILTER_OPERATOR_LTE = 'lte';
+const FILTER_OPERATOR_PLP = '%l%';
+const FILTER_OPERATOR_PL = '%l';
+const FILTER_OPERATOR_LP = 'l%';
+const filterOperators = [
+    FILTER_OPERATOR_EQ,
+    FILTER_OPERATOR_GT,
+    FILTER_OPERATOR_GTE,
+    FILTER_OPERATOR_LT,
+    FILTER_OPERATOR_LTE,
+    FILTER_OPERATOR_LP,
+    FILTER_OPERATOR_PL,
+    FILTER_OPERATOR_PLP,
+];
+
+/**
  * Method to clean the filters sent in query parameters
  *
- * @param {object} filters from query parameters
+ * @param {object} filters from query parameters of type { foo: 'bar:eq', ... }
  * @param {object} filterableFields the fields allowed to be used as a filter
- * @returns {object} Ready-to-use filters for the sql query
+ * @returns {Array} Ready-to-use array of filter objects
+ * possible returned value: [{ name: 'foo', value: 'bar', operator: 'eq' }, {...} ]
  */
 const filtersSanitizer = (filters, filterableFields) => {
     if (!filters || typeof filters !== 'object') {
-        return {};
+        return [];
     }
 
-    return Object.keys(filters)
-        .filter((key) => filterableFields.includes(key))
-        .filter((key) => filters[key] !== undefined)
-        .filter((key) => {
-            if (typeof filters[key] === 'string') {
-                return filters[key].trim() !== '';
+    let sanitizedFilters = Object.keys(filters)
+        .map((filterKey) => {
+            let unparsedValue = filters[filterKey];
+
+            if (unparsedValue === null) {
+                return { name: filterKey, value: null, operator: 'eq' };
             }
-            return true;
+
+            if (
+                unparsedValue === undefined ||
+                unparsedValue.trim().length == 0 ||
+                !filterableFields.includes(filterKey)
+            ) {
+                return null;
+            }
+
+            let [value, operator] = unparsedValue.split(':');
+
+            return {
+                name: filterKey,
+                value,
+                operator:
+                    !operator || !filterOperators.includes(operator)
+                        ? FILTER_OPERATOR_EQ
+                        : operator,
+            };
         })
-        .reduce((obj, key) => {
-            obj[key] = filters[key];
-            return obj;
-        }, {});
+        .filter((filter) => filter !== null);
+
+    return sanitizedFilters;
 };
 
 /**
@@ -34,8 +83,16 @@ const filtersSanitizer = (filters, filterableFields) => {
  * @param {Array} sortableFields the fields allowed to be used as a sort
  * @returns {Array} Ready-to-use filters for the sql query
  */
-const sortSanitizer = ({ sortBy, orderBy }, sortableFields) => {
-    if (orderBy === undefined || !sortableFields.includes(sortBy)) {
+const sortSanitizer = (sort, sortableFields) => {
+    if (!sort) {
+        return [sortableFields[0], 'ASC'];
+    }
+    const { sortBy, orderBy } = sort;
+    if (
+        orderBy === undefined ||
+        sortBy === undefined ||
+        !sortableFields.includes(sortBy)
+    ) {
         return [sortableFields[0], 'ASC'];
     }
 
@@ -54,23 +111,6 @@ const sortSanitizer = ({ sortBy, orderBy }, sortableFields) => {
  */
 const paginationSanitizer = ({ perPage, currentPage }) => {
     return [parseInt(perPage) || 10, parseInt(currentPage) || 1];
-};
-
-/**
- * This method intercepts query parameters expected in JSON but incorrectly formatted.
- *
- * @param {string} parameter - the query parameter expected in JSON
- * @returns {(object|boolean)} the parsed parameter or false if incorrectly formatted
- */
-const parseJsonQueryParameter = (parameter) => {
-    if (parameter === undefined) {
-        return false;
-    }
-    try {
-        return JSON.parse(parameter);
-    } catch (e) {
-        return false;
-    }
 };
 
 /**
@@ -135,10 +175,31 @@ const formatPaginationToLinkHeader = ({ resourceURI, pagination = {} }) => {
     return items.map((item) => linkHeaderItem(item)).join(',');
 };
 
+/**
+ * Extract the parameters from the query
+ *
+ * @param {object} query - The query received as ctx.query
+ * @returns {object} The extracted parameters, ready for sanitizing
+ */
+const extractQueryParameters = ({
+    sortBy,
+    orderBy,
+    currentPage,
+    perPage,
+    ...filters
+} = {}) => ({
+    sort: sortBy ? { sortBy, orderBy: orderBy || 'ASC' } : null,
+    pagination: {
+        currentPage: currentPage || 1,
+        perPage: perPage || 10,
+    },
+    filters,
+});
+
 module.exports = {
     filtersSanitizer,
     paginationSanitizer,
-    parseJsonQueryParameter,
     sortSanitizer,
     formatPaginationToLinkHeader,
+    extractQueryParameters,
 };
