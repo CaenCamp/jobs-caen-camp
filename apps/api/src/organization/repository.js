@@ -3,6 +3,7 @@ const pick = require('lodash.pick');
 
 const { getDbClient } = require('../toolbox/dbConnexion');
 
+const tableName = 'organization';
 const authorizedFilters = ['name', 'addressLocality', 'postalCode'];
 const authorizedSort = ['name', 'id', 'addressLocality', 'postalCode'];
 
@@ -15,7 +16,7 @@ const authorizedSort = ['name', 'id', 'addressLocality', 'postalCode'];
 const getFilteredOrganizationsQuery = (client) => {
     return client
         .select(
-            'organization.*',
+            `${tableName}.*`,
             client.raw(`(SELECT array_to_json(array_agg(jsonb_build_object(
                 'identifier',
                 contact_point.id,
@@ -28,9 +29,9 @@ const getFilteredOrganizationsQuery = (client) => {
                 'contactType',
                 contact_point.contact_type
             ) ORDER BY contact_point.contact_type))
-            FROM contact_point WHERE contact_point.organization_id = organization.id) as contact_points`)
+            FROM contact_point WHERE contact_point.organization_id = ${tableName}.id) as contact_points`)
         )
-        .from('organization');
+        .from(tableName);
 };
 
 /**
@@ -104,9 +105,9 @@ const prepareOrganizationDataForSave = (dataFromApi) => ({
  */
 const getOneByIdQuery = (client, organizationId) => {
     return client
-        .table('organization')
+        .table(tableName)
         .first(
-            'organization.*',
+            `${tableName}.*`,
             client.raw(`(SELECT array_to_json(array_agg(jsonb_build_object(
                 'identifier',
                 contact_point.id,
@@ -119,7 +120,7 @@ const getOneByIdQuery = (client, organizationId) => {
                 'contactType',
                 contact_point.contact_type
             ) ORDER BY contact_point.contact_type))
-            FROM contact_point WHERE contact_point.organization_id = organization.id) as contact_points`)
+            FROM contact_point WHERE contact_point.organization_id = ${tableName}.id) as contact_points`)
         )
         .where({ id: organizationId });
 };
@@ -138,7 +139,7 @@ const createOne = async (apiData) => {
 
     return client
         .transaction((trx) => {
-            client('organization')
+            client(tableName)
                 .transacting(trx)
                 .returning('id')
                 .insert(organization)
@@ -195,7 +196,7 @@ const getOne = async (organizationId) => {
  */
 const deleteOne = async (organizationId) => {
     const client = getDbClient();
-    return client('organization')
+    return client(tableName)
         .where({ id: organizationId })
         .del()
         .then((nbDeletion) => {
@@ -232,7 +233,7 @@ const updateOne = async (organizationId, apiData) => {
 
     try {
         await client.transaction((trx) => {
-            client('organization')
+            client(tableName)
                 .transacting(trx)
                 .where({ id: organizationId })
                 .update(organization)

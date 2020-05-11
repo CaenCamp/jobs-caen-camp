@@ -31,7 +31,7 @@ const authorizedFilters = [
 const getFilteredJobPostingsQuery = (client) => {
     return client
         .select(
-            'job_posting.*',
+            `${tableName}.*`,
             'organization.name as hiringOrganizationName',
             'organization.postal_code as hiringOrganizationPostalCode',
             'organization.address_locality as hiringOrganizationAddressLocality',
@@ -163,7 +163,7 @@ const getPaginatedList = async (queryParameters) => {
 const getOneByIdQuery = (client, id) => {
     return client
         .first(
-            'job_posting.*',
+            `${tableName}.*`,
             'organization.name as hiringOrganizationName',
             'organization.postal_code as hiringOrganizationPostalCode',
             'organization.address_locality as hiringOrganizationAddressLocality',
