@@ -16,7 +16,7 @@ const router = new Router();
 router.post('/authenticate', async (ctx) => {
     const { username, password, rememberMe = false } = ctx.request.body;
 
-    const user = await getOneByUsername({ client: ctx.db, username });
+    const user = await getOneByUsername(username);
 
     if (!user || user.error) {
         ctx.throw(401, user ? user.error : 'Invalid credentials.');
@@ -33,10 +33,7 @@ router.post('/authenticate', async (ctx) => {
     // we need to keep it to keep this refresh-token valid.
     // else, we'll create a new one.
     let refreshTokenId;
-    const existingRefreshToken = await getExistingRefreshToken({
-        client: ctx.db,
-        userId: user.id,
-    });
+    const existingRefreshToken = await getExistingRefreshToken(user.id);
     const currentTimestamp = Math.floor(Date.now() / 1000);
     if (
         existingRefreshToken &&
@@ -49,10 +46,7 @@ router.post('/authenticate', async (ctx) => {
         // but that this one was no longer valid
         // we erase it so we can create a new one.
         if (existingRefreshToken && existingRefreshToken.id) {
-            await deleteRefreshToken({
-                client: ctx.db,
-                id: existingRefreshToken.id,
-            });
+            await deleteRefreshToken(existingRefreshToken.id);
         }
         const newTokenData = {
             userId: user.id,
@@ -62,10 +56,7 @@ router.post('/authenticate', async (ctx) => {
                   config.security.refreshToken.rememberExpiration
                 : currentTimestamp + config.security.refreshToken.expiration,
         };
-        const newRefreshToken = await createRefreshToken({
-            client: ctx.db,
-            data: newTokenData,
-        });
+        const newRefreshToken = await createRefreshToken(newTokenData);
 
         if (!newRefreshToken || newRefreshToken.error) {
             ctx.throw(
@@ -112,10 +103,7 @@ router.get('/refresh-token', async (ctx) => {
         signed: true,
     });
 
-    const dbToken = await getExistingRefreshTokenById({
-        client: ctx.db,
-        id: refreshTokenId,
-    });
+    const dbToken = await getExistingRefreshTokenById(refreshTokenId);
 
     if (!dbToken.id || dbToken.error) {
         ctx.throw(400, `The refresh token is not valid.`);
@@ -124,13 +112,13 @@ router.get('/refresh-token', async (ctx) => {
 
     const currentTimestamp = Math.floor(Date.now() / 1000);
     if (dbToken.validityTimestamp <= currentTimestamp) {
-        await deleteRefreshToken({ client: ctx.db, id: refreshTokenId });
+        await deleteRefreshToken(refreshTokenId);
 
         ctx.throw(400, `The refresh token is expired.`);
         return;
     }
 
-    const user = await getOne({ client: ctx.db, id: dbToken.userId });
+    const user = await getOne(dbToken.userId);
 
     if (!user || user.error) {
         ctx.throw(401, user.error || 'Invalid credentials.');
@@ -157,7 +145,7 @@ router.get('/logout', async (ctx) => {
         signed: true,
     });
 
-    await deleteRefreshToken({ client: ctx.db, id: refreshTokenId });
+    await deleteRefreshToken(refreshTokenId);
 
     const cookieOptions = {
         expires: new Date(new Date().getTime() - 1),

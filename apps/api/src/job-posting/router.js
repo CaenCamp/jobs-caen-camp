@@ -1,16 +1,15 @@
 const Router = require('koa-router');
 
 const {
-    createJobPosting,
-    deleteJobPosting,
-    getJobPosting,
-    getJobPostingPaginatedList,
-    updateJobPosting,
+    createOne,
+    deleteOne,
+    getOne,
+    getPaginatedList,
+    updateOne,
 } = require('./repository');
 const {
     formatPaginationToLinkHeader,
-    extractQueryParameters,
-} = require('../toolbox/sanitizers');
+} = require('../toolbox/rest-list/pagination-helpers');
 
 const router = new Router({
     prefix: '/api/job-postings',
@@ -30,10 +29,7 @@ router.use(async (ctx, next) => {
 });
 
 router.get('/', async (ctx) => {
-    const { jobPostings, pagination } = await getJobPostingPaginatedList({
-        client: ctx.db,
-        extractedParameters: extractQueryParameters(ctx.query),
-    });
+    const { jobPostings, pagination } = await getPaginatedList(ctx.query);
 
     const linkHeaderValue = formatPaginationToLinkHeader({
         resourceURI: '/api/job-postings',
@@ -48,10 +44,7 @@ router.get('/', async (ctx) => {
 });
 
 router.post('/', async (ctx) => {
-    const newJobPosting = await createJobPosting({
-        client: ctx.db,
-        apiData: ctx.request.body,
-    });
+    const newJobPosting = await createOne(ctx.request.body);
 
     if (newJobPosting.error) {
         const explainedError = new Error(newJobPosting.error.message);
@@ -64,10 +57,7 @@ router.post('/', async (ctx) => {
 });
 
 router.get('/:jobPostingId', async (ctx) => {
-    const jobPosting = await getJobPosting({
-        client: ctx.db,
-        jobPostingId: ctx.params.jobPostingId,
-    });
+    const jobPosting = await getOne(ctx.params.jobPostingId);
 
     if (jobPosting.error) {
         const explainedError = new Error(jobPosting.error.message);
@@ -89,10 +79,7 @@ router.get('/:jobPostingId', async (ctx) => {
 });
 
 router.delete('/:jobPostingId', async (ctx) => {
-    const deletedJobPosting = await deleteJobPosting({
-        client: ctx.db,
-        jobPostingId: ctx.params.jobPostingId,
-    });
+    const deletedJobPosting = await deleteOne(ctx.params.jobPostingId);
 
     if (deletedJobPosting.error) {
         const explainedError = new Error(deletedJobPosting.error.message);
@@ -114,11 +101,10 @@ router.delete('/:jobPostingId', async (ctx) => {
 });
 
 router.put('/:jobPostingId', async (ctx) => {
-    const updatedJobPosting = await updateJobPosting({
-        client: ctx.db,
-        jobPostingId: ctx.params.jobPostingId,
-        apiData: ctx.request.body,
-    });
+    const updatedJobPosting = await updateOne(
+        ctx.params.jobPostingId,
+        ctx.request.body
+    );
 
     if (updatedJobPosting.error) {
         const explainedError = new Error(updatedJobPosting.error.message);

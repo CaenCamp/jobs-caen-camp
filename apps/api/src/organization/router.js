@@ -1,16 +1,15 @@
 const Router = require('koa-router');
 
 const {
-    deleteOrganization,
-    createOrganization,
-    getOrganization,
-    getOrganizationPaginatedList,
-    updateOrganization,
+    deleteOne,
+    createOne,
+    getOne,
+    getPaginatedList,
+    updateOne,
 } = require('./repository');
 const {
-    extractQueryParameters,
     formatPaginationToLinkHeader,
-} = require('../toolbox/sanitizers');
+} = require('../toolbox/rest-list/pagination-helpers');
 
 const router = new Router({
     prefix: '/api/organizations',
@@ -30,10 +29,7 @@ router.use(async (ctx, next) => {
 });
 
 router.get('/', async (ctx) => {
-    const { organizations, pagination } = await getOrganizationPaginatedList({
-        client: ctx.db,
-        extractedParameters: extractQueryParameters(ctx.query),
-    });
+    const { organizations, pagination } = await getPaginatedList(ctx.query);
 
     const linkHeaderValue = formatPaginationToLinkHeader({
         resourceURI: '/api/organizations',
@@ -48,10 +44,7 @@ router.get('/', async (ctx) => {
 });
 
 router.post('/', async (ctx) => {
-    const newOrganization = await createOrganization({
-        client: ctx.db,
-        apiData: ctx.request.body,
-    });
+    const newOrganization = await createOne(ctx.request.body);
 
     if (newOrganization.error) {
         const explainedError = new Error(newOrganization.error.message);
@@ -64,10 +57,7 @@ router.post('/', async (ctx) => {
 });
 
 router.get('/:organizationId', async (ctx) => {
-    const organization = await getOrganization({
-        client: ctx.db,
-        organizationId: ctx.params.organizationId,
-    });
+    const organization = await getOne(ctx.params.organizationId);
 
     if (!organization.id) {
         const explainedError = new Error(
@@ -89,10 +79,7 @@ router.get('/:organizationId', async (ctx) => {
 });
 
 router.delete('/:organizationId', async (ctx) => {
-    const deletedOrganization = await deleteOrganization({
-        client: ctx.db,
-        organizationId: ctx.params.organizationId,
-    });
+    const deletedOrganization = await deleteOne(ctx.params.organizationId);
 
     if (!deletedOrganization.id) {
         const explainedError = new Error(
@@ -114,11 +101,10 @@ router.delete('/:organizationId', async (ctx) => {
 });
 
 router.put('/:organizationId', async (ctx) => {
-    const updatedOrganization = await updateOrganization({
-        client: ctx.db,
-        organizationId: ctx.params.organizationId,
-        apiData: ctx.request.body,
-    });
+    const updatedOrganization = await updateOne(
+        ctx.params.organizationId,
+        ctx.request.body
+    );
 
     if (updatedOrganization.error) {
         const explainedError = new Error(updatedOrganization.error.message);

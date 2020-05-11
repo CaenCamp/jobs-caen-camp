@@ -1,34 +1,22 @@
 const omit = require('lodash.omit');
 const pick = require('lodash.pick');
-const signale = require('signale');
 
-const {
-    filtersSanitizer,
-    formatPaginationContentRange,
-    paginationSanitizer,
-    sortSanitizer,
-} = require('../toolbox/sanitizers');
+const { getDbClient } = require('../toolbox/dbConnexion');
 
-const OrganizationFilterableFields = ['name', 'addressLocality', 'postalCode'];
-const OrganizationSortableFields = [
-    'name',
-    'id',
-    'addressLocality',
-    'postalCode',
-];
+const tableName = 'organization';
+const authorizedFilters = ['name', 'addressLocality', 'postalCode'];
+const authorizedSort = ['name', 'id', 'addressLocality', 'postalCode'];
 
 /**
  * Knex query for filtrated organization list
  *
  * @param {object} client - The Database client
- * @param {Array} filters - Organization Filter {name: 'foo', value: 'bar', operator: 'eq' }
- * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @returns {Promise} - Knew query for filtrated organization list
  */
-const getFilteredOrganizationsQuery = (client, filters, sort) => {
-    const query = client
+const getFilteredOrganizationsQuery = (client) => {
+    return client
         .select(
-            'organization.*',
+            `${tableName}.*`,
             client.raw(`(SELECT array_to_json(array_agg(jsonb_build_object(
                 'identifier',
                 contact_point.id,
@@ -41,48 +29,9 @@ const getFilteredOrganizationsQuery = (client, filters, sort) => {
                 'contactType',
                 contact_point.contact_type
             ) ORDER BY contact_point.contact_type))
-            FROM contact_point WHERE contact_point.organization_id = organization.id) as contact_points`)
+            FROM contact_point WHERE contact_point.organization_id = ${tableName}.id) as contact_points`)
         )
-        .from('organization');
-
-    filters.map((filter) => {
-        switch (filter.operator) {
-            case 'eq':
-                query.andWhere(filter.name, '=', filter.value);
-                break;
-            case 'lt':
-                query.andWhere(filter.name, '<', filter.value);
-                break;
-            case 'lte':
-                query.andWhere(filter.name, '<=', filter.value);
-                break;
-            case 'gt':
-                query.andWhere(filter.name, '>', filter.value);
-                break;
-            case 'gte':
-                query.andWhere(filter.name, '>=', filter.value);
-                break;
-            case '%l%':
-                query.andWhere(filter.name, 'LIKE', `%${filter.value}%`);
-                break;
-            case '%l':
-                query.andWhere(filter.name, 'LIKE', `%${filter.value}`);
-                break;
-            case 'l%':
-                query.andWhere(filter.name, 'LIKE', `${filter.value}%`);
-                break;
-            default:
-                signale.log(
-                    `The filter operator ${filter.operator} is not managed`
-                );
-        }
-    });
-
-    if (sort && sort.length) {
-        query.orderBy(...sort);
-    }
-
-    return query;
+        .from(tableName);
 };
 
 /**
@@ -111,34 +60,20 @@ const formatOrganizationForAPI = (dbOrganization) => ({
 /**
  * Return paginated and filtered list of organization
  *
- * @param {object} client - The Database client
- * @param {object} extractedParameters - Contains:
- *  Sort parameters {sortBy: 'title', orderBy: 'ASC'}
- *  Pagination parameters {perPage: 10, currentPage: 1}
- *  filter parameters {name: 'lex:%l%', addressLocality: 'Hérouvil:l%' }
- * @returns {Promise} - paginated object with paginated organization list and totalCount
+ * @param {object} queryParameters - An object og query parameters from Koa
+ * @returns {Promise} - paginated object with paginated organization list and pagination
  */
-const getOrganizationPaginatedList = async ({
-    client,
-    extractedParameters,
-}) => {
-    const query = getFilteredOrganizationsQuery(
-        client,
-        filtersSanitizer(
-            extractedParameters.filters,
-            OrganizationFilterableFields
-        ),
-        sortSanitizer(extractedParameters.sort, OrganizationSortableFields)
-    );
-    const [perPage, currentPage] = paginationSanitizer(
-        extractedParameters.pagination
-    );
-
-    return query
-        .paginate({ perPage, currentPage, isLengthAware: true })
-        .then((result) => ({
-            organizations: result.data.map(formatOrganizationForAPI),
-            pagination: result.pagination,
+const getPaginatedList = async (queryParameters) => {
+    const client = getDbClient();
+    return getFilteredOrganizationsQuery(client)
+        .paginateRestList({
+            queryParameters,
+            authorizedFilters,
+            authorizedSort,
+        })
+        .then(({ data, pagination }) => ({
+            organizations: data.map(formatOrganizationForAPI),
+            pagination,
         }));
 };
 
@@ -168,11 +103,11 @@ const prepareOrganizationDataForSave = (dataFromApi) => ({
  * @param {string} organizationId - Organization Id
  * @returns {Promise} - Knew query for single organization
  */
-const getOrganizationByIdQuery = (client, organizationId) => {
+const getOneByIdQuery = (client, organizationId) => {
     return client
-        .table('organization')
+        .table(tableName)
         .first(
-            'organization.*',
+            `${tableName}.*`,
             client.raw(`(SELECT array_to_json(array_agg(jsonb_build_object(
                 'identifier',
                 contact_point.id,
@@ -185,7 +120,7 @@ const getOrganizationByIdQuery = (client, organizationId) => {
                 'contactType',
                 contact_point.contact_type
             ) ORDER BY contact_point.contact_type))
-            FROM contact_point WHERE contact_point.organization_id = organization.id) as contact_points`)
+            FROM contact_point WHERE contact_point.organization_id = ${tableName}.id) as contact_points`)
         )
         .where({ id: organizationId });
 };
@@ -193,18 +128,18 @@ const getOrganizationByIdQuery = (client, organizationId) => {
 /**
  * Return the created organization
  *
- * @param {object} client - The Database client
  * @param {object} apiData - The validated data sent from API to create a new organization
  * @returns {Promise} - the created organization
  */
-const createOrganization = async ({ client, apiData }) => {
+const createOne = async (apiData) => {
+    const client = getDbClient();
     const { organization, contactPoints } = prepareOrganizationDataForSave(
         apiData
     );
 
     return client
         .transaction((trx) => {
-            client('organization')
+            client(tableName)
                 .transacting(trx)
                 .returning('id')
                 .insert(organization)
@@ -233,7 +168,7 @@ const createOrganization = async ({ client, apiData }) => {
                 .catch(trx.rollback);
         })
         .then((newOrganizationId) => {
-            return getOrganizationByIdQuery(client, newOrganizationId).then(
+            return getOneByIdQuery(client, newOrganizationId).then(
                 formatOrganizationForAPI
             );
         })
@@ -243,12 +178,12 @@ const createOrganization = async ({ client, apiData }) => {
 /**
  * Return an organization
  *
- * @param {object} client - The Database client
  * @param {object} organizationId - The organization identifier
  * @returns {Promise} - the organization
  */
-const getOrganization = async ({ client, organizationId }) => {
-    return getOrganizationByIdQuery(client, organizationId)
+const getOne = async (organizationId) => {
+    const client = getDbClient();
+    return getOneByIdQuery(client, organizationId)
         .then(formatOrganizationForAPI)
         .catch((error) => ({ error }));
 };
@@ -256,12 +191,12 @@ const getOrganization = async ({ client, organizationId }) => {
 /**
  * Delete an organization
  *
- * @param {object} client - The Database client
  * @param {object} organizationId - The organization identifier
  * @returns {Promise} - the id if the deleted organization or an empty object if organization is not in db
  */
-const deleteOrganization = async ({ client, organizationId }) => {
-    return client('organization')
+const deleteOne = async (organizationId) => {
+    const client = getDbClient();
+    return client(tableName)
         .where({ id: organizationId })
         .del()
         .then((nbDeletion) => {
@@ -287,18 +222,18 @@ const getIdsToDelete = (idsInDb, objectsFromApi) => {
 /**
  * Update an organization
  *
- * @param {object} client - The Database client
  * @param {object} apiData - The validated data sent from API to update an organization
  * @returns {Promise} - the updated organization
  */
-const updateOrganization = async ({ client, organizationId, apiData }) => {
+const updateOne = async (organizationId, apiData) => {
+    const client = getDbClient();
     const { organization, contactPoints } = prepareOrganizationDataForSave(
         apiData
     );
 
     try {
         await client.transaction((trx) => {
-            client('organization')
+            client(tableName)
                 .transacting(trx)
                 .where({ id: organizationId })
                 .update(organization)
@@ -363,22 +298,18 @@ const updateOrganization = async ({ client, organizationId, apiData }) => {
         return { error };
     }
 
-    return getOrganizationByIdQuery(client, organizationId)
+    return getOneByIdQuery(client, organizationId)
         .then(formatOrganizationForAPI)
         .catch((error) => ({ error }));
 };
 
 module.exports = {
-    createOrganization,
-    deleteOrganization,
-    filtersSanitizer,
+    createOne,
+    deleteOne,
     formatOrganizationForAPI,
-    formatPaginationContentRange,
     getIdsToDelete,
-    getOrganization,
-    getOrganizationPaginatedList,
-    paginationSanitizer,
+    getOne,
+    getPaginatedList,
     prepareOrganizationDataForSave,
-    sortSanitizer,
-    updateOrganization,
+    updateOne,
 };

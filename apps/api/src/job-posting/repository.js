@@ -1,50 +1,37 @@
 const omit = require('lodash.omit');
-const signale = require('signale');
+const { getDbClient } = require('../toolbox/dbConnexion');
 
-const {
-    filtersSanitizer,
-    paginationSanitizer,
-    sortSanitizer,
-} = require('../toolbox/sanitizers');
-
-const jobPostingSortableFields = [
+const tableName = 'job_posting';
+const authorizedSort = [
     'datePosted',
     'title',
     'jobStartDate',
     'validThrough',
     'employmentType',
-    'hiringOrganizationName',
-    'hiringOrganizationIdentifier',
-    'hiringOrganizationPostalCode',
-    'hiringOrganizationAddressLocality',
-    'hiringOrganizationAddressCountry',
+    'organization.postal_code',
 ];
-
-const jobPostingFilterableFields = [
+const authorizedFilters = [
     'title',
     'skills',
     'employmentType',
     'datePosted',
     'jobStartDate',
     'validThrough',
-    'hiringOrganizationName',
-    'hiringOrganizationPostalCode',
-    'hiringOrganizationAddressLocality',
-    'hiringOrganizationAddressCountry',
+    'organization.name',
+    'organization.address_locality',
+    'organization.postal_code',
 ];
 
 /**
  * Knex query for filtrated jobPosting list
  *
  * @param {object} client - The Database client
- * @param {Array} filters - array of jobPosting Filters {name: 'foo', value: 'bar', operator: 'eq' }
- * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @returns {Promise} - Knew query for filtrated jobPosting list
  */
-const getFilteredJobPostingsQuery = (client, filters, sort) => {
-    const query = client
+const getFilteredJobPostingsQuery = (client) => {
+    return client
         .select(
-            'job_posting.*',
+            `${tableName}.*`,
             'organization.name as hiringOrganizationName',
             'organization.postal_code as hiringOrganizationPostalCode',
             'organization.address_locality as hiringOrganizationAddressLocality',
@@ -52,67 +39,10 @@ const getFilteredJobPostingsQuery = (client, filters, sort) => {
             'organization.image as hiringOrganizationImage',
             'organization.url as hiringOrganizationUrl'
         )
-        .from('job_posting')
+        .from(tableName)
         .join('organization', {
-            'organization.id': 'job_posting.hiring_organization_id',
+            'organization.id': `${tableName}.hiring_organization_id`,
         });
-
-    filters.map((filter) => {
-        switch (filter.name) {
-            case 'hiringOrganizationPostalCode':
-                filter.name = 'organization.postal_code';
-                break;
-            case 'hiringOrganizationName':
-                filter.name = 'organization.name';
-                break;
-            case 'hiringOrganizationAddressLocality':
-                filter.name = 'organization.address_locality';
-                break;
-            case 'hiringOrganizationAddressCountry':
-                filter.name = 'organization.address_country';
-                break;
-            default:
-                break;
-        }
-    });
-
-    filters.map((filter) => {
-        switch (filter.operator) {
-            case 'eq':
-                query.andWhere(filter.name, '=', filter.value);
-                break;
-            case 'lt':
-                query.andWhere(filter.name, '<', filter.value);
-                break;
-            case 'lte':
-                query.andWhere(filter.name, '<=', filter.value);
-                break;
-            case 'gt':
-                query.andWhere(filter.name, '>', filter.value);
-                break;
-            case 'gte':
-                query.andWhere(filter.name, '>=', filter.value);
-                break;
-            case '%l%':
-                query.andWhere(filter.name, 'LIKE', `%${filter.value}%`);
-                break;
-            case '%l':
-                query.andWhere(filter.name, 'LIKE', `%${filter.value}`);
-                break;
-            case 'l%':
-                query.andWhere(filter.name, 'LIKE', `${filter.value}%`);
-                break;
-            default:
-                signale.log(
-                    `The filter operator ${filter.operator} is not managed`
-                );
-        }
-    });
-
-    if (sort && sort.length) {
-        query.orderBy(...sort);
-    }
-    return query;
 };
 
 /**
@@ -160,48 +90,82 @@ const formatJobPostingForAPI = (dbJobPosting) => {
 };
 
 /**
+ * Return queryParameters with name as real row db name
+ *
+ * It is not always possible to name the applicable filters from the API
+ * with a name compatible with SQL tables. This is especially true when operating JOINs.
+ * This method allows to transform the name of a filter that can be used from the API into a name compatible
+ * with the PostgreSQL tables
+ *
+ * @param {Object} queryParameters
+ * @return {Object} Query parameters renamed as db row name
+ */
+const renameFiltersFromAPI = (queryParameters) => {
+    const filterNamesToChange = {
+        hiringOrganizationPostalCode: 'organization.postal_code',
+        hiringOrganizationName: 'organization.name',
+        hiringOrganizationAddressLocality: 'organization.address_locality',
+    };
+
+    return Object.keys(queryParameters).reduce((acc, filter) => {
+        if (filter === 'sortBy') {
+            const sortName = Object.prototype.hasOwnProperty.call(
+                filterNamesToChange,
+                queryParameters.sortBy
+            )
+                ? filterNamesToChange[queryParameters.sortBy]
+                : queryParameters.sortBy;
+
+            return {
+                ...acc,
+                sortBy: sortName,
+            };
+        }
+
+        const filterName = Object.prototype.hasOwnProperty.call(
+            filterNamesToChange,
+            filter
+        )
+            ? filterNamesToChange[filter]
+            : filter;
+
+        return {
+            ...acc,
+            [filterName]: queryParameters[filter],
+        };
+    }, {});
+};
+
+/**
  * Return paginated and filtered list of jobPosting
  *
- * @param {object} client - The Database client
- * @param {object} extractedParameters - Contains:
- *  Sort parameters {sortBy: 'title', orderBy: 'ASC'}
- *  Pagination parameters {perPage: 10, currentPage: 1}
- *  filter parameters {title: 'Lead:%l%', datePosted_before: '2020-05-02' }
- * @returns {Promise} - paginated object with paginated jobPosting list and totalCount
+ * @param {object} queryParameters - An object og query parameters from Koa
+ * @returns {Promise} - paginated object with paginated jobPosting list and pagination
  */
-const getJobPostingPaginatedList = async ({ client, extractedParameters }) => {
-    const query = getFilteredJobPostingsQuery(
-        client,
-        filtersSanitizer(
-            extractedParameters.filters,
-            jobPostingFilterableFields
-        ),
-        sortSanitizer(extractedParameters.sort, jobPostingSortableFields)
-    );
-
-    const [perPage, currentPage] = paginationSanitizer(
-        extractedParameters.pagination
-    );
-
-    return query
-        .paginate({ perPage, currentPage, isLengthAware: true })
-        .then((result) => ({
-            jobPostings: result.data.map(formatJobPostingForAPI),
-            pagination: result.pagination,
+const getPaginatedList = async (queryParameters) => {
+    const client = getDbClient();
+    return getFilteredJobPostingsQuery(client)
+        .paginateRestList({
+            queryParameters: renameFiltersFromAPI(queryParameters),
+            authorizedFilters,
+            authorizedSort,
+        })
+        .then(({ data, pagination }) => ({
+            jobPostings: data.map(formatJobPostingForAPI),
+            pagination,
         }));
 };
 
 /**
  * Knex query for single jobPosting
  *
- * @param {object} client - The Database client
  * @param {string} jobPostingId - jobPosting Id
  * @returns {Promise} - Knew query for single jobPosting
  */
-const getJobPostingByIdQuery = (client, jobPostingId) => {
+const getOneByIdQuery = (client, id) => {
     return client
         .first(
-            'job_posting.*',
+            `${tableName}.*`,
             'organization.name as hiringOrganizationName',
             'organization.postal_code as hiringOrganizationPostalCode',
             'organization.address_locality as hiringOrganizationAddressLocality',
@@ -209,22 +173,22 @@ const getJobPostingByIdQuery = (client, jobPostingId) => {
             'organization.image as hiringOrganizationImage',
             'organization.url as hiringOrganizationUrl'
         )
-        .from('job_posting')
+        .from(tableName)
         .join('organization', {
-            'organization.id': 'job_posting.hiring_organization_id',
+            'organization.id': `${tableName}.hiring_organization_id`,
         })
-        .where({ 'job_posting.id': jobPostingId });
+        .where({ [`${tableName}.id`]: id });
 };
 
 /**
  * Return a jobPosting
  *
- * @param {object} client - The Database client
  * @param {object} organizationId - The jobPosting identifier
  * @returns {Promise} - the jobPosting
  */
-const getJobPosting = async ({ client, jobPostingId }) => {
-    return getJobPostingByIdQuery(client, jobPostingId)
+const getOne = async (id) => {
+    const client = getDbClient();
+    return getOneByIdQuery(client, id)
         .then(formatJobPostingForAPI)
         .catch((error) => ({ error }));
 };
@@ -232,11 +196,11 @@ const getJobPosting = async ({ client, jobPostingId }) => {
 /**
  * Return the created jobPosting
  *
- * @param {object} client - The Database client
  * @param {object} apiData - The validated data sent from API to create a new jobPosting
  * @returns {Promise} - the created jobPosting
  */
-const createJobPosting = async ({ client, apiData }) => {
+const createOne = async (apiData) => {
+    const client = getDbClient();
     const organization = await client
         .first('id')
         .from('organization')
@@ -246,11 +210,11 @@ const createJobPosting = async ({ client, apiData }) => {
         return { error: new Error('this organization does not exist') };
     }
 
-    return client('job_posting')
+    return client(tableName)
         .returning('id')
         .insert(apiData)
         .then(([newJobPostingId]) => {
-            return getJobPostingByIdQuery(client, newJobPostingId).then(
+            return getOneByIdQuery(client, newJobPostingId).then(
                 formatJobPostingForAPI
             );
         })
@@ -260,16 +224,16 @@ const createJobPosting = async ({ client, apiData }) => {
 /**
  * Delete a jobPosting
  *
- * @param {object} client - The Database client
  * @param {object} jobPostingId - The jobPosting identifier
  * @returns {Promise} - the id of the deleted jobPosting or an empty object if jobPosting is not in db
  */
-const deleteJobPosting = async ({ client, jobPostingId }) => {
-    return client('job_posting')
-        .where({ id: jobPostingId })
+const deleteOne = async (id) => {
+    const client = getDbClient();
+    return client(tableName)
+        .where({ id })
         .del()
         .then((nbDeletion) => {
-            return nbDeletion ? { id: jobPostingId } : {};
+            return nbDeletion ? { id } : {};
         })
         .catch((error) => ({ error }));
 };
@@ -277,17 +241,17 @@ const deleteJobPosting = async ({ client, jobPostingId }) => {
 /**
  * Update a jobPosting
  *
- * @param {object} client - The Database client
  * @param {object} jobPostingId - The jobPosting identifier
  * @param {object} apiData - The validated data sent from API to update the jobPosting
  * @returns {Promise} - the updated JobPosting
  */
-const updateJobPosting = async ({ client, jobPostingId, apiData }) => {
+const updateOne = async (id, apiData) => {
+    const client = getDbClient();
     // check that jobPosting exist
     const currentJobPosting = await client
         .first('id', 'hiringOrganizationId')
-        .from('job_posting')
-        .where({ id: jobPostingId });
+        .from(tableName)
+        .where({ id });
     if (!currentJobPosting) {
         return {};
     }
@@ -309,8 +273,8 @@ const updateJobPosting = async ({ client, jobPostingId, apiData }) => {
     }
 
     // update the jobPosting
-    const updatedJobPosting = await client('job_posting')
-        .where({ id: jobPostingId })
+    const updatedJobPosting = await client(tableName)
+        .where({ id })
         .update(apiData)
         .catch((error) => ({ error }));
     if (updatedJobPosting.error) {
@@ -318,16 +282,17 @@ const updateJobPosting = async ({ client, jobPostingId, apiData }) => {
     }
 
     // return the complete jobPosting from db
-    return getJobPostingByIdQuery(client, jobPostingId)
+    return getOneByIdQuery(client, id)
         .then(formatJobPostingForAPI)
         .catch((error) => ({ error }));
 };
 
 module.exports = {
-    createJobPosting,
-    deleteJobPosting,
+    createOne,
+    deleteOne,
     formatJobPostingForAPI,
-    getJobPosting,
-    getJobPostingPaginatedList,
-    updateJobPosting,
+    getOne,
+    getPaginatedList,
+    renameFiltersFromAPI,
+    updateOne,
 };

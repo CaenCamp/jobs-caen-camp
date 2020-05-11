@@ -1,13 +1,15 @@
+const { getDbClient } = require('../dbConnexion');
+
 const tableName = 'refresh_token';
 
 /**
  * Return a new refresh token for a specific user
  *
- * @param {object} client - The Database client
  * @param {object} data - The token data for token creation
  * @returns {Promise} - the refresh token
  */
-const createOneForUser = async ({ client, data }) => {
+const createOneForUser = async (data) => {
+    const client = getDbClient();
     return client(tableName)
         .insert(data)
         .returning('*')
@@ -17,11 +19,11 @@ const createOneForUser = async ({ client, data }) => {
 /**
  * Return a refresh token if exist
  *
- * @param {object} client - The Database client
  * @param {string} id - The token id
  * @returns {Promise} - the refresh token
  */
-const getOne = async ({ client, id }) => {
+const getOne = async (id) => {
+    const client = getDbClient();
     return client(tableName)
         .first('*')
         .where({ id })
@@ -31,11 +33,11 @@ const getOne = async ({ client, id }) => {
 /**
  * Return a user refresh token if exist
  *
- * @param {object} client - The Database client
  * @param {string} userId - The user id that owned the token
  * @returns {Promise} - the refresh token
  */
-const getOneByUserId = async ({ client, userId }) => {
+const getOneByUserId = async (userId) => {
+    const client = getDbClient();
     return client(tableName)
         .first('*')
         .where({ userId })
@@ -45,11 +47,11 @@ const getOneByUserId = async ({ client, userId }) => {
 /**
  * Delete refresh token if exist
  *
- * @param {object} client - The Database client
  * @param {string} id - The id's token to delete
  * @returns {Promise} - the deleted token id
  */
-const deleteOne = async ({ client, id }) => {
+const deleteOne = async (id) => {
+    const client = getDbClient();
     return client(tableName)
         .where({ id })
         .del()

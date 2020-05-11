@@ -11,6 +11,16 @@ const getXTotalCountHeaderValue = (headers) => {
     return parseInt(headers.get('x-total-count'), 10);
 };
 
+const formatFilters = (filters) => {
+    return Object.keys(filters).reduce((acc, filterKey) => {
+        const [name, operator = 'eq'] = filterKey.split(':');
+        return {
+            ...acc,
+            [name]: `${filters[filterKey]}:${operator}`,
+        };
+    }, {});
+};
+
 /**
  * Maps react-admin queries to a simple REST API
  *
@@ -25,15 +35,15 @@ const getXTotalCountHeaderValue = (headers) => {
  */
 export default (apiUrl, httpClient) => ({
     getList: (resource, params) => {
-        const { currentPage, perPage } = params;
+        const { page: currentPage, perPage } = params.pagination;
         const { field, order } = params.sort;
         const filters = params.filter;
         const query = {
             sortBy: field,
             orderBy: order,
-            filters,
             currentPage,
             perPage,
+            ...formatFilters(filters),
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
