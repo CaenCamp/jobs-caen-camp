@@ -14,7 +14,7 @@
  * @typedef {Object} FormatedQueryParameters
  * @property {(SortParameters || null)} sort - The sort parameters
  * @property {PaginationParameters} pagination - The pagination parameters
- * @property {Object} filters - The filters with filter name as key and operator:value as value
+ * @property {Object} filters - The filters with name as key and value:operator as value
  */
 
 /**

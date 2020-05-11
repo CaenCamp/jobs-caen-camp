@@ -91,9 +91,11 @@ const formatJobPostingForAPI = (dbJobPosting) => {
 
 /**
  * Return queryParameters with name as real row db name
- * As it's difficult to have a name for filter used on join table
- * query parameters name from API are not necessary the sames
- * than table row names
+ *
+ * It is not always possible to name the applicable filters from the API
+ * with a name compatible with SQL tables. This is especially true when operating JOINs.
+ * This method allows to transform the name of a filter that can be used from the API into a name compatible
+ * with the PostgreSQL tables
  *
  * @param {Object} queryParameters
  * @return {Object} Query parameters renamed as db row name
