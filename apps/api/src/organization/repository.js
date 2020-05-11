@@ -1,6 +1,8 @@
 const omit = require('lodash.omit');
 const pick = require('lodash.pick');
 
+const { getDbClient } = require('../toolbox/dbConnexion');
+
 const authorizedFilters = ['name', 'addressLocality', 'postalCode'];
 const authorizedSort = ['name', 'id', 'addressLocality', 'postalCode'];
 
@@ -8,8 +10,6 @@ const authorizedSort = ['name', 'id', 'addressLocality', 'postalCode'];
  * Knex query for filtrated organization list
  *
  * @param {object} client - The Database client
- * @param {Array} filters - Organization Filter {name: 'foo', value: 'bar', operator: 'eq' }
- * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @returns {Promise} - Knew query for filtrated organization list
  */
 const getFilteredOrganizationsQuery = (client) => {
@@ -59,11 +59,11 @@ const formatOrganizationForAPI = (dbOrganization) => ({
 /**
  * Return paginated and filtered list of organization
  *
- * @param {object} client - The Database client
  * @param {object} queryParameters - An object og query parameters from Koa
  * @returns {Promise} - paginated object with paginated organization list and pagination
  */
-const getOrganizationPaginatedList = async ({ client, queryParameters }) => {
+const getPaginatedList = async (queryParameters) => {
+    const client = getDbClient();
     return getFilteredOrganizationsQuery(client)
         .paginateRestList({
             queryParameters,
@@ -102,7 +102,7 @@ const prepareOrganizationDataForSave = (dataFromApi) => ({
  * @param {string} organizationId - Organization Id
  * @returns {Promise} - Knew query for single organization
  */
-const getOrganizationByIdQuery = (client, organizationId) => {
+const getOneByIdQuery = (client, organizationId) => {
     return client
         .table('organization')
         .first(
@@ -127,11 +127,11 @@ const getOrganizationByIdQuery = (client, organizationId) => {
 /**
  * Return the created organization
  *
- * @param {object} client - The Database client
  * @param {object} apiData - The validated data sent from API to create a new organization
  * @returns {Promise} - the created organization
  */
-const createOrganization = async ({ client, apiData }) => {
+const createOne = async (apiData) => {
+    const client = getDbClient();
     const { organization, contactPoints } = prepareOrganizationDataForSave(
         apiData
     );
@@ -167,7 +167,7 @@ const createOrganization = async ({ client, apiData }) => {
                 .catch(trx.rollback);
         })
         .then((newOrganizationId) => {
-            return getOrganizationByIdQuery(client, newOrganizationId).then(
+            return getOneByIdQuery(client, newOrganizationId).then(
                 formatOrganizationForAPI
             );
         })
@@ -177,12 +177,12 @@ const createOrganization = async ({ client, apiData }) => {
 /**
  * Return an organization
  *
- * @param {object} client - The Database client
  * @param {object} organizationId - The organization identifier
  * @returns {Promise} - the organization
  */
-const getOrganization = async ({ client, organizationId }) => {
-    return getOrganizationByIdQuery(client, organizationId)
+const getOne = async (organizationId) => {
+    const client = getDbClient();
+    return getOneByIdQuery(client, organizationId)
         .then(formatOrganizationForAPI)
         .catch((error) => ({ error }));
 };
@@ -190,11 +190,11 @@ const getOrganization = async ({ client, organizationId }) => {
 /**
  * Delete an organization
  *
- * @param {object} client - The Database client
  * @param {object} organizationId - The organization identifier
  * @returns {Promise} - the id if the deleted organization or an empty object if organization is not in db
  */
-const deleteOrganization = async ({ client, organizationId }) => {
+const deleteOne = async (organizationId) => {
+    const client = getDbClient();
     return client('organization')
         .where({ id: organizationId })
         .del()
@@ -221,11 +221,11 @@ const getIdsToDelete = (idsInDb, objectsFromApi) => {
 /**
  * Update an organization
  *
- * @param {object} client - The Database client
  * @param {object} apiData - The validated data sent from API to update an organization
  * @returns {Promise} - the updated organization
  */
-const updateOrganization = async ({ client, organizationId, apiData }) => {
+const updateOne = async (organizationId, apiData) => {
+    const client = getDbClient();
     const { organization, contactPoints } = prepareOrganizationDataForSave(
         apiData
     );
@@ -297,18 +297,18 @@ const updateOrganization = async ({ client, organizationId, apiData }) => {
         return { error };
     }
 
-    return getOrganizationByIdQuery(client, organizationId)
+    return getOneByIdQuery(client, organizationId)
         .then(formatOrganizationForAPI)
         .catch((error) => ({ error }));
 };
 
 module.exports = {
-    createOrganization,
-    deleteOrganization,
+    createOne,
+    deleteOne,
     formatOrganizationForAPI,
     getIdsToDelete,
-    getOrganization,
-    getOrganizationPaginatedList,
+    getOne,
+    getPaginatedList,
     prepareOrganizationDataForSave,
-    updateOrganization,
+    updateOne,
 };

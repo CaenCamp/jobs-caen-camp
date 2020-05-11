@@ -1,5 +1,7 @@
 const omit = require('lodash.omit');
+const { getDbClient } = require('../toolbox/dbConnexion');
 
+const tableName = 'job_posting';
 const authorizedSort = [
     'datePosted',
     'title',
@@ -8,7 +10,6 @@ const authorizedSort = [
     'employmentType',
     'organization.postal_code',
 ];
-
 const authorizedFilters = [
     'title',
     'skills',
@@ -25,8 +26,6 @@ const authorizedFilters = [
  * Knex query for filtrated jobPosting list
  *
  * @param {object} client - The Database client
- * @param {Array} filters - array of jobPosting Filters {name: 'foo', value: 'bar', operator: 'eq' }
- * @param {object} sort - Sort parameters { sortBy, orderBy }
  * @returns {Promise} - Knew query for filtrated jobPosting list
  */
 const getFilteredJobPostingsQuery = (client) => {
@@ -40,9 +39,9 @@ const getFilteredJobPostingsQuery = (client) => {
             'organization.image as hiringOrganizationImage',
             'organization.url as hiringOrganizationUrl'
         )
-        .from('job_posting')
+        .from(tableName)
         .join('organization', {
-            'organization.id': 'job_posting.hiring_organization_id',
+            'organization.id': `${tableName}.hiring_organization_id`,
         });
 };
 
@@ -138,11 +137,11 @@ const renameFiltersFromAPI = (queryParameters) => {
 /**
  * Return paginated and filtered list of jobPosting
  *
- * @param {object} client - The Database client
  * @param {object} queryParameters - An object og query parameters from Koa
  * @returns {Promise} - paginated object with paginated jobPosting list and pagination
  */
-const getPaginatedList = async ({ client, queryParameters }) => {
+const getPaginatedList = async (queryParameters) => {
+    const client = getDbClient();
     return getFilteredJobPostingsQuery(client)
         .paginateRestList({
             queryParameters: renameFiltersFromAPI(queryParameters),
@@ -158,11 +157,10 @@ const getPaginatedList = async ({ client, queryParameters }) => {
 /**
  * Knex query for single jobPosting
  *
- * @param {object} client - The Database client
  * @param {string} jobPostingId - jobPosting Id
  * @returns {Promise} - Knew query for single jobPosting
  */
-const getOneByIdQuery = (client, jobPostingId) => {
+const getOneByIdQuery = (client, id) => {
     return client
         .first(
             'job_posting.*',
@@ -173,22 +171,22 @@ const getOneByIdQuery = (client, jobPostingId) => {
             'organization.image as hiringOrganizationImage',
             'organization.url as hiringOrganizationUrl'
         )
-        .from('job_posting')
+        .from(tableName)
         .join('organization', {
-            'organization.id': 'job_posting.hiring_organization_id',
+            'organization.id': `${tableName}.hiring_organization_id`,
         })
-        .where({ 'job_posting.id': jobPostingId });
+        .where({ [`${tableName}.id`]: id });
 };
 
 /**
  * Return a jobPosting
  *
- * @param {object} client - The Database client
  * @param {object} organizationId - The jobPosting identifier
  * @returns {Promise} - the jobPosting
  */
-const getOne = async ({ client, jobPostingId }) => {
-    return getOneByIdQuery(client, jobPostingId)
+const getOne = async (id) => {
+    const client = getDbClient();
+    return getOneByIdQuery(client, id)
         .then(formatJobPostingForAPI)
         .catch((error) => ({ error }));
 };
@@ -196,11 +194,11 @@ const getOne = async ({ client, jobPostingId }) => {
 /**
  * Return the created jobPosting
  *
- * @param {object} client - The Database client
  * @param {object} apiData - The validated data sent from API to create a new jobPosting
  * @returns {Promise} - the created jobPosting
  */
-const createOne = async ({ client, apiData }) => {
+const createOne = async (apiData) => {
+    const client = getDbClient();
     const organization = await client
         .first('id')
         .from('organization')
@@ -210,7 +208,7 @@ const createOne = async ({ client, apiData }) => {
         return { error: new Error('this organization does not exist') };
     }
 
-    return client('job_posting')
+    return client(tableName)
         .returning('id')
         .insert(apiData)
         .then(([newJobPostingId]) => {
@@ -224,16 +222,16 @@ const createOne = async ({ client, apiData }) => {
 /**
  * Delete a jobPosting
  *
- * @param {object} client - The Database client
  * @param {object} jobPostingId - The jobPosting identifier
  * @returns {Promise} - the id of the deleted jobPosting or an empty object if jobPosting is not in db
  */
-const deleteOne = async ({ client, jobPostingId }) => {
-    return client('job_posting')
-        .where({ id: jobPostingId })
+const deleteOne = async (id) => {
+    const client = getDbClient();
+    return client(tableName)
+        .where({ id })
         .del()
         .then((nbDeletion) => {
-            return nbDeletion ? { id: jobPostingId } : {};
+            return nbDeletion ? { id } : {};
         })
         .catch((error) => ({ error }));
 };
@@ -241,17 +239,17 @@ const deleteOne = async ({ client, jobPostingId }) => {
 /**
  * Update a jobPosting
  *
- * @param {object} client - The Database client
  * @param {object} jobPostingId - The jobPosting identifier
  * @param {object} apiData - The validated data sent from API to update the jobPosting
  * @returns {Promise} - the updated JobPosting
  */
-const updateOne = async ({ client, jobPostingId, apiData }) => {
+const updateOne = async (id, apiData) => {
+    const client = getDbClient();
     // check that jobPosting exist
     const currentJobPosting = await client
         .first('id', 'hiringOrganizationId')
-        .from('job_posting')
-        .where({ id: jobPostingId });
+        .from(tableName)
+        .where({ id });
     if (!currentJobPosting) {
         return {};
     }
@@ -273,8 +271,8 @@ const updateOne = async ({ client, jobPostingId, apiData }) => {
     }
 
     // update the jobPosting
-    const updatedJobPosting = await client('job_posting')
-        .where({ id: jobPostingId })
+    const updatedJobPosting = await client(tableName)
+        .where({ id })
         .update(apiData)
         .catch((error) => ({ error }));
     if (updatedJobPosting.error) {
@@ -282,7 +280,7 @@ const updateOne = async ({ client, jobPostingId, apiData }) => {
     }
 
     // return the complete jobPosting from db
-    return getOneByIdQuery(client, jobPostingId)
+    return getOneByIdQuery(client, id)
         .then(formatJobPostingForAPI)
         .catch((error) => ({ error }));
 };
