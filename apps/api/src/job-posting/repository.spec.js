@@ -1,6 +1,43 @@
-const { formatJobPostingForAPI } = require('./repository');
+const {
+    formatJobPostingForAPI,
+    renameFiltersFromAPI,
+} = require('./repository');
 
 describe('jobPosting repository', () => {
+    describe('renameFiltersFromAPI', () => {
+        it('should not change anything if nothing needs to be changed.', () => {
+            const queryParameters = {
+                sortBy: 'foo',
+                bar: 'foo:neq',
+            };
+            expect(renameFiltersFromAPI(queryParameters)).toEqual(
+                queryParameters
+            );
+        });
+
+        it('should rename the filters whose mapping is declared.', () => {
+            const queryParameters = {
+                sortBy: 'foo',
+                hiringOrganizationName: 'foo:l%',
+            };
+            expect(renameFiltersFromAPI(queryParameters)).toEqual({
+                sortBy: 'foo',
+                'organization.name': 'foo:l%',
+            });
+        });
+
+        it('should rename the sortBy if needed.', () => {
+            const queryParameters = {
+                sortBy: 'hiringOrganizationName',
+                bar: 'foo:l%',
+            };
+            expect(renameFiltersFromAPI(queryParameters)).toEqual({
+                sortBy: 'organization.name',
+                bar: 'foo:l%',
+            });
+        });
+    });
+
     describe('formatJobPostingForAPI', () => {
         it('should return an empty object if return from db is null', () => {
             expect(formatJobPostingForAPI(null)).toEqual({});

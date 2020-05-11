@@ -1,13 +1,15 @@
 const Router = require('koa-router');
 
 const {
-    createJobPosting,
-    deleteJobPosting,
-    getJobPosting,
-    getJobPostingPaginatedList,
-    updateJobPosting,
+    createOne,
+    deleteOne,
+    getOne,
+    getPaginatedList,
+    updateOne,
 } = require('./repository');
-const { formatPaginationToLinkHeader } = require('../toolbox/sanitizers');
+const {
+    formatPaginationToLinkHeader,
+} = require('../toolbox/rest-list/pagination-helpers');
 
 const router = new Router({
     prefix: '/api/job-postings',
@@ -27,7 +29,7 @@ router.use(async (ctx, next) => {
 });
 
 router.get('/', async (ctx) => {
-    const { jobPostings, pagination } = await getJobPostingPaginatedList({
+    const { jobPostings, pagination } = await getPaginatedList({
         client: ctx.db,
         queryParameters: ctx.query,
     });
@@ -45,7 +47,7 @@ router.get('/', async (ctx) => {
 });
 
 router.post('/', async (ctx) => {
-    const newJobPosting = await createJobPosting({
+    const newJobPosting = await createOne({
         client: ctx.db,
         apiData: ctx.request.body,
     });
@@ -61,7 +63,7 @@ router.post('/', async (ctx) => {
 });
 
 router.get('/:jobPostingId', async (ctx) => {
-    const jobPosting = await getJobPosting({
+    const jobPosting = await getOne({
         client: ctx.db,
         jobPostingId: ctx.params.jobPostingId,
     });
@@ -86,7 +88,7 @@ router.get('/:jobPostingId', async (ctx) => {
 });
 
 router.delete('/:jobPostingId', async (ctx) => {
-    const deletedJobPosting = await deleteJobPosting({
+    const deletedJobPosting = await deleteOne({
         client: ctx.db,
         jobPostingId: ctx.params.jobPostingId,
     });
@@ -111,7 +113,7 @@ router.delete('/:jobPostingId', async (ctx) => {
 });
 
 router.put('/:jobPostingId', async (ctx) => {
-    const updatedJobPosting = await updateJobPosting({
+    const updatedJobPosting = await updateOne({
         client: ctx.db,
         jobPostingId: ctx.params.jobPostingId,
         apiData: ctx.request.body,

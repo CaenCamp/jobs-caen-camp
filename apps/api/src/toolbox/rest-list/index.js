@@ -15,10 +15,7 @@ const {
     FILTER_OPERATOR_PLP,
     filtersSanitizer,
 } = require('./filters-helpers');
-const {
-    paginationSanitizer,
-    // formatPaginationToLinkHeader,
-} = require('./pagination-helpers');
+const { paginationSanitizer } = require('./pagination-helpers');
 const { formatQueryParameters } = require('./query-parameters-helpers');
 const { sortSanitizer } = require('./sort-helpers');
 
@@ -31,7 +28,6 @@ module.exports.attachPaginateRestList = function attachPaginateRestList() {
     }) {
         const isFromStart = false;
         const isLengthAware = true;
-
         const {
             pagination: rawPagination,
             sort,
@@ -40,6 +36,7 @@ module.exports.attachPaginateRestList = function attachPaginateRestList() {
         const { perPage, currentPage } = paginationSanitizer(rawPagination);
         const { sortBy, orderBy } = sortSanitizer(sort, authorizedSort);
         const filtersParameters = filtersSanitizer(filters, authorizedFilters);
+
         if (debug) {
             signale.debug('queryParameters', queryParameters);
             signale.debug(

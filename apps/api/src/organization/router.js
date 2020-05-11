@@ -7,7 +7,9 @@ const {
     getOrganizationPaginatedList,
     updateOrganization,
 } = require('./repository');
-const { formatPaginationToLinkHeader } = require('../toolbox/sanitizers');
+const {
+    formatPaginationToLinkHeader,
+} = require('../toolbox/rest-list/pagination-helpers');
 
 const router = new Router({
     prefix: '/api/organizations',

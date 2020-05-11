@@ -6,6 +6,7 @@ const authorizedSort = [
     'jobStartDate',
     'validThrough',
     'employmentType',
+    'organization.postal_code',
 ];
 
 const authorizedFilters = [
@@ -106,12 +107,27 @@ const renameFiltersFromAPI = (queryParameters) => {
     };
 
     return Object.keys(queryParameters).reduce((acc, filter) => {
+        if (filter === 'sortBy') {
+            const sortName = Object.prototype.hasOwnProperty.call(
+                filterNamesToChange,
+                queryParameters.sortBy
+            )
+                ? filterNamesToChange[queryParameters.sortBy]
+                : queryParameters.sortBy;
+
+            return {
+                ...acc,
+                sortBy: sortName,
+            };
+        }
+
         const filterName = Object.prototype.hasOwnProperty.call(
             filterNamesToChange,
             filter
         )
             ? filterNamesToChange[filter]
             : filter;
+
         return {
             ...acc,
             [filterName]: queryParameters[filter],
@@ -126,7 +142,7 @@ const renameFiltersFromAPI = (queryParameters) => {
  * @param {object} queryParameters - An object og query parameters from Koa
  * @returns {Promise} - paginated object with paginated jobPosting list and pagination
  */
-const getJobPostingPaginatedList = async ({ client, queryParameters }) => {
+const getPaginatedList = async ({ client, queryParameters }) => {
     return getFilteredJobPostingsQuery(client)
         .paginateRestList({
             queryParameters: renameFiltersFromAPI(queryParameters),
@@ -146,7 +162,7 @@ const getJobPostingPaginatedList = async ({ client, queryParameters }) => {
  * @param {string} jobPostingId - jobPosting Id
  * @returns {Promise} - Knew query for single jobPosting
  */
-const getJobPostingByIdQuery = (client, jobPostingId) => {
+const getOneByIdQuery = (client, jobPostingId) => {
     return client
         .first(
             'job_posting.*',
@@ -171,8 +187,8 @@ const getJobPostingByIdQuery = (client, jobPostingId) => {
  * @param {object} organizationId - The jobPosting identifier
  * @returns {Promise} - the jobPosting
  */
-const getJobPosting = async ({ client, jobPostingId }) => {
-    return getJobPostingByIdQuery(client, jobPostingId)
+const getOne = async ({ client, jobPostingId }) => {
+    return getOneByIdQuery(client, jobPostingId)
         .then(formatJobPostingForAPI)
         .catch((error) => ({ error }));
 };
@@ -184,7 +200,7 @@ const getJobPosting = async ({ client, jobPostingId }) => {
  * @param {object} apiData - The validated data sent from API to create a new jobPosting
  * @returns {Promise} - the created jobPosting
  */
-const createJobPosting = async ({ client, apiData }) => {
+const createOne = async ({ client, apiData }) => {
     const organization = await client
         .first('id')
         .from('organization')
@@ -198,7 +214,7 @@ const createJobPosting = async ({ client, apiData }) => {
         .returning('id')
         .insert(apiData)
         .then(([newJobPostingId]) => {
-            return getJobPostingByIdQuery(client, newJobPostingId).then(
+            return getOneByIdQuery(client, newJobPostingId).then(
                 formatJobPostingForAPI
             );
         })
@@ -212,7 +228,7 @@ const createJobPosting = async ({ client, apiData }) => {
  * @param {object} jobPostingId - The jobPosting identifier
  * @returns {Promise} - the id of the deleted jobPosting or an empty object if jobPosting is not in db
  */
-const deleteJobPosting = async ({ client, jobPostingId }) => {
+const deleteOne = async ({ client, jobPostingId }) => {
     return client('job_posting')
         .where({ id: jobPostingId })
         .del()
@@ -230,7 +246,7 @@ const deleteJobPosting = async ({ client, jobPostingId }) => {
  * @param {object} apiData - The validated data sent from API to update the jobPosting
  * @returns {Promise} - the updated JobPosting
  */
-const updateJobPosting = async ({ client, jobPostingId, apiData }) => {
+const updateOne = async ({ client, jobPostingId, apiData }) => {
     // check that jobPosting exist
     const currentJobPosting = await client
         .first('id', 'hiringOrganizationId')
@@ -266,16 +282,17 @@ const updateJobPosting = async ({ client, jobPostingId, apiData }) => {
     }
 
     // return the complete jobPosting from db
-    return getJobPostingByIdQuery(client, jobPostingId)
+    return getOneByIdQuery(client, jobPostingId)
         .then(formatJobPostingForAPI)
         .catch((error) => ({ error }));
 };
 
 module.exports = {
-    createJobPosting,
-    deleteJobPosting,
+    createOne,
+    deleteOne,
     formatJobPostingForAPI,
-    getJobPosting,
-    getJobPostingPaginatedList,
-    updateJobPosting,
+    getOne,
+    getPaginatedList,
+    renameFiltersFromAPI,
+    updateOne,
 };
