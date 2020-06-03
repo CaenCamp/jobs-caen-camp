@@ -1,6 +1,7 @@
 import React from 'react';
-import { Show, SimpleShowLayout, TextField } from 'react-admin';
+import { Show, SimpleShowLayout, TextField, UrlField } from 'react-admin';
 import { PropTypes } from 'prop-types';
+import DisplayAddress from '../toolbox/DispayAddress';
 
 // Todo :
 const OrganizationName = ({ record }) => {
@@ -9,29 +10,6 @@ const OrganizationName = ({ record }) => {
 OrganizationName.propTypes = {
     record: PropTypes.shape({
         name: PropTypes.string.isRequired,
-    }),
-};
-
-const DisplayAddress = ({ record }) => {
-    return record && record.address ? (
-        <p>
-            {record.address.streetAddress} <br />
-            {record.address.postalCode} {record.address.addressLocality}{' '}
-            {record.address.addressCountry}
-        </p>
-    ) : (
-        `Pas d'addresse pour "${record.name}"`
-    );
-};
-DisplayAddress.propTypes = {
-    record: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        address: PropTypes.shape({
-            addressCountry: PropTypes.string,
-            addressLocality: PropTypes.string,
-            postalCode: PropTypes.string,
-            streetAddress: PropTypes.string,
-        }),
     }),
 };
 
@@ -55,23 +33,17 @@ export const OrganizationShow = (props) => {
         <Show title={<OrganizationName />} {...props}>
             <SimpleShowLayout>
                 <OrganizationLogo label="logo" />
-                <TextField label="Nom de l'entreprise" source="name" />
+                <TextField addlabel="false" source="name" />
                 <TextField label="Email principal" source="email" />
-                <TextField label="Url du site web" source="url" />
+                <UrlField label="Url du site web" source="url" />
                 <TextField label="Présentation" source="description" />
-                {<DisplayAddress />}
 
-                <TextField
-                    label="Nom du contact des offres d'emploi"
-                    source="contact_name"
-                />
-                <TextField
-                    label="Email du contact des offres d'emploi"
-                    source="contact_email"
-                />
-                <TextField
-                    label="Téléphone du contact des offres d'emploi"
-                    source="contact_phone"
+                <DisplayAddress
+                    label="adresse"
+                    streetAddress="address.streetAddress"
+                    postalCode="address.postalCode"
+                    addressLocality="address.addressLocality"
+                    addressCountry="address.addressCountry"
                 />
             </SimpleShowLayout>
         </Show>

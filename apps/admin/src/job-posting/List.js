@@ -70,7 +70,7 @@ export const JobPostingList = ({ permissions, ...props }) => {
             bulkActionButtons={false}
             title="Liste des Offres d'Emploi"
         >
-            <Datagrid rowClik="show">
+            <Datagrid rowClick="show">
                 <TextField source="title" label="Titre de l'offre" />
                 <TextField source="employmentType" label="Type de contrat" />
                 <ReferenceField

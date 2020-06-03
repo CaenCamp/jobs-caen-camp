@@ -58,7 +58,7 @@ const App = () => (
                 }
                 icon={JobPosting.icon}
                 option={JobPosting.option}
-                show={Organization.show}
+                show={JobPosting.show}
             />,
         ]}
     </Admin>
