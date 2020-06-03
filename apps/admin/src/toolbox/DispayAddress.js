@@ -32,7 +32,7 @@ const AddressField = ({
 };
 
 AddressField.propTypes = {
-    className: PropTypes.string.isRequired,
+    className: PropTypes.string,
     addressCountry: PropTypes.string,
     addressLocality: PropTypes.string,
     postalCode: PropTypes.string,
