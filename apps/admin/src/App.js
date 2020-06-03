@@ -46,6 +46,7 @@ const App = () => (
                 }
                 icon={Organization.icon}
                 option={Organization.option}
+                show={Organization.show}
             />,
             <Resource
                 key="job-posting"
@@ -57,6 +58,7 @@ const App = () => (
                 }
                 icon={JobPosting.icon}
                 option={JobPosting.option}
+                show={Organization.show}
             />,
         ]}
     </Admin>
