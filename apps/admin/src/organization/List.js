@@ -61,7 +61,7 @@ export const OrganizationList = ({ permissions, ...props }) => {
             bulkActionButtons={false}
             title="Liste des Entreprises"
         >
-            <Datagrid>
+            <Datagrid rowClick="show">
                 <OrganizationLogo label="Logo" />
                 <TextField source="name" label="Nom de l'entreprise" />
                 <OrganizationAddress label="Adresse" />
