@@ -4,7 +4,7 @@ import { PropTypes } from 'prop-types';
 
 // Todo :
 const OrganizationName = ({ record }) => {
-    return <span>{record ? `"${record.name}"` : ''}</span>;
+    return <span>{record ? `${record.name}` : ''}</span>;
 };
 OrganizationName.propTypes = {
     record: PropTypes.shape({
